@@ -9,13 +9,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.caremate"
+    namespace = "com.mdp.caremate"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.caremate"
+        applicationId = "com.mdp.caremate"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -94,8 +94,9 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.1.0")
 
     // Firebase (Sistem Autentikasi untuk Role Caregiver & Family)
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-analytics")
 
     // WorkManager (Background Process untuk Alarm Pengingat Obat Lokal)
     implementation("androidx.work:work-runtime-ktx:2.9.0")

@@ -1,4 +1,4 @@
-package com.example.caremate
+package com.mdp.caremate
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

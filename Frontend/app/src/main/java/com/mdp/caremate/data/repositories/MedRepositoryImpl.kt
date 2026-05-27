@@ -62,6 +62,10 @@ class MedRepositoryImpl(
         return existingMedication.toMedication()
     }
 
+    override suspend fun resetTakenStatus() {
+        medicationDao.resetTakenStatus(System.currentTimeMillis())
+    }
+
     override suspend fun setMedicationTakenStatus(
         medicationId: Long,
         isTakenToday: Boolean
@@ -74,9 +78,5 @@ class MedRepositoryImpl(
             isTakenToday = isTakenToday,
             updatedAt = updatedAt
         )
-    }
-
-    override suspend fun resetTakenStatus() {
-        medicationDao.resetTakenStatus(System.currentTimeMillis())
     }
 }

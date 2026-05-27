@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dest_auth">
+    app:startDestination="@id/dest_dashboard">
 
     <fragment
         android:id="@+id/dest_auth"
@@ -21,7 +21,17 @@
         android:id="@+id/dest_dashboard"
         android:name="com.mdp.caremate.ui.dashboard.DashboardFragment"
         android:label="Dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dest_dashboard_to_dest_med_form"
+            app:destination="@id/dest_med_form" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dest_med_form"
+        android:name="com.mdp.caremate.ui.medicationform.MedFormFragment"
+        android:label="Medication Form"
+        tools:layout="@layout/fragment_med_form" />
 
     <fragment
         android:id="@+id/dest_premium"

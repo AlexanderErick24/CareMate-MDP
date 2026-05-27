@@ -8,10 +8,15 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mdp.caremate.R
 import com.mdp.caremate.data.model.Medication
 import com.mdp.caremate.databinding.FragmentDashboardBinding
+import com.mdp.caremate.ui.medicationform.MedFormFragment
 
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
@@ -32,6 +37,7 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMedicationList()
+        setupSwipeToDelete()
         observeMedicationList()
         setupSearch()
     }
@@ -40,6 +46,9 @@ class DashboardFragment : Fragment() {
         medicationAdapter = MedicationAdapter(
             onMedicationChecked = { medication, isTakenToday ->
                 viewModel.updateMedicationTakenStatus(medication, isTakenToday)
+            },
+            onMedicationEdit = { medication ->
+                openMedicationForm(medication.id)
             },
             onFilteredCountChanged = { filteredCount ->
                 filteredMedicationCount = filteredCount
@@ -50,6 +59,31 @@ class DashboardFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = medicationAdapter
         }
+    }
+
+    private fun setupSwipeToDelete() {
+        val itemTouchHelper = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.bindingAdapterPosition
+                    if (position == RecyclerView.NO_POSITION) return
+
+                    val medication = medicationAdapter.currentList.getOrNull(position)
+                    if (medication != null) {
+                        confirmDeleteMedication(medication, position)
+                    } else {
+                        medicationAdapter.notifyItemChanged(position)
+                    }
+                }
+            }
+        )
+        itemTouchHelper.attachToRecyclerView(binding.rvMedications)
     }
 
     private fun observeMedicationList() {
@@ -64,6 +98,9 @@ class DashboardFragment : Fragment() {
     private fun setupSearch() {
         binding.etDashboardSearch.doOnTextChanged { text, _, _, _ ->
             medicationAdapter.filter(text?.toString().orEmpty())
+        }
+        binding.fabAddMedication.setOnClickListener {
+            findNavController().navigate(R.id.action_dest_dashboard_to_dest_med_form)
         }
     }
 
@@ -90,6 +127,29 @@ class DashboardFragment : Fragment() {
         } else {
             getString(R.string.dashboard_search_empty_state)
         }
+    }
+
+    private fun openMedicationForm(medicationId: Long) {
+        val args = Bundle().apply {
+            putLong(MedFormFragment.ARG_MEDICATION_ID, medicationId)
+        }
+        findNavController().navigate(R.id.dest_med_form, args)
+    }
+
+    private fun confirmDeleteMedication(medication: Medication, position: Int) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.confirm_delete_title)
+            .setMessage(R.string.confirm_delete_message)
+            .setPositiveButton(R.string.confirm_delete_positive) { _, _ ->
+                viewModel.deleteMedication(medication)
+            }
+            .setNegativeButton(R.string.confirm_delete_negative) { _, _ ->
+                medicationAdapter.notifyItemChanged(position)
+            }
+            .setOnCancelListener {
+                medicationAdapter.notifyItemChanged(position)
+            }
+            .show()
     }
 
     override fun onDestroyView() {

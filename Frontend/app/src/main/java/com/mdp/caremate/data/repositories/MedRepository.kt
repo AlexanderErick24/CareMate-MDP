@@ -12,10 +12,9 @@ interface MedRepository {
     suspend fun updateMedication(medication: Medication): Medication
     suspend fun deleteMedication(medication: Medication): Medication
     suspend fun deleteMedicationById(medicationId: Long): Medication
+    suspend fun resetTakenStatus()
     suspend fun setMedicationTakenStatus(
         medicationId: Long,
         isTakenToday: Boolean
     ): Medication
-
-    suspend fun resetTakenStatus()
 }

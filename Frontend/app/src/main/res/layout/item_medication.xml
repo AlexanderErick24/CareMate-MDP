@@ -70,6 +70,19 @@
             app:layout_constraintTop_toBottomOf="@id/tvMedicationDosage"
             tools:text="08:00" />
 
+        <ImageButton
+            android:id="@+id/btnEditMedication"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Edit obat"
+            android:padding="6dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:tint="@color/caremate_primary"
+            app:layout_constraintEnd_toStartOf="@id/cbTaken"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cbTaken"
             android:layout_width="wrap_content"

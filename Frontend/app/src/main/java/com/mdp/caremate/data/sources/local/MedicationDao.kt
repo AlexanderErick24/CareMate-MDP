@@ -28,6 +28,9 @@ interface MedicationDao {
     @Query("SELECT * FROM medications WHERE is_enabled = 1 ORDER BY intake_hour ASC, intake_minute ASC")
     fun observeTodaysMedications(): Flow<List<MedicationEntity>>
 
+    @Query("SELECT * FROM medications WHERE is_enabled = 1 ORDER BY intake_hour ASC, intake_minute ASC")
+    suspend fun getEnabledMedications(): List<MedicationEntity>
+
     @Query("SELECT * FROM medications WHERE id = :medicationId LIMIT 1")
     suspend fun getMedicationById(medicationId: Long): MedicationEntity?
 

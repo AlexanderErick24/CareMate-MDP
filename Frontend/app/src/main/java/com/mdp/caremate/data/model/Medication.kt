@@ -1,6 +1,6 @@
-package com.example.caremate.data.model
+package com.mdp.caremate.data.model
 
-import com.example.caremate.data.sources.local.MedicationEntity
+import com.mdp.caremate.data.sources.local.MedicationEntity
 
 data class Medication(
     val id: Long = 0L,

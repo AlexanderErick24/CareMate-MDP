@@ -1,5 +1,19 @@
 <resources>
     <string name="app_name">CareMate</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dashboard_title">CareMate Dashboard</string>
+    <string name="dashboard_subtitle">Pantau jadwal obat hari ini dan tandai yang sudah diminum.</string>
+    <string name="dashboard_search_hint">Cari obat atau dosis</string>
+    <string name="dashboard_section_title">Jadwal obat hari ini</string>
+    <string name="dashboard_empty_state">Belum ada jadwal obat untuk hari ini.</string>
+    <string name="dashboard_search_empty_state">Tidak ada obat yang cocok dengan pencarian.</string>
+    <string name="dashboard_total_format">%1$d obat</string>
+    <string name="dashboard_taken_format">%1$d sudah diminum</string>
+    <string name="dashboard_not_taken_format">%1$d belum diminum</string>
+    <string name="dashboard_label_total">Total</string>
+    <string name="dashboard_label_taken">Diminum</string>
+    <string name="dashboard_label_not_taken">Sisa</string>
+    <string name="dashboard_checkbox_taken">Sudah diminum</string>
+    <string name="dashboard_medication_time_format">%1$02d:%2$02d</string>
+    <string name="dashboard_medication_no_time">Jam belum diatur</string>
 </resources>

@@ -1,60 +1,100 @@
 package com.mdp.caremate.ui.dashboard
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdp.caremate.R
+import com.mdp.caremate.data.model.Medication
+import com.mdp.caremate.databinding.FragmentDashboardBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DashboardFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DashboardFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: DashboardViewModel by viewModels()
+    private lateinit var medicationAdapter: MedicationAdapter
+    private var filteredMedicationCount: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupMedicationList()
+        observeMedicationList()
+        setupSearch()
+    }
+
+    private fun setupMedicationList() {
+        medicationAdapter = MedicationAdapter(
+            onMedicationChecked = { medication, isTakenToday ->
+                viewModel.updateMedicationTakenStatus(medication, isTakenToday)
+            },
+            onFilteredCountChanged = { filteredCount ->
+                filteredMedicationCount = filteredCount
+                updateEmptyState()
+            }
+        )
+        binding.rvMedications.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = medicationAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+    private fun observeMedicationList() {
+        viewModel.todaysMedications.observe(viewLifecycleOwner) { medications ->
+            medicationAdapter.setMedications(medications)
+            renderSummary(medications)
+            binding.rvMedications.isVisible = medications.isNotEmpty()
+            updateEmptyState()
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DashboardFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DashboardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun setupSearch() {
+        binding.etDashboardSearch.doOnTextChanged { text, _, _, _ ->
+            medicationAdapter.filter(text?.toString().orEmpty())
+        }
+    }
+
+    private fun renderSummary(medications: List<Medication>) {
+        val totalCount = medications.size
+        val takenCount = medications.count { it.isTakenToday }
+        val remainingCount = totalCount - takenCount
+
+        binding.tvTotalCount.text = getString(R.string.dashboard_total_format, totalCount)
+        binding.tvTakenCount.text = getString(R.string.dashboard_taken_format, takenCount)
+        binding.tvSectionTitle.text = getString(R.string.dashboard_section_title)
+        binding.tvDashboardSubtitle.text = getString(R.string.dashboard_subtitle)
+        binding.cardTaken.alpha = if (remainingCount == 0) 1f else 0.98f
+    }
+
+    private fun updateEmptyState() {
+        val hasAnyMedications = viewModel.todaysMedications.value.orEmpty().isNotEmpty()
+        val noFilteredResult = hasAnyMedications && filteredMedicationCount == 0
+        val noData = !hasAnyMedications
+
+        binding.tvEmptyState.isVisible = noData || noFilteredResult
+        binding.tvEmptyState.text = if (noData) {
+            getString(R.string.dashboard_empty_state)
+        } else {
+            getString(R.string.dashboard_search_empty_state)
+        }
+    }
+
+    override fun onDestroyView() {
+        binding.rvMedications.adapter = null
+        _binding = null
+        super.onDestroyView()
     }
 }

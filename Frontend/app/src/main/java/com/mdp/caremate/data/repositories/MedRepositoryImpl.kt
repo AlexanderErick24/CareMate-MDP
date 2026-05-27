@@ -1,9 +1,9 @@
-package com.example.caremate.data.repositories
+package com.mdp.caremate.data.repositories
 
-import com.example.caremate.data.model.Medication
-import com.example.caremate.data.model.toMedication
-import com.example.caremate.data.model.toMedicationEntity
-import com.example.caremate.data.sources.local.MedicationDao
+import com.mdp.caremate.data.model.Medication
+import com.mdp.caremate.data.model.toMedication
+import com.mdp.caremate.data.model.toMedicationEntity
+import com.mdp.caremate.data.sources.local.MedicationDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

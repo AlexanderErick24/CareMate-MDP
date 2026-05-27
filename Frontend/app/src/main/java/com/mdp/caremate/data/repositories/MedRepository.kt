@@ -1,6 +1,6 @@
-package com.example.caremate.data.repositories
+package com.mdp.caremate.data.repositories
 
-import com.example.caremate.data.model.Medication
+import com.mdp.caremate.data.model.Medication
 import kotlinx.coroutines.flow.Flow
 
 interface MedRepository {

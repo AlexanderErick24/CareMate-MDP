@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="caremate_primary">#5E8B7E</color>
+    <color name="caremate_secondary">#7DA0B1</color>
+    <color name="caremate_tertiary">#F4EDE3</color>
+    <color name="caremate_neutral">#4A4D4C</color>
+    <color name="caremate_surface">#FFFDF9</color>
+    <color name="caremate_outline">#D8CEC1</color>
+    <color name="caremate_success">#4F8A5B</color>
+    <color name="caremate_muted">#7A756E</color>
 </resources>

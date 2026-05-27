@@ -1,4 +1,4 @@
-package com.example.caremate.data.sources.local
+package com.mdp.caremate.data.sources.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

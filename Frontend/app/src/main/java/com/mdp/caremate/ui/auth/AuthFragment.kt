@@ -1,60 +1,194 @@
 package com.mdp.caremate.ui.auth
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.TextView
+import android.widget.Toast
+
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+
 import com.mdp.caremate.R
+import com.mdp.caremate.data.repositories.AuthRepositoryImpl
+import com.mdp.caremate.data.sources.remote.FirebaseSource
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class AuthFragment : Fragment(R.layout.fragment_auth) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AuthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AuthFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var viewModel: AuthViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun onViewCreated(
+        view: View,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_auth, container, false)
-    }
+    ) {
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AuthFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AuthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        super.onViewCreated(view, savedInstanceState)
+
+        // =========================
+        // FIND VIEW
+        // =========================
+
+        val etName =
+            view.findViewById<EditText>(R.id.etName)
+
+        val etEmail =
+            view.findViewById<EditText>(R.id.etEmail)
+
+        val etPassword =
+            view.findViewById<EditText>(R.id.etPassword)
+
+        val btnRegister =
+            view.findViewById<Button>(R.id.btnRegister)
+
+        val radioGroup =
+            view.findViewById<RadioGroup>(R.id.radioGroupRole)
+
+        val etPairingCode =
+            view.findViewById<EditText>(R.id.etPairingCode)
+
+        val tvPairingLabel =
+            view.findViewById<TextView>(R.id.tvPairingLabel)
+
+        val btnLogin =
+            view.findViewById<Button>(R.id.btnLogin)
+
+        // =========================
+        // PAIRING VISIBILITY LOGIC
+        // =========================
+
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+
+            if (checkedId == R.id.rbFamily) {
+
+                etPairingCode.visibility = View.VISIBLE
+                tvPairingLabel.visibility = View.VISIBLE
+
+            } else {
+
+                etPairingCode.visibility = View.GONE
+                tvPairingLabel.visibility = View.GONE
+            }
+        }
+
+        // =========================
+        // FIREBASE + VIEWMODEL
+        // =========================
+
+        val firebaseSource = FirebaseSource()
+
+        val repository =
+            AuthRepositoryImpl(firebaseSource)
+
+        val factory =
+            AuthViewModelFactory(repository)
+
+        viewModel = ViewModelProvider(
+            this,
+            factory
+        )[AuthViewModel::class.java]
+
+        // =========================
+        // REGISTER BUTTON
+        // =========================
+
+        btnRegister.setOnClickListener {
+
+            val name = etName.text.toString()
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+
+            viewModel.registerCaregiver(
+                name,
+                email,
+                password
+            )
+        }
+
+        btnLogin.setOnClickListener {
+
+            val email =
+                etEmail.text.toString()
+
+            val password =
+                etPassword.text.toString()
+
+            viewModel.login(
+                email,
+                password
+            )
+        }
+
+        // =========================
+        // OBSERVE RESULT
+        // =========================
+
+        viewModel.registerState.observe(
+            viewLifecycleOwner
+        ) { result ->
+
+            result.onSuccess {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Register berhasil",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            result.onFailure {
+
+                Toast.makeText(
+                    requireContext(),
+                    it.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        viewModel.loginState.observe(
+            viewLifecycleOwner
+        ) { result ->
+
+            result.onSuccess { role ->
+
+                Toast.makeText(
+                    requireContext(),
+                    "Login sebagai $role",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                when (role) {
+
+                    "caregiver" -> {
+
+                        // TODO:
+                        // navigate caregiver dashboard
+                    }
+
+                    "family" -> {
+
+                        // TODO:
+                        // navigate family dashboard
+                    }
+
+                    "admin" -> {
+
+                        // TODO:
+                        // navigate admin dashboard
+                    }
                 }
             }
+
+            result.onFailure {
+
+                Toast.makeText(
+                    requireContext(),
+                    it.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }

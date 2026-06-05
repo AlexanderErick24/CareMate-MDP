@@ -1,8 +1,10 @@
 package com.mdp.caremate.data.sources.local
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mdp.caremate.data.model.Journal
 
+@Entity(tableName = "journal_table")
 data class JournalEntity(
     @PrimaryKey
     val id: String,

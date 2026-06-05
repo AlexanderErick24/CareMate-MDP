@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [MedicationEntity::class],
+    entities = [MedicationEntity::class, JournalEntity::class],
     version = 1,
     exportSchema = false
 )

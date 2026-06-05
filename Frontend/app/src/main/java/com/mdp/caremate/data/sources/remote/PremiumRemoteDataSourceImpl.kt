@@ -4,8 +4,10 @@ import com.mdp.caremate.data.model.Journal
 import com.mdp.caremate.data.model.Nutrition
 
 class PremiumRemoteDataSourceImpl(
-    private val webService: WebService
+    // Berikan nilai default agar langsung mengambil dari ApiConfig
+    private val webService: WebService = ApiConfig.getWebService()
 ) : PremiumRemoteDataSource {
+
     override suspend fun analyzeMood(content: String): Journal {
         // 1. Bungkus teks input menjadi JSON Request
         val request = MoodRequestJson(content)

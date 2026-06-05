@@ -24,7 +24,7 @@ app.post('/premium/analyze-mood', async (req, res) => {
         }
 
         // Kita gunakan model Flash karena merespons sangat cepat dan ringan
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         // PROMPT ENGINEERING
         // Di sini kita menaruh "roh" dari aplikasi Teman Keluarga.

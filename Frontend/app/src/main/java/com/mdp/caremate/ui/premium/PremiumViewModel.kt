@@ -44,10 +44,8 @@ class PremiumViewModel (
     // Fungsi internal untuk menyegarkan daftar riwayat
     private suspend fun refreshHistoryList() {
         _journalList.clear()
-
-        // TODO: Nanti kita buka komentar di bawah ini setelah kita buat fungsi getAllJournals()
-        // di dalam PremiumRepository (Entah mengambil dari Room lokal atau Firebase).
-        // _journalList.addAll(repository.getAllJournals())
+        // Sekarang repository sudah punya fungsi ini!
+        _journalList.addAll(repository.getAllJournals())
         _journals.value = _journalList.toList()
     }
 
@@ -63,12 +61,14 @@ class PremiumViewModel (
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Tembak API AI
+                // 1. Tembak API AI (Internet)
                 val result = repository.analyzeMood(content)
                 _journalResult.value = result
 
-                // TODO: Nanti tambahkan repository.insert(result) di sini untuk menyimpan ke database lokal
-                // Setelah berhasil dianalisis & disimpan, perbarui daftar riwayat!
+                // 2. Simpan hasilnya ke Database Lokal (Room)
+                repository.insertJournal(result)
+
+                // 3. Perbarui daftar riwayat di layar
                 refreshHistoryList()
 
             } catch (e: Exception) {

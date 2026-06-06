@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomNav.visibility = when (destination.id) {
-                R.id.dest_med_form, R.id.dest_auth -> View.GONE
+                R.id.dest_med_form, R.id.dest_auth, R.id.dest_event_detail -> View.GONE
                 else -> View.VISIBLE
             }
         }

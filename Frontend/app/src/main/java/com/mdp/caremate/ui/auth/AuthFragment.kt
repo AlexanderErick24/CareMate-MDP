@@ -10,6 +10,7 @@ import android.widget.Toast
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.mdp.caremate.R
 import com.mdp.caremate.data.repositories.AuthRepositoryImpl
@@ -162,9 +163,9 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 when (role) {
 
                     "caregiver" -> {
-
-                        // TODO:
-                        // navigate caregiver dashboard
+                        findNavController().navigate(
+                            R.id.action_dest_auth_to_dest_dashboard
+                        )
                     }
 
                     "family" -> {

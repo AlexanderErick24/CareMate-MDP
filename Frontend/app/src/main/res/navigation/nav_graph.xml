@@ -34,6 +34,22 @@
         tools:layout="@layout/fragment_med_form" />
 
     <fragment
+        android:id="@+id/dest_community"
+        android:name="com.mdp.caremate.ui.community.CommunityFragment"
+        android:label="Komunitas"
+        tools:layout="@layout/fragment_community">
+        <action
+            android:id="@+id/action_dest_community_to_dest_event_detail"
+            app:destination="@id/dest_event_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dest_event_detail"
+        android:name="com.mdp.caremate.ui.community.EventDetailFragment"
+        android:label="Detail Event"
+        tools:layout="@layout/fragment_event_detail" />
+
+    <fragment
         android:id="@+id/dest_premium"
         android:name="com.mdp.caremate.ui.premium.JournalingFragment"
         android:label="Premium Services"

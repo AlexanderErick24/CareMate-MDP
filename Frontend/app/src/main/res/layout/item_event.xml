@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:contentPadding="16dp"
+    app:strokeColor="@color/caremate_outline"
+    app:strokeWidth="1dp"
+    tools:context=".ui.community.EventAdapter">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Accent bar kiri (warna secondary untuk membedakan dari medication) -->
+        <View
+            android:id="@+id/viewEventAccent"
+            android:layout_width="5dp"
+            android:layout_height="0dp"
+            android:background="@color/caremate_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Judul event -->
+        <TextView
+            android:id="@+id/tvEventTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/caremate_neutral"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/viewEventAccent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Seminar Kesehatan Lansia 2025" />
+
+        <!-- Tanggal event -->
+        <TextView
+            android:id="@+id/tvEventDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_time_chip"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textColor="@color/caremate_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/viewEventAccent"
+            app:layout_constraintTop_toBottomOf="@id/tvEventTitle"
+            tools:text="20 Juni 2025" />
+
+        <!-- Lokasi event -->
+        <TextView
+            android:id="@+id/tvEventLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"
+            android:drawablePadding="4dp"
+            android:textColor="@color/caremate_muted"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/viewEventAccent"
+            app:layout_constraintTop_toBottomOf="@id/tvEventDate"
+            tools:text="📍 Gedung Serbaguna, Jakarta" />
+
+        <!-- Penyelenggara -->
+        <TextView
+            android:id="@+id/tvEventOrganizer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/caremate_muted"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/viewEventAccent"
+            app:layout_constraintTop_toBottomOf="@id/tvEventLocation"
+            tools:text="Oleh: Yayasan Peduli Lansia" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

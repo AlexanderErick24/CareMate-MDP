@@ -41,4 +41,14 @@
     <string name="confirm_delete_message">Jadwal ini akan dihapus dan alarmnya ikut dibatalkan.</string>
     <string name="confirm_delete_positive">Hapus</string>
     <string name="confirm_delete_negative">Batal</string>
+
+    <!-- Community -->
+    <string name="community_title">Komunitas CareMate</string>
+    <string name="community_subtitle">Event dan kegiatan kesehatan untuk caregiver.</string>
+    <string name="community_section_title">Event Komunitas</string>
+    <string name="community_empty_state">Belum ada event komunitas saat ini.</string>
+    <string name="community_back">Kembali</string>
+    <string name="community_detail_location_label">Lokasi</string>
+    <string name="community_detail_organizer_label">Penyelenggara</string>
+    <string name="community_detail_description_label">Deskripsi Event</string>
 </resources>

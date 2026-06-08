@@ -12,9 +12,9 @@
         android:id="@+id/ivAvatar"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@tools:sample/avatars"
+        android:src="@drawable/ic_calendar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_top_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvAdminHub"

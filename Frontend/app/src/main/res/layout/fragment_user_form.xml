@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardMedFormHeader"
+            android:id="@+id/cardUserFormHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/caremate_primary"
@@ -31,27 +31,18 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvEventFormTitle"
+                    android:id="@+id/tvUserFormTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/med_form_title_add"
+                    android:text="          Tambahkan Pengguna"
                     android:textColor="@android:color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvMedFormSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/med_form_subtitle"
-                    android:textColor="#EAF4F0"
-                    android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMedName"
+            android:id="@+id/tilUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -63,20 +54,20 @@
             app:boxStrokeColor="@color/caremate_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardMedFormHeader">
+            app:layout_constraintTop_toBottomOf="@id/cardUserFormHeader">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMedName"
+                android:id="@+id/etUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/med_form_name_hint"
                 android:inputType="textCapWords"
+                android:hint="Nama Lengkap"
                 android:textColor="@color/caremate_neutral"
                 android:textColorHint="@color/caremate_muted" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMedDosage"
+            android:id="@+id/tilUserEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -88,79 +79,95 @@
             app:boxStrokeColor="@color/caremate_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilMedName">
+            app:layout_constraintTop_toBottomOf="@id/tilUserName">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMedDosage"
+                android:id="@+id/etUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/med_form_dosage_hint"
-                android:inputType="textMultiLine"
-                android:minLines="2"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
                 android:textColor="@color/caremate_neutral"
                 android:textColorHint="@color/caremate_muted" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutTime"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserRole"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilMedDosage">
+            app:layout_constraintTop_toBottomOf="@id/tilUserEmail">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserRole"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeColor="@color/caremate_primary">
+                android:hint="Peran (Role)"
+                android:inputType="text"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedHour"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/med_form_hour_hint"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/caremate_neutral"
-                    android:textColorHint="@color/caremate_muted" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserPairingCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilUserRole">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserPairingCode"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeColor="@color/caremate_primary">
+                android:hint="Kode Pairing"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedMinute"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/med_form_minute_hint"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/caremate_neutral"
-                    android:textColorHint="@color/caremate_muted" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUserCaregiverUid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilUserPairingCode">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserCaregiverUid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="UID Caregiver"
+                android:inputType="text"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSaveMedication"
+            android:id="@+id/btnSaveUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
@@ -170,10 +177,10 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTime" />
+            app:layout_constraintTop_toBottomOf="@id/tilUserCaregiverUid" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteMedication"
+            android:id="@+id/btnDeleteUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -184,7 +191,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSaveMedication" />
+            app:layout_constraintTop_toBottomOf="@id/btnSaveUser" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

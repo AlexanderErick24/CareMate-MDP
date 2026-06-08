@@ -13,8 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- HEADER CARD -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardMedFormHeader"
+            android:id="@+id/cardEventFormHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/caremate_primary"
@@ -34,24 +35,16 @@
                     android:id="@+id/tvEventFormTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/med_form_title_add"
+                    android:text="              Tambahkan Event"
                     android:textColor="@android:color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvMedFormSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/med_form_subtitle"
-                    android:textColor="#EAF4F0"
-                    android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- FIELD: NAME (Nama Event) -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMedName"
+            android:id="@+id/tilEventName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -63,20 +56,21 @@
             app:boxStrokeColor="@color/caremate_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardMedFormHeader">
+            app:layout_constraintTop_toBottomOf="@id/cardEventFormHeader">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMedName"
+                android:id="@+id/etEventName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/med_form_name_hint"
                 android:inputType="textCapWords"
+                android:hint="Event Name"
                 android:textColor="@color/caremate_neutral"
                 android:textColorHint="@color/caremate_muted" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- FIELD: DATE (Tanggal) -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMedDosage"
+            android:id="@+id/tilEventDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -88,79 +82,103 @@
             app:boxStrokeColor="@color/caremate_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilMedName">
+            app:layout_constraintTop_toBottomOf="@id/tilEventName">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMedDosage"
+                android:id="@+id/etEventDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/med_form_dosage_hint"
-                android:inputType="textMultiLine"
-                android:minLines="2"
+                android:hint="Event Date"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
                 android:textColor="@color/caremate_neutral"
                 android:textColorHint="@color/caremate_muted" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutTime"
+        <!-- FIELD: TIME (Waktu) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEventTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilMedDosage">
+            app:layout_constraintTop_toBottomOf="@id/tilEventDate">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEventTime"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeColor="@color/caremate_primary">
+                android:hint="Event Time"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedHour"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/med_form_hour_hint"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/caremate_neutral"
-                    android:textColorHint="@color/caremate_muted" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <!-- FIELD: PLACE (Tempat) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEventPlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilEventTime">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEventPlace"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeColor="@color/caremate_primary">
+                android:hint="Event Place"
+                android:inputType="textPostalAddress"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedMinute"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/med_form_minute_hint"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/caremate_neutral"
-                    android:textColorHint="@color/caremate_muted" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        <!-- FIELD: CAPACITY (Kapasitas) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEventCapacity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilEventPlace">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEventCapacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Capacity"
+                android:inputType="number"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- BUTTON SAVE -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSaveMedication"
+            android:id="@+id/btnSaveEvent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
@@ -170,10 +188,11 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTime" />
+            app:layout_constraintTop_toBottomOf="@id/tilEventCapacity" />
 
+        <!-- BUTTON DELETE -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteMedication"
+            android:id="@+id/btnDeleteEvent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -183,8 +202,8 @@
             app:backgroundTint="@color/caremate_neutral"
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSaveMedication" />
+            app:layout_constraintStart_of="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnSaveEvent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

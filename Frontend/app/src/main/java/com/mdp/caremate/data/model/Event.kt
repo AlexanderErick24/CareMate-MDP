@@ -1,11 +1,11 @@
 package com.mdp.caremate.data.model
 
 data class Event(
-    val id: String = "",
-    val title: String = "",
-    val description: String = "",
-    val location: String = "",
+    val eid: String = "",
+    val name: String = "",
     val date: String = "",
-    val organizer: String = "",
-    val createdAt: Long = 0L
+    val time: String = "",
+    val place: String = "",
+    val capacity: String = "",
+    val listed: Boolean = false
 )

@@ -38,7 +38,7 @@ class CommunityFragment : Fragment() {
         eventAdapter = EventAdapter { event ->
             // Kirim event ID ke EventDetailFragment saat item diklik
             val args = Bundle().apply {
-                putString(EventDetailFragment.ARG_EVENT_ID, event.id)
+                putString(EventDetailFragment.ARG_EVENT_ID, event.eid)
                 putString(EventDetailFragment.ARG_EVENT_TITLE, event.title)
                 putString(EventDetailFragment.ARG_EVENT_DESCRIPTION, event.description)
                 putString(EventDetailFragment.ARG_EVENT_DATE, event.date)

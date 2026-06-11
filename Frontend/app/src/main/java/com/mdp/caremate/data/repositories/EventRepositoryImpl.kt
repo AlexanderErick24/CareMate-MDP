@@ -23,7 +23,7 @@ class EventRepositoryImpl : EventRepository {
                     return@addSnapshotListener
                 }
                 val events = snapshot?.documents?.mapNotNull { doc ->
-                    doc.toObject(Event::class.java)?.copy(id = doc.id)
+                    doc.toObject(Event::class.java)?.copy(eid = doc.id)
                 } ?: emptyList()
                 trySend(events)
             }
@@ -34,7 +34,7 @@ class EventRepositoryImpl : EventRepository {
     override suspend fun getEventById(eventId: String): Event? {
         return try {
             val doc = eventsCollection.document(eventId).get().await()
-            doc.toObject(Event::class.java)?.copy(id = doc.id)
+            doc.toObject(Event::class.java)?.copy(eid = doc.id)
         } catch (e: Exception) {
             null
         }

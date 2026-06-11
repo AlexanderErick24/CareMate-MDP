@@ -30,10 +30,9 @@ class EventAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(event: Event) {
-            binding.tvEventTitle.text = event.title
-            binding.tvEventDate.text = event.date
-            binding.tvEventLocation.text = event.location
-            binding.tvEventOrganizer.text = event.organizer
+            binding.tvEventTitle.text = event.name
+            binding.tvEventDate.text = "${event.date} ${event.time}"
+            binding.tvEventLocation.text = event.place
             binding.root.setOnClickListener { onEventClick(event) }
         }
     }
@@ -41,7 +40,7 @@ class EventAdapter(
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<Event>() {
             override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.eid == newItem.eid
             }
 
             override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {

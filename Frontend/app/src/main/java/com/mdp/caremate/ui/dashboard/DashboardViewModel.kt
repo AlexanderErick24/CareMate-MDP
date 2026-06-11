@@ -14,12 +14,16 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(application: Application) : AndroidViewModel(application) {
     private val medRepository: MedRepository = MedRepositoryImpl(
-        AppDatabase.getDatabase(application).medicationDao()
+        AppDatabase.getDatabase(application).medicationDao(),
+        AppDatabase.getDatabase(application).medicationHistoryDao()
     )
     private val scheduler = MedicationAlarmScheduler(application)
 
     val todaysMedications: LiveData<List<Medication>> =
         medRepository.observeTodaysMedications().asLiveData()
+
+    val historyList: LiveData<List<com.mdp.caremate.data.sources.local.MedicationHistoryEntity>> =
+        AppDatabase.getDatabase(application).medicationHistoryDao().observeHistory().asLiveData()
 
     fun updateMedicationTakenStatus(medication: Medication, isTakenToday: Boolean) {
         viewModelScope.launch {

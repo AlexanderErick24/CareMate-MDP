@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class MedFormViewModel(application: Application) : AndroidViewModel(application) {
     private val medRepository: MedRepository = MedRepositoryImpl(
-        AppDatabase.getDatabase(application).medicationDao()
+        AppDatabase.getDatabase(application).medicationDao(),
+        AppDatabase.getDatabase(application).medicationHistoryDao()
     )
 
     private val _selectedMedication = MutableLiveData<Medication?>(null)

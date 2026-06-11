@@ -4,11 +4,15 @@ import com.mdp.caremate.data.model.Medication
 import com.mdp.caremate.data.model.toMedication
 import com.mdp.caremate.data.model.toMedicationEntity
 import com.mdp.caremate.data.sources.local.MedicationDao
+import com.mdp.caremate.data.sources.local.MedicationHistoryDao
+import com.mdp.caremate.data.sources.local.MedicationHistoryEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Calendar
 
 class MedRepositoryImpl(
-    private val medicationDao: MedicationDao
+    private val medicationDao: MedicationDao,
+    private val medicationHistoryDao: MedicationHistoryDao
 ) : MedRepository {
     override fun observeAllMedications(): Flow<List<Medication>> {
         return medicationDao.observeAllMedications().map { medications ->
@@ -74,6 +78,25 @@ class MedRepositoryImpl(
             ?: throw NoSuchElementException("Medication with ID $medicationId not found")
         val updatedAt = System.currentTimeMillis()
         medicationDao.updateTakenStatus(medicationId, isTakenToday, updatedAt)
+
+        if (isTakenToday) {
+            medicationHistoryDao.insertHistory(
+                MedicationHistoryEntity(
+                    medicationId = medicationId,
+                    medicationName = existingMedication.name,
+                    takenAt = updatedAt
+                )
+            )
+        } else {
+            val startOfDay = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.timeInMillis
+            medicationHistoryDao.deleteTodayHistory(medicationId, startOfDay)
+        }
+
         return existingMedication.toMedication().copy(
             isTakenToday = isTakenToday,
             updatedAt = updatedAt

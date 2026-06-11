@@ -39,11 +39,11 @@ class CommunityFragment : Fragment() {
             // Kirim event ID ke EventDetailFragment saat item diklik
             val args = Bundle().apply {
                 putString(EventDetailFragment.ARG_EVENT_ID, event.eid)
-                putString(EventDetailFragment.ARG_EVENT_TITLE, event.title)
-                putString(EventDetailFragment.ARG_EVENT_DESCRIPTION, event.description)
+                putString(EventDetailFragment.ARG_EVENT_NAME, event.name)
                 putString(EventDetailFragment.ARG_EVENT_DATE, event.date)
-                putString(EventDetailFragment.ARG_EVENT_LOCATION, event.location)
-                putString(EventDetailFragment.ARG_EVENT_ORGANIZER, event.organizer)
+                putString(EventDetailFragment.ARG_EVENT_TIME, event.time)
+                putString(EventDetailFragment.ARG_EVENT_PLACE, event.place)
+                putString(EventDetailFragment.ARG_EVENT_CAPACITY, event.capacity)
             }
             findNavController().navigate(R.id.action_dest_community_to_dest_event_detail, args)
         }

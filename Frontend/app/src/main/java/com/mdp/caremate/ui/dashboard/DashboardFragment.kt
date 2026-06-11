@@ -40,6 +40,10 @@ class DashboardFragment : Fragment() {
         setupSwipeToDelete()
         observeMedicationList()
         setupSearch()
+        
+        binding.btnHistory.setOnClickListener {
+            HistoryBottomSheetFragment().show(childFragmentManager, HistoryBottomSheetFragment.TAG)
+        }
     }
 
     private fun setupMedicationList() {

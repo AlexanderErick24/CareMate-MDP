@@ -13,7 +13,7 @@
         android:id="@+id/cardCommunityHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/caremate_secondary"
+        app:cardBackgroundColor="@color/caremate_primary"
         app:cardCornerRadius="28dp"
         app:cardElevation="0dp"
         app:contentPadding="20dp"

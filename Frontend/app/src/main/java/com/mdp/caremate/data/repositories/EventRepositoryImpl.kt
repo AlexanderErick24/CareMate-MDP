@@ -1,40 +1,26 @@
 package com.mdp.caremate.data.repositories
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mdp.caremate.data.model.Event
-import kotlinx.coroutines.channels.awaitClose
+import com.mdp.caremate.data.sources.remote.ApiConfig
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.flow.flow
 
 class EventRepositoryImpl : EventRepository {
 
-    private val firestore = FirebaseFirestore.getInstance()
-    private val eventsCollection = firestore.collection("events")
+    private val webService = ApiConfig.getWebService()
 
-    // Menggunakan callbackFlow agar perubahan data di Firestore
-    // langsung ter-observe secara realtime oleh UI (seperti Flow dari Room)
-    override fun observeAllEvents(): Flow<List<Event>> = callbackFlow {
-        val listener = eventsCollection
-            .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    close(error)
-                    return@addSnapshotListener
-                }
-                val events = snapshot?.documents?.mapNotNull { doc ->
-                    doc.toObject(Event::class.java)?.copy(eid = doc.id)
-                } ?: emptyList()
-                trySend(events)
-            }
-        // Hentikan listener saat Flow tidak lagi di-observe
-        awaitClose { listener.remove() }
+    override fun observeAllEvents(): Flow<List<Event>> = flow {
+        try {
+            val events = webService.getAllEvents()
+            emit(events)
+        } catch (e: Exception) {
+            emit(emptyList())
+        }
     }
 
     override suspend fun getEventById(eventId: String): Event? {
         return try {
-            val doc = eventsCollection.document(eventId).get().await()
-            doc.toObject(Event::class.java)?.copy(eid = doc.id)
+            webService.getEventById(eventId)
         } catch (e: Exception) {
             null
         }

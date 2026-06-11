@@ -30,21 +30,21 @@ class EventDetailFragment : Fragment() {
 
         // Ambil data dari Bundle yang dikirim CommunityFragment
         val eventId = arguments?.getString(ARG_EVENT_ID).orEmpty()
-        val title = arguments?.getString(ARG_EVENT_TITLE).orEmpty()
-        val description = arguments?.getString(ARG_EVENT_DESCRIPTION).orEmpty()
+        val name = arguments?.getString(ARG_EVENT_NAME).orEmpty()
         val date = arguments?.getString(ARG_EVENT_DATE).orEmpty()
-        val location = arguments?.getString(ARG_EVENT_LOCATION).orEmpty()
-        val organizer = arguments?.getString(ARG_EVENT_ORGANIZER).orEmpty()
+        val time = arguments?.getString(ARG_EVENT_TIME).orEmpty()
+        val place = arguments?.getString(ARG_EVENT_PLACE).orEmpty()
+        val capacity = arguments?.getString(ARG_EVENT_CAPACITY).orEmpty()
 
         if (eventId.isNotEmpty()) {
             viewModel.setEvent(
                 Event(
-                    id = eventId,
-                    title = title,
-                    description = description,
+                    eid = eventId,
+                    name = name,
                     date = date,
-                    location = location,
-                    organizer = organizer
+                    time = time,
+                    place = place,
+                    capacity = capacity
                 )
             )
         }
@@ -56,11 +56,11 @@ class EventDetailFragment : Fragment() {
     private fun observeEvent() {
         viewModel.event.observe(viewLifecycleOwner) { event ->
             if (event != null) {
-                binding.tvDetailTitle.text = event.title
-                binding.tvDetailDate.text = event.date
-                binding.tvDetailLocation.text = event.location
-                binding.tvDetailOrganizer.text = event.organizer
-                binding.tvDetailDescription.text = event.description
+                binding.tvDetailTitle.text = event.name
+                binding.tvDetailDate.text = "${event.date} ${event.time}"
+                binding.tvDetailLocation.text = event.place
+                binding.tvDetailOrganizer.text = "Kapasitas: ${event.capacity}"
+                binding.tvDetailDescription.text = "Event Komunitas dari CareMate" // Fallback text karena kolom description sudah dihapus
             }
         }
     }
@@ -78,10 +78,10 @@ class EventDetailFragment : Fragment() {
 
     companion object {
         const val ARG_EVENT_ID = "arg_event_id"
-        const val ARG_EVENT_TITLE = "arg_event_title"
-        const val ARG_EVENT_DESCRIPTION = "arg_event_description"
+        const val ARG_EVENT_NAME = "arg_event_name"
         const val ARG_EVENT_DATE = "arg_event_date"
-        const val ARG_EVENT_LOCATION = "arg_event_location"
-        const val ARG_EVENT_ORGANIZER = "arg_event_organizer"
+        const val ARG_EVENT_TIME = "arg_event_time"
+        const val ARG_EVENT_PLACE = "arg_event_place"
+        const val ARG_EVENT_CAPACITY = "arg_event_capacity"
     }
 }

@@ -1,21 +1,28 @@
 package com.mdp.caremate.data.repositories
 
+import com.mdp.caremate.data.model.User
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 
 class AuthRepositoryImpl(
     private val firebaseSource: FirebaseSource
 ) : AuthRepository {
 
-    override suspend fun registerCaregiver(
+    override suspend fun register(
         name: String,
         email: String,
-        password: String
+        password: String,
+        role: String,
+        pairingCode: String,
+        patientName: String
     ): Result<String> {
 
-        return firebaseSource.registerCaregiver(
+        return firebaseSource.register(
             name,
             email,
-            password
+            password,
+            role,
+            pairingCode,
+            patientName
         )
     }
 
@@ -28,5 +35,13 @@ class AuthRepositoryImpl(
             email,
             password
         )
+    }
+
+    override suspend fun getCurrentUser(): Result<User> {
+        return firebaseSource.getCurrentUser()
+    }
+
+    override suspend fun getLinkedCaregiver(): Result<User> {
+        return firebaseSource.getLinkedCaregiver()
     }
 }

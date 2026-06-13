@@ -11,39 +11,134 @@ class FirebaseSource {
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    suspend fun registerCaregiver(
+    suspend fun register(
         name: String,
         email: String,
-        password: String
+        password: String,
+        role: String,
+        pairingCode: String,
+        patientName: String
     ): Result<String> {
 
         return try {
 
-            val authResult =
-                auth.createUserWithEmailAndPassword(email, password).await()
+            if (role == "caregiver") {
 
-            val uid = authResult.user?.uid ?: ""
+                registerCaregiver(
+                    name,
+                    email,
+                    password,
+                    patientName
+                )
 
-            val pairingCode = generatePairingCode()
+            } else {
 
-            val user = User(
-                uid = uid,
-                name = name,
-                email = email,
-                role = "caregiver",
-                pairingCode = pairingCode
-            )
-
-            firestore.collection("users")
-                .document(uid)
-                .set(user)
-//                .await()
-
-            Result.success("Register berhasil")
+                registerFamily(
+                    name,
+                    email,
+                    password,
+                    pairingCode
+                )
+            }
 
         } catch (e: Exception) {
+
             Result.failure(e)
         }
+    }
+
+    private suspend fun registerCaregiver(
+        name: String,
+        email: String,
+        password: String,
+        patientName: String
+    ): Result<String> {
+
+        val authResult =
+            auth.createUserWithEmailAndPassword(
+                email,
+                password
+            ).await()
+
+        val uid =
+            authResult.user?.uid ?: ""
+
+        val generatedCode =
+            generatePairingCode()
+
+        val user = User(
+            uid = uid,
+            name = name,
+            email = email,
+            role = "caregiver",
+            pairingCode = generatedCode,
+            patientName = patientName
+        )
+
+        firestore.collection("users")
+            .document(uid)
+            .set(user)
+            .await()
+
+        return Result.success(generatedCode)
+    }
+
+    private suspend fun registerFamily(
+        name: String,
+        email: String,
+        password: String,
+        pairingCode: String
+    ): Result<String> {
+
+        val caregiverQuery =
+            firestore.collection("users")
+                .whereEqualTo(
+                    "pairingCode",
+                    pairingCode
+                )
+                .get()
+                .await()
+
+        if (caregiverQuery.isEmpty) {
+
+            return Result.failure(
+                Exception(
+                    "Pairing code tidak valid"
+                )
+            )
+        }
+
+        val caregiverDocument =
+            caregiverQuery.documents.first()
+
+        val caregiverUid =
+            caregiverDocument.id
+
+        val authResult =
+            auth.createUserWithEmailAndPassword(
+                email,
+                password
+            ).await()
+
+        val uid =
+            authResult.user?.uid ?: ""
+
+        val user = User(
+            uid = uid,
+            name = name,
+            email = email,
+            role = "family",
+            caregiverUid = caregiverUid
+        )
+
+        firestore.collection("users")
+            .document(uid)
+            .set(user)
+            .await()
+
+        return Result.success(
+            "Family berhasil terhubung"
+        )
     }
 
     private fun generatePairingCode(): String {
@@ -86,17 +181,63 @@ class FirebaseSource {
             Result.failure(e)
         }
     }
-    
+
     suspend fun getCurrentUser(): Result<User> {
         return try {
-            val uid = auth.currentUser?.uid ?: throw Exception("User not logged in")
+            val uid = auth.currentUser?.uid ?: return Result.failure(Exception("User not found"))
             val document = firestore.collection("users").document(uid).get().await()
-            val user = document.toObject(User::class.java) ?: throw Exception("User not found")
+            val user = document.toObject(User::class.java) ?: return Result.failure(Exception("Profile not found"))
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+    fun logout() {
+        auth.signOut()
+    }
+
+    suspend fun getLinkedCaregiver(): Result<User> {
+
+        return try {
+
+            val familyUid =
+                auth.currentUser?.uid
+                    ?: return Result.failure(
+                        Exception("User not found")
+                    )
+
+            val familyDocument =
+                firestore.collection("users")
+                    .document(familyUid)
+                    .get()
+                    .await()
+
+            val caregiverUid =
+                familyDocument.getString(
+                    "caregiverUid"
+                )
+                    ?: return Result.failure(
+                        Exception("Caregiver not linked")
+                    )
+
+            val caregiverDocument =
+                firestore.collection("users")
+                    .document(caregiverUid)
+                    .get()
+                    .await()
+
+            val caregiver =
+                caregiverDocument.toObject(
+                    User::class.java
+                )
+                    ?: return Result.failure(
+                        Exception("Caregiver not found")
+                    )
+
+            Result.success(caregiver)
+
+        } catch (e: Exception) {
 
     suspend fun updateUserProfile(jobTitle: String, age: Int, bio: String, experience: List<String>, skills: List<String>): Result<String> {
         return try {

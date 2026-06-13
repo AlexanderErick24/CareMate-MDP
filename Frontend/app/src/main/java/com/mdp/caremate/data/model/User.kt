@@ -7,6 +7,7 @@ data class User(
     val role: String = "",
     val pairingCode: String = "",
     val caregiverUid: String = "",
+    val patientName: String = ""
     
     // Fitur Profil CV
     val jobTitle: String = "",

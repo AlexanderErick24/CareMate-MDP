@@ -3,18 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dest_auth">
+    app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/dest_auth"
-        android:name="com.mdp.caremate.ui.auth.AuthFragment"
-        android:label="Authentication"
-        tools:layout="@layout/fragment_auth">
+        android:id="@+id/loginFragment"
+        android:name="com.mdp.caremate.ui.auth.LoginFragment"
+        android:label="Login">
+
         <action
-            android:id="@+id/action_dest_auth_to_dest_dashboard"
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/registerFragment"/>
+
+        <action
+            android:id="@+id/action_login_to_dashboard"
             app:destination="@id/dest_dashboard"
-            app:popUpTo="@id/dest_auth"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.mdp.caremate.ui.auth.RegisterFragment"
+        android:label="Register">
+
+        <action
+            android:id="@+id/action_register_to_login"
+            app:destination="@id/loginFragment"/>
+
     </fragment>
 
     <fragment
@@ -55,10 +72,24 @@
         android:label="Premium Services"
         tools:layout="@layout/fragment_journaling" />
 
+<!--    <fragment-->
+<!--        android:id="@+id/dest_admin"-->
+<!--        android:name="com.mdp.caremate.ui.admin.AdminFragment"-->
+<!--        android:label="Admin Panel"-->
+<!--        tools:layout="@layout/fragment_admin" />-->
+
+    <!-- FAMILY -->
     <fragment
-        android:id="@+id/dest_admin"
-        android:name="com.mdp.caremate.ui.admin.AdminFragment"
-        android:label="Admin Panel"
-        tools:layout="@layout/fragment_admin" />
+        android:id="@+id/familyContainerFragment"
+        android:name="com.mdp.caremate.ui.family.FamilyContainerFragment"
+        android:label="Family Container"
+        tools:layout="@layout/fragment_family_container">
+
+        <action
+            android:id="@+id/action_family_container_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 
 </navigation>

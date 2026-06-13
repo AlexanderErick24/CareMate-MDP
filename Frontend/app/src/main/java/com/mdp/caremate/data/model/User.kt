@@ -6,5 +6,6 @@ data class User(
     val email: String = "",
     val role: String = "",
     val pairingCode: String = "",
-    val caregiverUid: String = ""
+    val caregiverUid: String = "",
+    val patientName: String = ""
 )

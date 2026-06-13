@@ -1,59 +1,45 @@
 package com.mdp.caremate.ui.auth
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-
 import com.mdp.caremate.R
 import com.mdp.caremate.data.repositories.AuthRepositoryImpl
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 
-class AuthFragment : Fragment(R.layout.fragment_auth) {
-
+class RegisterFragment : Fragment(R.layout.fragment_register) {
     private lateinit var viewModel: AuthViewModel
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
     ) {
-
         super.onViewCreated(view, savedInstanceState)
 
         // =========================
         // FIND VIEW
         // =========================
 
-        val etName =
-            view.findViewById<EditText>(R.id.etName)
-
-        val etEmail =
-            view.findViewById<EditText>(R.id.etEmail)
-
-        val etPassword =
-            view.findViewById<EditText>(R.id.etPassword)
-
-        val btnRegister =
-            view.findViewById<Button>(R.id.btnRegister)
-
-        val radioGroup =
-            view.findViewById<RadioGroup>(R.id.radioGroupRole)
-
-        val etPairingCode =
-            view.findViewById<EditText>(R.id.etPairingCode)
-
-        val tvPairingLabel =
-            view.findViewById<TextView>(R.id.tvPairingLabel)
-
-        val btnLogin =
-            view.findViewById<Button>(R.id.btnLogin)
+        val etName = view.findViewById<EditText>(R.id.etName)
+        val etPatientName = view.findViewById<EditText>(R.id.etPatientName)
+        val etEmail = view.findViewById<EditText>(R.id.etEmail)
+        val etPassword = view.findViewById<EditText>(R.id.etPassword)
+        val btnRegister = view.findViewById<Button>(R.id.btnRegister)
+        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupRole)
+        val etPairingCode = view.findViewById<EditText>(R.id.etPairingCode)
+        val rbCaregiver = view.findViewById<RadioButton>(R.id.rbCaregiver)
+        val rbFamily = view.findViewById<RadioButton>(R.id.rbFamily)
+        val tvLogin = view.findViewById<TextView>(R.id.tvLogin)
 
         // =========================
         // PAIRING VISIBILITY LOGIC
@@ -64,12 +50,12 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             if (checkedId == R.id.rbFamily) {
 
                 etPairingCode.visibility = View.VISIBLE
-                tvPairingLabel.visibility = View.VISIBLE
+                etPatientName.visibility = View.GONE
 
             } else {
 
                 etPairingCode.visibility = View.GONE
-                tvPairingLabel.visibility = View.GONE
+                etPatientName.visibility = View.VISIBLE
             }
         }
 
@@ -91,33 +77,44 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         )[AuthViewModel::class.java]
 
         // =========================
-        // REGISTER BUTTON
+        // LOGIN LOGIC
         // =========================
 
         btnRegister.setOnClickListener {
-
             val name = etName.text.toString()
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
+            val patientName = etPatientName.text.toString()
 
-            viewModel.registerCaregiver(
+            val role =
+                when {
+                    rbCaregiver.isChecked ->
+                        "caregiver"
+                    rbFamily.isChecked ->
+                        "family"
+                    else ->
+                        ""
+                }
+
+            val pairingCode =
+                if (role == "family")
+                    etPairingCode.text.toString()
+                else
+                    ""
+
+            viewModel.register(
                 name,
                 email,
-                password
+                password,
+                role,
+                pairingCode,
+                patientName
             )
         }
 
-        btnLogin.setOnClickListener {
-
-            val email =
-                etEmail.text.toString()
-
-            val password =
-                etPassword.text.toString()
-
-            viewModel.login(
-                email,
-                password
+        tvLogin.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_register_to_login
             )
         }
 
@@ -129,11 +126,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             viewLifecycleOwner
         ) { result ->
 
-            result.onSuccess {
+            result.onSuccess { message ->
 
                 Toast.makeText(
                     requireContext(),
-                    "Register berhasil",
+                    "Registrasi berhasil! Your pairing code" + message,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -148,48 +145,5 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
             }
         }
 
-        viewModel.loginState.observe(
-            viewLifecycleOwner
-        ) { result ->
-
-            result.onSuccess { role ->
-
-                Toast.makeText(
-                    requireContext(),
-                    "Login sebagai $role",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                when (role) {
-
-                    "caregiver" -> {
-                        findNavController().navigate(
-                            R.id.action_dest_auth_to_dest_dashboard
-                        )
-                    }
-
-                    "family" -> {
-
-                        // TODO:
-                        // navigate family dashboard
-                    }
-
-                    "admin" -> {
-
-                        // TODO:
-                        // navigate admin dashboard
-                    }
-                }
-            }
-
-            result.onFailure {
-
-                Toast.makeText(
-                    requireContext(),
-                    it.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mdp.caremate.data.model.User
 
 import com.mdp.caremate.data.repositories.AuthRepository
 
@@ -25,19 +26,36 @@ class AuthViewModel(
     val loginState: LiveData<Result<String>>
         get() = _loginState
 
-    fun registerCaregiver(
+    private val _currentUser = MutableLiveData<User>()
+
+    val currentUser: LiveData<User>
+        get() = _currentUser
+
+    private val _linkedCaregiver =
+        MutableLiveData<User>()
+
+    val linkedCaregiver: LiveData<User>
+        get() = _linkedCaregiver
+
+    fun register(
         name: String,
         email: String,
-        password: String
+        password: String,
+        role: String,
+        pairingCode: String,
+        patientName: String
     ) {
 
         viewModelScope.launch {
 
             val result =
-                repository.registerCaregiver(
+                repository.register(
                     name,
                     email,
-                    password
+                    password,
+                    role,
+                    pairingCode,
+                    patientName
                 )
 
             _registerState.value = result
@@ -58,6 +76,27 @@ class AuthViewModel(
                 )
 
             _loginState.value = result
+        }
+    }
+
+    fun getCurrentUser() {
+        viewModelScope.launch {
+            repository.getCurrentUser().onSuccess {
+                _currentUser.value = it
+            }
+        }
+    }
+
+    fun getLinkedCaregiver() {
+
+        viewModelScope.launch {
+
+            repository.getLinkedCaregiver()
+                .onSuccess {
+
+                    _linkedCaregiver.value = it
+
+                }
         }
     }
 }

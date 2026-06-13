@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/family_nav_graph"
+
+    app:startDestination="@id/familyDashboardFragment">
+
+    <fragment
+        android:id="@+id/familyDashboardFragment"
+        android:name="com.mdp.caremate.ui.family.dashboard.FamilyDashboardFragment"/>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.mdp.caremate.ui.family.chat.ChatFragment"/>
+
+    <fragment
+        android:id="@+id/familyManagementFragment"
+        android:name="com.mdp.caremate.ui.family.management.FamilyManagementFragment"/>
+
+    <fragment
+        android:id="@+id/familyProfileFragment"
+        android:name="com.mdp.caremate.ui.family.profile.FamilyProfileFragment"/>
+
+</navigation>

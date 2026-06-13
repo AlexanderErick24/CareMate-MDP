@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- STATUS ICON -->
+
+        <TextView
+            android:id="@+id/tvActivityIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="✓"
+            android:textColor="#386458"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- CONTENT -->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvActivityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medication Taken"
+                android:textColor="#191C1B"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvActivityDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Morning blood pressure medication completed"
+                android:textColor="#6B7280"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <!-- TIME -->
+
+        <TextView
+            android:id="@+id/tvActivityTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="08:00"
+            android:textColor="#6B7280"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

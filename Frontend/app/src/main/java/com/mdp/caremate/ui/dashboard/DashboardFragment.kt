@@ -133,11 +133,13 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun openMedicationForm(medicationId: Long) {
-        val args = Bundle().apply {
-            putLong(MedFormFragment.ARG_MEDICATION_ID, medicationId)
+    private fun openMedicationForm(medicationId: String?) {
+        val bundle = Bundle().apply {
+            if (medicationId != null) {
+                putString(MedFormFragment.ARG_MEDICATION_ID, medicationId)
+            }
         }
-        findNavController().navigate(R.id.dest_med_form, args)
+        findNavController().navigate(R.id.action_dest_dashboard_to_dest_med_form, bundle)
     }
 
     private fun confirmDeleteMedication(medication: Medication, position: Int) {

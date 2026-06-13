@@ -17,8 +17,8 @@
         android:title="Premium AI" />
 
     <item
-        android:id="@+id/dest_admin"
-        android:icon="@android:drawable/ic_menu_manage"
-        android:title="Admin" />
+        android:id="@+id/dest_profile"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Profile" />
 
 </menu>

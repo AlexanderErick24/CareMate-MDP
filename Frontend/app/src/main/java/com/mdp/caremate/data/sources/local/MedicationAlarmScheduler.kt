@@ -31,7 +31,7 @@ class MedicationAlarmScheduler(private val context: Context) {
         )
     }
 
-    fun cancel(medicationId: Long) {
+    fun cancel(medicationId: String) {
         alarmManager.cancel(createPendingIntent(medicationId))
     }
 
@@ -45,17 +45,17 @@ class MedicationAlarmScheduler(private val context: Context) {
         }
         return PendingIntent.getBroadcast(
             context,
-            medication.id.toInt(),
+            medication.id.hashCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
-    private fun createPendingIntent(medicationId: Long): PendingIntent {
+    private fun createPendingIntent(medicationId: String): PendingIntent {
         val intent = Intent(context, MedicationNotificationReceiver::class.java)
         return PendingIntent.getBroadcast(
             context,
-            medicationId.toInt(),
+            medicationId.hashCode(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

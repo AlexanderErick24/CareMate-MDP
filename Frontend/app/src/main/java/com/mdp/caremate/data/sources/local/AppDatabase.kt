@@ -9,14 +9,12 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [MedicationEntity::class, JournalEntity::class, MedicationHistoryEntity::class],
+    entities = [JournalEntity::class],
     version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun medicationDao(): MedicationDao
     abstract fun journalDao(): JournalDao
-    abstract fun medicationHistoryDao(): MedicationHistoryDao
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null

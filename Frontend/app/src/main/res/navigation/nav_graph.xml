@@ -91,5 +91,9 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
     </fragment>
+        android:id="@+id/dest_profile"
+        android:name="com.mdp.caremate.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

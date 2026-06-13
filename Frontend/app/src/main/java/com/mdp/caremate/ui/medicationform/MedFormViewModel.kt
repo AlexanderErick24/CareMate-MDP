@@ -9,14 +9,13 @@ import com.mdp.caremate.data.model.Medication
 import com.mdp.caremate.data.repositories.MedRepository
 import com.mdp.caremate.data.repositories.MedRepositoryImpl
 import com.mdp.caremate.data.sources.local.MedicationAlarmScheduler
-import com.mdp.caremate.data.sources.local.AppDatabase
+import com.mdp.caremate.data.sources.remote.FirebaseSource
 import kotlinx.coroutines.launch
 
 class MedFormViewModel(application: Application) : AndroidViewModel(application) {
-    private val medRepository: MedRepository = MedRepositoryImpl(
-        AppDatabase.getDatabase(application).medicationDao(),
-        AppDatabase.getDatabase(application).medicationHistoryDao()
-    )
+    private val medRepository: MedRepository = MedRepositoryImpl()
+    private val firebaseSource = FirebaseSource()
+    private val scheduler = MedicationAlarmScheduler(application)
 
     private val _selectedMedication = MutableLiveData<Medication?>(null)
     val selectedMedication: LiveData<Medication?> = _selectedMedication
@@ -30,13 +29,29 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
     private val _closeScreen = MutableLiveData(false)
     val closeScreen: LiveData<Boolean> = _closeScreen
 
-    private var currentMedicationId: Long = -1L
-    private val scheduler = MedicationAlarmScheduler(application)
+    private var currentMedicationId: String = ""
+    private var targetUid: String = ""
 
-    fun loadMedication(medicationId: Long) {
-        if (medicationId <= 0) return
+    init {
         viewModelScope.launch {
-            val medication = medRepository.getMedicationById(medicationId)
+            val userResult = firebaseSource.getCurrentUser()
+            if (userResult.isSuccess) {
+                val user = userResult.getOrNull()
+                if (user != null) {
+                    targetUid = if (user.role == "caregiver" && user.connectedPatientUid.isNotEmpty()) {
+                        user.connectedPatientUid
+                    } else {
+                        user.uid
+                    }
+                }
+            }
+        }
+    }
+
+    fun loadMedication(medicationId: String) {
+        if (medicationId.isEmpty() || targetUid.isEmpty()) return
+        viewModelScope.launch {
+            val medication = medRepository.getMedicationById(targetUid, medicationId)
             if (medication != null) {
                 currentMedicationId = medicationId
                 _selectedMedication.value = medication
@@ -68,10 +83,15 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
             return
         }
 
+        if (targetUid.isEmpty()) {
+            _message.value = "Gagal memuat target pasien."
+            return
+        }
+
         viewModelScope.launch {
             val now = System.currentTimeMillis()
             val medication = Medication(
-                id = currentMedicationId.takeIf { it > 0 } ?: 0L,
+                id = currentMedicationId,
                 name = trimmedName,
                 dosage = trimmedDosage,
                 intakeHour = hour,
@@ -82,12 +102,12 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
                 updatedAt = now
             )
 
-            if (currentMedicationId > 0) {
-                val updatedMedication = medRepository.updateMedication(medication)
+            if (currentMedicationId.isNotEmpty()) {
+                val updatedMedication = medRepository.updateMedication(targetUid, medication)
                 scheduler.schedule(updatedMedication)
                 _message.value = "Jadwal obat berhasil diperbarui."
             } else {
-                val insertedMedication = medRepository.insertMedication(medication)
+                val insertedMedication = medRepository.insertMedication(targetUid, medication)
                 scheduler.schedule(insertedMedication)
                 _message.value = "Jadwal obat berhasil disimpan."
             }
@@ -96,9 +116,9 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun deleteMedication() {
-        if (currentMedicationId <= 0) return
+        if (currentMedicationId.isEmpty() || targetUid.isEmpty()) return
         viewModelScope.launch {
-            medRepository.deleteMedicationById(currentMedicationId)
+            medRepository.deleteMedicationById(targetUid, currentMedicationId)
             scheduler.cancel(currentMedicationId)
             _message.value = "Jadwal obat berhasil dihapus."
             _closeScreen.value = true

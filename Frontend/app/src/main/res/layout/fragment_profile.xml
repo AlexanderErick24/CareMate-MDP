@@ -76,7 +76,20 @@
             android:textColor="#717975"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvPairingCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kode Pasangan Anda: -"
+            android:textColor="#386458"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_pairing_code"
+            android:padding="12dp"
+            android:gravity="center" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardGabungKeluarga"

@@ -88,7 +88,12 @@ class ProfileFragment : Fragment() {
                 binding.tvProfileAge.text = if (user.age == 0) "Umur belum diatur" else "${user.age} Years Old"
                 binding.tvProfileBio.text = if (user.bio.isEmpty()) "Belum ada bio" else user.bio
                 
-                // Set data lain...
+                if (user.pairingCode.isNotEmpty()) {
+                    binding.tvPairingCode.visibility = View.VISIBLE
+                    binding.tvPairingCode.text = "Kode Anda: ${user.pairingCode}"
+                } else {
+                    binding.tvPairingCode.visibility = View.GONE
+                }
             }
         }
     }

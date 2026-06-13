@@ -28,11 +28,11 @@ class MedFormFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val medicationId = arguments?.getLong(ARG_MEDICATION_ID, -1L) ?: -1L
+        val medicationId = arguments?.getString(ARG_MEDICATION_ID) ?: ""
 
         setupActions()
         observeState()
-        if (medicationId > 0) {
+        if (medicationId.isNotEmpty()) {
             viewModel.loadMedication(medicationId)
         }
     }

@@ -25,7 +25,8 @@ class MedicationNotificationReceiver : BroadcastReceiver() {
             ?: context.getString(R.string.app_name)
         val medicationDosage = intent.getStringExtra(MedicationAlarmScheduler.EXTRA_MEDICATION_DOSAGE)
             ?: ""
-        val medicationId = intent.getLongExtra(MedicationAlarmScheduler.EXTRA_MEDICATION_ID, 0L)
+        val medicationId = intent.getStringExtra(MedicationAlarmScheduler.EXTRA_MEDICATION_ID)
+            ?: ""
         val medicationHour = intent.getIntExtra(MedicationAlarmScheduler.EXTRA_MEDICATION_HOUR, -1)
         val medicationMinute = intent.getIntExtra(MedicationAlarmScheduler.EXTRA_MEDICATION_MINUTE, -1)
 
@@ -53,12 +54,14 @@ class MedicationNotificationReceiver : BroadcastReceiver() {
             .setContentIntent(contentIntent)
             .build()
 
+        val notificationIdInt = if (medicationId.isNotEmpty()) medicationId.hashCode() else 0
+
         NotificationManagerCompat.from(context).notify(
-            medicationId.toInt(),
+            notificationIdInt,
             notification
         )
 
-        if (medicationId > 0 && medicationHour in 0..23 && medicationMinute in 0..59) {
+        if (medicationId.isNotEmpty() && medicationHour in 0..23 && medicationMinute in 0..59) {
             MedicationAlarmScheduler(context).schedule(
                 Medication(
                     id = medicationId,

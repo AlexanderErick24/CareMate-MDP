@@ -12,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.mdp.caremate.R
 import com.mdp.caremate.databinding.ActivityMainBinding
-import com.mdp.caremate.data.sources.local.MedicationDailyResetScheduler
 
 class MainActivity : AppCompatActivity() {
     private val notificationPermissionLauncher = registerForActivityResult(
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        MedicationDailyResetScheduler.schedule(applicationContext)
+
         requestNotificationPermissionIfNeeded()
         setupNavigation()
     }

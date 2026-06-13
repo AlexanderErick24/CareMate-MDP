@@ -1,43 +1,22 @@
 package com.mdp.caremate.data.model
 
-import com.mdp.caremate.data.sources.local.MedicationEntity
+import com.google.firebase.firestore.DocumentId
+
+import com.google.firebase.firestore.PropertyName
 
 data class Medication(
-    val id: Long = 0L,
-    val name: String,
-    val dosage: String,
-    val intakeHour: Int,
-    val intakeMinute: Int,
-    val isTakenToday: Boolean = false,
-    val isEnabled: Boolean = true,
+    @DocumentId
+    val id: String = "",
+    val name: String = "",
+    val dosage: String = "",
+    val intakeHour: Int = 0,
+    val intakeMinute: Int = 0,
+    @get:PropertyName("isTakenToday")
+    @set:PropertyName("isTakenToday")
+    var isTakenToday: Boolean = false,
+    @get:PropertyName("isEnabled")
+    @set:PropertyName("isEnabled")
+    var isEnabled: Boolean = true,
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 )
-
-fun MedicationEntity.toMedication(): Medication {
-    return Medication(
-        id = id,
-        name = name,
-        dosage = dosage,
-        intakeHour = intakeHour,
-        intakeMinute = intakeMinute,
-        isTakenToday = isTakenToday,
-        isEnabled = isEnabled,
-        createdAt = createdAt,
-        updatedAt = updatedAt
-    )
-}
-
-fun Medication.toMedicationEntity(): MedicationEntity {
-    return MedicationEntity(
-        id = id,
-        name = name,
-        dosage = dosage,
-        intakeHour = intakeHour,
-        intakeMinute = intakeMinute,
-        isTakenToday = isTakenToday,
-        isEnabled = isEnabled,
-        createdAt = createdAt,
-        updatedAt = updatedAt
-    )
-}

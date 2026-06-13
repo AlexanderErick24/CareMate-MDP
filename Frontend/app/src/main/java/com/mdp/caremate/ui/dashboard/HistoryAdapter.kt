@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mdp.caremate.R
-import com.mdp.caremate.data.sources.local.MedicationHistoryEntity
+import com.mdp.caremate.data.model.MedicationHistory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    private val items = mutableListOf<MedicationHistoryEntity>()
+    private val items = mutableListOf<MedicationHistory>()
 
-    fun submitList(newItems: List<MedicationHistoryEntity>) {
+    fun submitList(newItems: List<MedicationHistory>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()

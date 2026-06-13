@@ -6,5 +6,15 @@ data class User(
     val email: String = "",
     val role: String = "",
     val pairingCode: String = "",
-    val caregiverUid: String = ""
+    val caregiverUid: String = "",
+    
+    // Fitur Profil CV
+    val jobTitle: String = "",
+    val age: Int = 0,
+    val bio: String = "",
+    val experience: List<String> = emptyList(),
+    val skills: List<String> = emptyList(),
+    
+    // Fitur Gabung Keluarga
+    val connectedPatientUid: String = ""
 )

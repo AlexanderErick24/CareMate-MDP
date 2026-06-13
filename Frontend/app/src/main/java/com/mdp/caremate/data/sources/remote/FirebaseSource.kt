@@ -238,6 +238,9 @@ class FirebaseSource {
             Result.success(caregiver)
 
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
     suspend fun updateUserProfile(jobTitle: String, age: Int, bio: String, experience: List<String>, skills: List<String>): Result<String> {
         return try {

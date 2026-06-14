@@ -37,6 +37,13 @@ class AuthViewModel(
     val linkedCaregiver: LiveData<User>
         get() = _linkedCaregiver
 
+    private val _familyMembers =
+        MutableLiveData<List<String>>()
+
+    val familyMembers:
+            LiveData<List<String>>
+        get() = _familyMembers
+
     fun register(
         name: String,
         email: String,
@@ -96,6 +103,18 @@ class AuthViewModel(
 
                     _linkedCaregiver.value = it
 
+                }
+        }
+    }
+
+    fun getFamilyMembers() {
+
+        viewModelScope.launch {
+
+            repository.getFamilyMembers()
+                .onSuccess {
+
+                    _familyMembers.value = it
                 }
         }
     }

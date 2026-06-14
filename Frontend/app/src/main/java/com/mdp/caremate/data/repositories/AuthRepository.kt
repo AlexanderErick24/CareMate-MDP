@@ -1,5 +1,6 @@
 package com.mdp.caremate.data.repositories
 
+import com.mdp.caremate.data.model.FamilyMember
 import com.mdp.caremate.data.model.User
 
 interface AuthRepository {
@@ -20,4 +21,7 @@ interface AuthRepository {
 
     suspend fun getCurrentUser(): Result<User>
     suspend fun getLinkedCaregiver(): Result<User>
+    suspend fun getFamilyMembers(): Result<List<String>>
+
+    suspend fun getFamilyMemberList(): Result<List<FamilyMember>>
 }

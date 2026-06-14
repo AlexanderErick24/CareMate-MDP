@@ -1,5 +1,6 @@
 package com.mdp.caremate.data.repositories
 
+import com.mdp.caremate.data.model.FamilyMember
 import com.mdp.caremate.data.model.User
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 
@@ -43,5 +44,13 @@ class AuthRepositoryImpl(
 
     override suspend fun getLinkedCaregiver(): Result<User> {
         return firebaseSource.getLinkedCaregiver()
+    }
+
+    override suspend fun getFamilyMembers(): Result<List<String>> {
+        return firebaseSource.getFamilyMembers()
+    }
+
+    override suspend fun getFamilyMemberList(): Result<List<FamilyMember>> {
+        return firebaseSource.getFamilyMemberList()
     }
 }

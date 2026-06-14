@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".MainActivity">
+    tools:context=".ui.admin.ManagementEventAdminDashboard">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerBar"
@@ -50,6 +50,7 @@
             android:layout_marginStart="126dp"
             android:layout_marginEnd="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Notifikasi"
             android:padding="4dp"
             android:src="@drawable/ic_notifications"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,6 +87,7 @@
                 app:tint="#5C4033" />
 
             <EditText
+                android:id="@+id/etSearchEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -111,6 +113,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tabSemua"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_tab_active"
@@ -118,9 +121,12 @@
                     android:paddingVertical="8dp"
                     android:text="Semua"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
                 <TextView
+                    android:id="@+id/tabMendatang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -128,9 +134,12 @@
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="8dp"
                     android:text="Mendatang"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
                 <TextView
+                    android:id="@+id/tabLalu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -138,9 +147,12 @@
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="8dp"
                     android:text="Lalu"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
                 <TextView
+                    android:id="@+id/tabDraft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -148,7 +160,9 @@
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="8dp"
                     android:text="Draft"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:clickable="true"
+                    android:focusable="true"/>
             </LinearLayout>
         </HorizontalScrollView>
     </LinearLayout>

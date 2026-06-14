@@ -5,56 +5,67 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mdp.caremate.R
+import android.widget.Toast
+import com.mdp.caremate.databinding.FragmentAdminCommunityDashboardBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AdminCommunityDashboardFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AdminCommunityDashboardFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // View Binding property backing field (valid between onCreateView and onDestroyView)
+    private var _binding: FragmentAdminCommunityDashboardBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_community_dashboard, container, false)
+    ): View {
+        // Inflate the layout using View Binding
+        _binding = FragmentAdminCommunityDashboardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AdminCommunityDashboardFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AdminCommunityDashboardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupClickListeners()
+        setupBottomNavigation()
+    }
+
+    private fun setupClickListeners() {
+        // Access views directly via the binding object safely
+        binding.cardGrowth.setOnClickListener {
+            Toast.makeText(context, "Growth Trend Clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.cardBookings.setOnClickListener {
+            Toast.makeText(context, "Active Bookings Clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.cardRevenue.setOnClickListener {
+            Toast.makeText(context, "Revenue Clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.cardInsight.setOnClickListener {
+            Toast.makeText(context, "Insight Action Clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.ivNotification.setOnClickListener {
+            Toast.makeText(context, "Notifications Clicked", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                // Replace these IDs with your actual IDs inside res/menu/menu_bottom_nav.xml
+                // R.id.menu_home -> { true }
+                else -> false
             }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Clear the reference to avoid memory leaks
+        _binding = null
     }
 }

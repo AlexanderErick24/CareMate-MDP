@@ -1,5 +1,5 @@
-package com.mdp.caremate.data.repositories
-
+//package com.mdp.caremate.data.repositories
+//
 //interface AdminRepository {
 //    suspend fun getAll():List<User>
 //    suspend fun getById(id:String):User?

@@ -80,12 +80,16 @@
                             android:textColor="#191C1B"/>
 
                         <TextView
-                            android:id="@+id/tvPatientStatus"
+                            android:text="Emergency Call 112"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="● Stable"
-                            android:textColor="#386458"/>
+                            android:layout_height="wrap_content"/>
+
+                        <ImageButton
+                            android:id="@+id/btnCall112"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:backgroundTint="#386458"
+                            android:src="@android:drawable/ic_menu_call"/>
 
                     </LinearLayout>
 
@@ -123,10 +127,15 @@
                             android:textSize="16sp"
                             android:textColor="#191C1B"/>
 
+                        <TextView
+                            android:text="Ready to help you"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+
                             android:orientation="horizontal">
 
                             <ImageButton
@@ -136,13 +145,13 @@
                                 android:backgroundTint="#D9EDF5"
                                 android:src="@android:drawable/ic_dialog_email"/>
 
-                            <ImageButton
-                                android:id="@+id/btnCall"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginStart="8dp"
-                                android:backgroundTint="#386458"
-                                android:src="@android:drawable/ic_menu_call"/>
+<!--                            <ImageButton-->
+<!--                                android:id="@+id/btnCall"-->
+<!--                                android:layout_width="40dp"-->
+<!--                                android:layout_height="40dp"-->
+<!--                                android:layout_marginStart="8dp"-->
+<!--                                android:backgroundTint="#386458"-->
+<!--                                android:src="@android:drawable/ic_menu_call"/>-->
 
                         </LinearLayout>
 
@@ -208,7 +217,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Daily Progress"
+                            android:text="Daily Medication Progress"
                             android:textStyle="bold" />
 
                         <TextView
@@ -221,14 +230,12 @@
 
                     </LinearLayout>
 
-                    <ProgressBar
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
                         android:id="@+id/progressDaily"
-                        style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:max="100"
-                        android:progress="75" />
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/tvProgressDescription"
@@ -248,7 +255,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Activity Feed"
+                android:text="Medication Activity Feed"
                 android:textColor="#191C1B"
                 android:textSize="20sp"
                 android:textStyle="bold" />

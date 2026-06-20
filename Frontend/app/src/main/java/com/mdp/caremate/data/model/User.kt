@@ -4,6 +4,7 @@ data class User(
     val uid: String = "",
     val name: String = "",
     val email: String = "",
+    val password: String = "",
     val role: String = "",
     val pairingCode: String = "",
     val caregiverUid: String = "",
@@ -17,5 +18,9 @@ data class User(
     val skills: List<String> = emptyList(),
     
     // Fitur Gabung Keluarga
-    val connectedPatientUid: String = ""
+    val connectedPatientUid: String = "",
+
+    // Fitur Admin
+    val status: Boolean = true // Enable / Disable
+
 )

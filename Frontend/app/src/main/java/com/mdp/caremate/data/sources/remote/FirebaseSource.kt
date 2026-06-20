@@ -2,6 +2,7 @@ package com.mdp.caremate.data.sources.remote
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mdp.caremate.data.model.Event
 import com.mdp.caremate.data.model.User
 import kotlinx.coroutines.tasks.await
 
@@ -10,6 +11,37 @@ class FirebaseSource {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
+
+
+    // ADMIN
+
+    suspend fun getAllUsers(): List<User> {
+        return try {
+            val snapshot = firestore.collection("users").get().await()
+            snapshot.toObjects(User::class.java)
+        } catch (e: Exception) {
+            emptyList() // Mengembalikan list kosong jika terjadi error
+        }
+    }
+
+    suspend fun getAllEvents(): List<Event> {
+        return try {
+            val snapshot = firestore.collection("events").get().await()
+            snapshot.toObjects(Event::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getUserById(id: String): User? {
+        return try {
+            val document = firestore.collection("users").document(id).get().await()
+            document.toObject(User::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 
     suspend fun register(
         name: String,

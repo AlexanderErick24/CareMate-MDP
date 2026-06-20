@@ -19,6 +19,9 @@
             app:destination="@id/dest_dashboard"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_loginFragment_to_adminCommunityDashboardFragment"
+            app:destination="@id/adminCommunityDashboardFragment" />
 
 
     </fragment>
@@ -97,6 +100,10 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    <fragment
+        android:id="@+id/adminCommunityDashboardFragment"
+        android:name="com.mdp.caremate.ui.admin.AdminCommunityDashboardFragment"
+        android:label="AdminCommunityDashboardFragment" />
 
 
 </navigation>

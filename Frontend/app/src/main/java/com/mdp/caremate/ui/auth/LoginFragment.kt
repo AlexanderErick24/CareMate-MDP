@@ -107,9 +107,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                     "admin" -> {
 
-//                        findNavController().navigate(
-//                            R.id.adminFragment
-//                        )
+                        findNavController().navigate(
+                            R.id.adminCommunityDashboardFragment
+                        )
                     }
                 }
             }

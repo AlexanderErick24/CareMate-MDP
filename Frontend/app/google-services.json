@@ -12,7 +12,20 @@
           "package_name": "com.mdp.caremate"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "884769683078-k4ib584ab46l9vh21kk2k1np2fmna81m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdp.caremate",
+            "certificate_hash": "abcd20b1e8d490111de32c58975a716fe8f228a5"
+          }
+        },
+        {
+          "client_id": "884769683078-84i2hudnagvh5u3s8ldsamk615nq50tq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAXAiBnVpEIdfsCkEgS6EVkxJvVkcOJ3T8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884769683078-84i2hudnagvh5u3s8ldsamk615nq50tq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

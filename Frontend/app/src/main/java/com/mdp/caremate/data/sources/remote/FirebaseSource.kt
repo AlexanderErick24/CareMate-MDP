@@ -2,46 +2,17 @@ package com.mdp.caremate.data.sources.remote
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mdp.caremate.data.model.Event
+import com.mdp.caremate.data.model.ChatRoom
 import com.mdp.caremate.data.model.User
 import kotlinx.coroutines.tasks.await
-
+import com.google.firebase.firestore.ListenerRegistration
+import com.mdp.caremate.data.model.ChatMessage
+import com.mdp.caremate.data.model.FamilyMember
 
 class FirebaseSource {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
-
-
-    // ADMIN
-
-    suspend fun getAllUsers(): List<User> {
-        return try {
-            val snapshot = firestore.collection("users").get().await()
-            snapshot.toObjects(User::class.java)
-        } catch (e: Exception) {
-            emptyList() // Mengembalikan list kosong jika terjadi error
-        }
-    }
-
-    suspend fun getAllEvents(): List<Event> {
-        return try {
-            val snapshot = firestore.collection("events").get().await()
-            snapshot.toObjects(Event::class.java)
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun getUserById(id: String): User? {
-        return try {
-            val document = firestore.collection("users").document(id).get().await()
-            document.toObject(User::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
 
     suspend fun register(
         name: String,
@@ -112,6 +83,12 @@ class FirebaseSource {
             .set(user)
             .await()
 
+        createChatRoom(
+            generatedCode,
+            uid,
+            patientName
+        )
+
         return Result.success(generatedCode)
     }
 
@@ -122,55 +99,94 @@ class FirebaseSource {
         pairingCode: String
     ): Result<String> {
 
-        val caregiverQuery =
-            firestore.collection("users")
-                .whereEqualTo(
-                    "pairingCode",
-                    pairingCode
+        return try {
+
+            val caregiverQuery =
+                firestore.collection("users")
+                    .whereEqualTo(
+                        "pairingCode",
+                        pairingCode
+                    )
+                    .whereEqualTo(
+                        "role",
+                        "caregiver"
+                    )
+                    .get()
+                    .await()
+
+            if (
+                caregiverQuery.isEmpty
+            ) {
+
+                return Result.failure(
+                    Exception(
+                        "Invalid Pairing Code"
+                    )
                 )
-                .get()
+            }
+
+            val caregiverDoc =
+                caregiverQuery.documents.first()
+
+            val caregiverUid =
+                caregiverDoc.id
+
+            // =========================
+            // PREMIUM VALIDATION
+            // =========================
+
+            val familyCount =
+                firestore.collection("users")
+                    .whereEqualTo(
+                        "caregiverUid",
+                        caregiverUid
+                    )
+                    .get()
+                    .await()
+                    .size()
+
+            if (
+                familyCount >= 2
+            ) {
+
+                return Result.failure(
+                    Exception(
+                        "PREMIUM_REQUIRED"
+                    )
+                )
+            }
+
+            val authResult =
+                auth.createUserWithEmailAndPassword(
+                    email,
+                    password
+                ).await()
+
+            val uid =
+                authResult.user?.uid ?: ""
+
+            val user =
+                User(
+                    uid = uid,
+                    name = name,
+                    email = email,
+                    role = "family",
+                    caregiverUid = caregiverUid
+                )
+
+            firestore.collection("users")
+                .document(uid)
+                .set(user)
                 .await()
 
-        if (caregiverQuery.isEmpty) {
-
-            return Result.failure(
-                Exception(
-                    "Pairing code tidak valid"
-                )
+            Result.success(
+                "Register berhasil"
             )
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
         }
-
-        val caregiverDocument =
-            caregiverQuery.documents.first()
-
-        val caregiverUid =
-            caregiverDocument.id
-
-        val authResult =
-            auth.createUserWithEmailAndPassword(
-                email,
-                password
-            ).await()
-
-        val uid =
-            authResult.user?.uid ?: ""
-
-        val user = User(
-            uid = uid,
-            name = name,
-            email = email,
-            role = "family",
-            caregiverUid = caregiverUid
-        )
-
-        firestore.collection("users")
-            .document(uid)
-            .set(user)
-            .await()
-
-        return Result.success(
-            "Family berhasil terhubung"
-        )
     }
 
     private fun generatePairingCode(): String {
@@ -350,6 +366,280 @@ class FirebaseSource {
                 .update("status", "rejected").await()
             Result.success("Permintaan ditolak")
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // CHAT
+    suspend fun createChatRoom(
+        pairingCode: String,
+        caregiverUid: String,
+        patientName: String
+    ) {
+
+        val room = ChatRoom(
+            pairingCode = pairingCode,
+            caregiverUid = caregiverUid,
+            patientName = patientName
+        )
+
+        firestore.collection("chatRooms")
+            .document(pairingCode)
+            .set(room)
+            .await()
+    }
+
+    suspend fun sendMessage(
+        pairingCode: String,
+        message: String
+    ): Result<Unit> {
+
+        return try {
+
+            val currentUser =
+                getCurrentUser().getOrNull()
+                    ?: return Result.failure(
+                        Exception("User not found")
+                    )
+
+            val chatMessage =
+                ChatMessage(
+                    senderId = currentUser.uid,
+                    senderName = currentUser.name,
+                    message = message
+                )
+
+            firestore.collection("chatRooms")
+                .document(pairingCode)
+                .collection("messages")
+                .add(chatMessage)
+                .await()
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
+    fun observeMessages(
+
+        pairingCode: String,
+
+        onMessagesChanged: (List<ChatMessage>) -> Unit
+
+    ): ListenerRegistration {
+
+        return firestore.collection("chatRooms")
+            .document(pairingCode)
+            .collection("messages")
+            .orderBy("timestamp")
+            .addSnapshotListener { snapshot, _ ->
+
+                if (snapshot == null) return@addSnapshotListener
+
+                val messages =
+                    snapshot.toObjects(
+                        ChatMessage::class.java
+                    )
+
+                onMessagesChanged(
+                    messages
+                )
+            }
+    }
+
+    suspend fun getPairingCodeForCurrentUser():
+            Result<String> {
+
+        return try {
+
+            val uid =
+                auth.currentUser?.uid
+                    ?: return Result.failure(
+                        Exception(
+                            "User not found"
+                        )
+                    )
+
+            val currentUserDoc =
+                firestore.collection("users")
+                    .document(uid)
+                    .get()
+                    .await()
+
+            val role =
+                currentUserDoc.getString(
+                    "role"
+                ) ?: ""
+
+            if (role == "caregiver") {
+
+                val pairingCode =
+                    currentUserDoc.getString(
+                        "pairingCode"
+                    ) ?: ""
+
+                return Result.success(
+                    pairingCode
+                )
+            }
+
+            if (role == "family") {
+
+                val caregiverUid =
+                    currentUserDoc.getString(
+                        "caregiverUid"
+                    ) ?: ""
+
+                val caregiverDoc =
+                    firestore.collection("users")
+                        .document(caregiverUid)
+                        .get()
+                        .await()
+
+                val pairingCode =
+                    caregiverDoc.getString(
+                        "pairingCode"
+                    ) ?: ""
+
+                return Result.success(
+                    pairingCode
+                )
+            }
+
+            Result.failure(
+                Exception("Invalid role")
+            )
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getFamilyMembers():
+            Result<List<String>> {
+
+        return try {
+
+            val currentUid =
+                auth.currentUser?.uid
+                    ?: return Result.failure(
+                        Exception("User not found")
+                    )
+
+            val currentUser =
+                firestore.collection("users")
+                    .document(currentUid)
+                    .get()
+                    .await()
+
+            val role =
+                currentUser.getString("role")
+                    ?: ""
+
+            val caregiverUid =
+
+                if (role == "caregiver") {
+
+                    currentUid
+
+                } else {
+
+                    currentUser.getString(
+                        "caregiverUid"
+                    ) ?: ""
+                }
+
+            val snapshot =
+                firestore.collection("users")
+                    .whereEqualTo(
+                        "caregiverUid",
+                        caregiverUid
+                    )
+                    .get()
+                    .await()
+
+            val names =
+                snapshot.documents.mapNotNull {
+
+                    it.getString("name")
+                }
+
+            Result.success(names)
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getFamilyMemberList():
+            Result<List<FamilyMember>> {
+
+        return try {
+
+            val currentUid =
+                auth.currentUser?.uid ?: ""
+
+            val currentUser =
+                firestore.collection("users")
+                    .document(currentUid)
+                    .get()
+                    .await()
+
+            val role =
+                currentUser.getString("role")
+                    ?: ""
+
+            val caregiverUid =
+
+                if(role == "caregiver") {
+
+                    currentUid
+
+                } else {
+
+                    currentUser.getString(
+                        "caregiverUid"
+                    ) ?: ""
+                }
+
+            val snapshot =
+                firestore.collection("users")
+                    .whereEqualTo(
+                        "caregiverUid",
+                        caregiverUid
+                    )
+                    .get()
+                    .await()
+
+            val familyMembers =
+
+                snapshot.documents.map {
+
+                    FamilyMember(
+
+                        uid = it.id,
+
+                        name =
+                            it.getString("name")
+                                ?: "",
+
+                        email =
+                            it.getString("email")
+                                ?: ""
+                    )
+                }
+
+            Result.success(
+                familyMembers
+            )
+
+        } catch(e: Exception) {
+
             Result.failure(e)
         }
     }

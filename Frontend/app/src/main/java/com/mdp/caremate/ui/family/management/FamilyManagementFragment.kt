@@ -1,60 +1,115 @@
 package com.mdp.caremate.ui.family.management
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
+
 import com.mdp.caremate.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.mdp.caremate.data.repositories.AuthRepositoryImpl
+import com.mdp.caremate.data.sources.remote.FirebaseSource
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FamilyManagementFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FamilyManagementFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+import com.mdp.caremate.ui.family.management.adapter.FamilyMemberAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class FamilyManagementFragment :
+    Fragment(
+        R.layout.fragment_family_management
+    ) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    private lateinit var viewModel:
+            FamilyManagementViewModel
+
+    override fun onViewCreated(
+        view: View,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_family_management, container, false)
-    }
+    ) {
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FamilyManagementFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FamilyManagementFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        super.onViewCreated(
+            view,
+            savedInstanceState
+        )
+
+        val rvMembers =
+            view.findViewById<RecyclerView>(
+                R.id.rvFamilyMembers
+            )
+
+        val btnAddFamily =
+            view.findViewById<Button>(
+                R.id.btnAddFamily
+            )
+
+        val adapter =
+            FamilyMemberAdapter()
+
+        rvMembers.adapter =
+            adapter
+
+        rvMembers.layoutManager =
+            LinearLayoutManager(
+                requireContext()
+            )
+
+        val repository =
+            AuthRepositoryImpl(
+                FirebaseSource()
+            )
+
+        val factory =
+            FamilyManagementViewModelFactory(
+                repository
+            )
+
+        viewModel =
+            ViewModelProvider(
+                this,
+                factory
+            )[FamilyManagementViewModel::class.java]
+
+        viewModel.loadFamilyMembers()
+
+        viewModel.familyMembers.observe(
+            viewLifecycleOwner
+        ) {
+
+            adapter.submitList(it)
+        }
+
+        btnAddFamily.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                "Register your new member now",
+                Toast.LENGTH_LONG
+            ).show()
+            findNavController().navigate(R.id.action_family_management_to_register)
+        }
+
+        viewModel.isPremiumRequired.observe(
+            viewLifecycleOwner
+        ) {
+
+            if(it) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Upgrade to Premium first",
+                    // TODO() -> logic premium
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else {
+
+                findNavController().navigate(
+                    R.id.action_family_management_to_register
+                )
             }
+        }
     }
 }

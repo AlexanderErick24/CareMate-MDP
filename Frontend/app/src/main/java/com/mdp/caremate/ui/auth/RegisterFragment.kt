@@ -126,22 +126,41 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             viewLifecycleOwner
         ) { result ->
 
-            result.onSuccess { message ->
+            result.onSuccess {
 
                 Toast.makeText(
                     requireContext(),
-                    "Registrasi berhasil! Your pairing code" + message,
+                    "Register Success",
                     Toast.LENGTH_SHORT
                 ).show()
+
+                findNavController().navigate(
+                    R.id.loginFragment
+                )
             }
 
-            result.onFailure {
+            result.onFailure { error ->
 
-                Toast.makeText(
-                    requireContext(),
-                    it.message,
-                    Toast.LENGTH_SHORT
-                ).show()
+                when(error.message) {
+
+                    "PREMIUM_REQUIRED" -> {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Maximum free family members reached. Upgrade to Premium.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    else -> {
+
+                        Toast.makeText(
+                            requireContext(),
+                            error.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             }
         }
 

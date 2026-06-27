@@ -18,6 +18,11 @@
         android:title="Reports" />
 
     <item
+        android:id="@+id/navigation_users"
+        android:icon="@drawable/ic_plus"
+        android:title="Users" />
+
+    <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
         android:title="Settings" />

@@ -96,7 +96,8 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.1.0")
 
     // Firebase (Sistem Autentikasi untuk Role Caregiver & Family)
-    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
+//    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
 
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")

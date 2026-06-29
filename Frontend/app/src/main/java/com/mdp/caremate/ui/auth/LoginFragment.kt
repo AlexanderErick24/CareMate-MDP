@@ -58,10 +58,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         btnLogin.setOnClickListener {
 
             val email =
-                etEmail.text.toString()
+                etEmail.text.toString().trim()
 
             val password =
-                etPassword.text.toString()
+                etPassword.text.toString().trim()
 
             viewModel.login(
                 email,

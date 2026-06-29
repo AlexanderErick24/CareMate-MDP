@@ -1,6 +1,9 @@
 package com.mdp.caremate.data.sources.remote
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mdp.caremate.data.model.ChatRoom
 import com.mdp.caremate.data.model.User
@@ -204,14 +207,20 @@ class FirebaseSource {
 
         return try {
 
+            Log.d("LOGIN", "Email = $email")
+
             val authResult =
                 auth.signInWithEmailAndPassword(
                     email,
                     password
                 ).await()
 
+            Log.d("LOGIN", "Firebase Auth SUCCESS")
+
             val uid =
                 authResult.user?.uid ?: ""
+
+            Log.d("LOGIN", "UID = $uid")
 
             val document =
                 firestore.collection("users")
@@ -219,14 +228,31 @@ class FirebaseSource {
                     .get()
                     .await()
 
+            Log.d("LOGIN", "Firestore SUCCESS")
+
+
             val role =
                 document.getString("role") ?: ""
+
+            Log.d("LOGIN", "ROLE = $role")
 
             Result.success(role)
 
         } catch (e: Exception) {
-
+            Log.e(
+                "LOGIN_ERROR",
+                e.javaClass.simpleName,
+                e
+            )
             Result.failure(e)
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Log.e("LOGIN", "Invalid email/password")
+            return Result.failure(e)
+        }
+
+        catch (e: FirebaseAuthInvalidUserException) {
+            Log.e("LOGIN", "User does not exist")
+            return Result.failure(e)
         }
     }
 

@@ -18,7 +18,6 @@ class AdminCommunityDashboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout using View Binding
         _binding = FragmentAdminCommunityDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -27,7 +26,6 @@ class AdminCommunityDashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupClickListeners()
-        setupBottomNavigation()
     }
 
     private fun setupClickListeners() {
@@ -53,15 +51,6 @@ class AdminCommunityDashboardFragment : Fragment() {
         }
     }
 
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                // Replace these IDs with your actual IDs inside res/menu/menu_bottom_nav.xml
-                // R.id.menu_home -> { true }
-                else -> false
-            }
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -11,11 +11,46 @@ import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.ListenerRegistration
 import com.mdp.caremate.data.model.ChatMessage
 import com.mdp.caremate.data.model.FamilyMember
+import com.mdp.caremate.data.model.Event
 
 class FirebaseSource {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
+
+    suspend fun getAllUser(): List<User> {
+        return try {
+            firestore.collection("users")
+                .get()
+                .await()
+                .toObjects(User::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getUserByID(id: String): User? {
+        return try {
+            firestore.collection("users")
+                .document(id)
+                .get()
+                .await()
+                .toObject(User::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    suspend fun getAllEvent(): List<Event> {
+        return try {
+            firestore.collection("events")
+                .get()
+                .await()
+                .toObjects(Event::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 
     suspend fun register(
         name: String,

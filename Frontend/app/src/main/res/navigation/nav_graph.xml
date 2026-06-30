@@ -19,9 +19,6 @@
             app:destination="@id/dest_dashboard"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_loginFragment_to_adminCommunityDashboardFragment"
-            app:destination="@id/adminCommunityDashboardFragment" />
 
 
     </fragment>
@@ -81,12 +78,6 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/dest_admin"-->
-<!--        android:name="com.mdp.caremate.ui.admin.AdminFragment"-->
-<!--        android:label="Admin Panel"-->
-<!--        tools:layout="@layout/fragment_admin" />-->
-
     <!-- FAMILY -->
     <fragment
         android:id="@+id/familyContainerFragment"
@@ -100,10 +91,6 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
     </fragment>
-    <fragment
-        android:id="@+id/adminCommunityDashboardFragment"
-        android:name="com.mdp.caremate.ui.admin.AdminCommunityDashboardFragment"
-        android:label="AdminCommunityDashboardFragment" />
 
     <!-- CHAT -->
     <fragment
@@ -112,5 +99,30 @@
         android:label="Chat Message"
         tools:layout="@layout/fragment_chat"/>
 
+    <!-- ADMIN -->
+    <fragment
+        android:id="@+id/adminDashboard"
+        android:name="com.mdp.caremate.ui.admin.AdminCommunityDashboardFragment"
+        android:label="adminDashboard"
+        tools:layout="@layout/fragment_admin_community_dashboard"/>
+    <fragment
+        android:id="@+id/adminEvents"
+        android:name="com.mdp.caremate.ui.admin.ManagementEventAdminDashboard"
+        android:label="adminEvent"
+        tools:layout="@layout/fragment_management_event_admin_dashboard" />
+    <fragment
+        android:id="@+id/adminUsers"
+        android:name="com.mdp.caremate.ui.admin.UsersFragment"
+        android:label="UsersFragment"
+        tools:layout="@layout/fragment_users">
+        <action
+            android:id="@+id/action_adminUsers_to_userDetail"
+            app:destination="@id/userDetail" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/userDetail"
+        android:name="com.mdp.caremate.ui.admin.UserDetail"
+        android:label="UserDetailFragment"
+        tools:layout="@layout/fragment_user_detail" />
 </navigation>

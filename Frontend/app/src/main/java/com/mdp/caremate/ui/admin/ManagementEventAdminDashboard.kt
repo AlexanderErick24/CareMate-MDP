@@ -57,14 +57,6 @@ class ManagementEventAdminDashboard : Fragment() {
             // TODO: Pindah ke Fragment/Activity Input Event Baru
         }
 
-        // 5. Setup Bottom Navigation Click Listener
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                // Sesuaikan R.id dengan ID menu yang ada di file res/menu/menu_bottom_nav.xml Anda
-                // R.id.navigation_home -> { true }
-                else -> false
-            }
-        }
     }
 
     private fun setupRecyclerView() {

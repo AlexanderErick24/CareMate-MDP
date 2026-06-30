@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_main"
+    android:id="@+id/adminDashboard"
     android:padding="@dimen/padding_main">
 
     <ImageView
@@ -243,7 +244,6 @@
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="2dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintTop_toBottomOf="@id/tvSectionTitle">
 
         <LinearLayout
@@ -277,18 +277,5 @@
                 android:textSize="13sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:elevation="8dp"
-        app:itemIconSize="24dp"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

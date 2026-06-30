@@ -9,14 +9,14 @@ class AdminRepositoryImpl(
 ) : AdminRepository {
 
     override suspend fun getAllUser(): List<User> {
-        return firebaseSource.getAllUsers()
+        return firebaseSource.getAllUser()
     }
 
     override suspend fun getAllEvent(): List<Event> {
-        return firebaseSource.getAllEvents()
+        return firebaseSource.getAllEvent()
     }
 
     override suspend fun getUserByID(id: String): User? {
-        return firebaseSource.getUserById(id)
+        return firebaseSource.getUserByID(id)
     }
 }

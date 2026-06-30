@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/navigation_overview"
+        android:id="@+id/adminDashboard"
         android:icon="@drawable/ic_overview"
-        android:title="Overview" />
+        android:title="Dashboard" />
 
     <item
-        android:id="@+id/navigation_events"
+        android:id="@+id/adminEvents"
         android:icon="@drawable/ic_calendar"
         android:title="Events" />
 
     <item
-        android:id="@+id/navigation_reports"
+        android:id="@+id/adminReports"
         android:icon="@drawable/ic_reports"
         android:title="Reports" />
 
     <item
-        android:id="@+id/navigation_users"
+        android:id="@+id/adminUsers"
         android:icon="@drawable/ic_plus"
         android:title="Users" />
 
     <item
-        android:id="@+id/navigation_settings"
+        android:id="@+id/adminSettings"
         android:icon="@drawable/ic_settings"
         android:title="Settings" />
 </menu>

@@ -10,6 +10,6 @@ interface JournalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertJournal(journal: JournalEntity)
 
-    @Query("SELECT * FROM journal_table ORDER BY timestamp DESC")
-    suspend fun getAllJournals(): List<JournalEntity>
+    @Query("SELECT * FROM journal_table WHERE caregiverId = :caregiverId ORDER BY timestamp ASC")
+    suspend fun getJournalsByCaregiver(caregiverId: String): List<JournalEntity>
 }

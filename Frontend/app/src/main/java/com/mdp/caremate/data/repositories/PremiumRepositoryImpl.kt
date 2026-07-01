@@ -2,6 +2,7 @@ package com.mdp.caremate.data.repositories
 
 import com.mdp.caremate.data.model.Journal
 import com.mdp.caremate.data.model.Nutrition
+import com.mdp.caremate.data.repositories.PremiumRepository
 import com.mdp.caremate.data.sources.local.JournalDao
 import com.mdp.caremate.data.sources.local.toEntity
 import com.mdp.caremate.data.sources.remote.PremiumRemoteDataSource
@@ -26,9 +27,9 @@ class PremiumRepositoryImpl(
         journalDao.insertJournal(journal.toEntity())
     }
 
-    override suspend fun getAllJournals(): List<Journal> {
+    override suspend fun getAllJournals(caregiverId: String): List<Journal> {
         // Ambil data berseragam (Entity) dari Room
-        val entities = journalDao.getAllJournals()
+        val entities = journalDao.getJournalsByCaregiver(caregiverId)
 
         // Ubah seluruh daftar menjadi baju kasual (Domain Model) agar bisa dibaca UI
         return entities.map { it.toDomain() }

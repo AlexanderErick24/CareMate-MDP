@@ -26,6 +26,10 @@ class PremiumViewModel (
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
+    private val _burnoutAlert = MutableLiveData<Boolean>()
+    val burnoutAlert: LiveData<Boolean>
+        get() = _burnoutAlert
+
     // ==========================================
     // 2. STATE UNTUK RIWAYAT JURNAL (HISTORY)
     // ==========================================
@@ -35,24 +39,24 @@ class PremiumViewModel (
         get() = _journals
 
     // Fungsi untuk memuat awal data riwayat
-    fun initHistory() {
+    fun initHistory(caregiverId: String) {
         viewModelScope.launch {
-            refreshHistoryList()
+            refreshHistoryList(caregiverId)
         }
     }
 
     // Fungsi internal untuk menyegarkan daftar riwayat
-    private suspend fun refreshHistoryList() {
+    private suspend fun refreshHistoryList(caregiverId: String) {
         _journalList.clear()
         // Sekarang repository sudah punya fungsi ini!
-        _journalList.addAll(repository.getAllJournals())
+        _journalList.addAll(repository.getAllJournals(caregiverId))
         _journals.value = _journalList.toList()
     }
 
     // ==========================================
     // 3. FUNGSI UTAMA (TOMBOL ANALISIS)
     // ==========================================
-    fun analyzeJournal(content: String) {
+    fun analyzeJournal(content: String, caregiverId: String) {
         if (content.trim().isEmpty()) {
             _errorMessage.value = "Teks jurnal tidak boleh kosong!"
             return
@@ -63,13 +67,25 @@ class PremiumViewModel (
             try {
                 // 1. Tembak API AI (Internet)
                 val result = repository.analyzeMood(content)
-                _journalResult.value = result
+                
+                // Tambahkan caregiverId ke hasil agar disimpan dengan benar
+                // SERTA kembalikan 'content' menjadi teks asli pengguna (bukan prompt lengkap)
+                val finalResult = result.copy(caregiverId = caregiverId, content = content)
+                
+                _journalResult.value = finalResult
 
                 // 2. Simpan hasilnya ke Database Lokal (Room)
-                repository.insertJournal(result)
+                repository.insertJournal(finalResult)
+
+                // Pemicu Alert Kelelahan (Burnout) jika skor mood sangat rendah (stres)
+                if (finalResult.moodScore <= 3) {
+                    _burnoutAlert.value = true
+                } else {
+                    _burnoutAlert.value = false
+                }
 
                 // 3. Perbarui daftar riwayat di layar
-                refreshHistoryList()
+                refreshHistoryList(caregiverId)
 
             } catch (e: Exception) {
                 _errorMessage.value = "Gagal menganalisis: ${e.message}"

@@ -21,6 +21,20 @@ import com.mdp.caremate.R
 import com.mdp.caremate.data.model.Medication
 import com.mdp.caremate.databinding.FragmentDashboardBinding
 import com.mdp.caremate.ui.medicationform.MedFormFragment
+import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.util.Base64
+import android.view.Window
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import coil.load
+import com.mdp.caremate.data.model.MedicationHistory
+import com.mdp.caremate.databinding.DialogMedicationPreviewBinding
+import com.mdp.caremate.databinding.DialogUploadPhotoBinding
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -32,8 +46,45 @@ class DashboardFragment : Fragment() {
     private val viewModel: DashboardViewModel by viewModels()
     private lateinit var medicationAdapter: MedicationAdapter
     private var allMedications: List<Medication> = emptyList()
+    private var allHistory: List<MedicationHistory> = emptyList()
     private var selectedCalendar: Calendar = Calendar.getInstance()
     private val calendarDays = mutableListOf<Calendar>()
+
+    private var currentMedicationForPhoto: Medication? = null
+    private var currentPreviewBinding: DialogMedicationPreviewBinding? = null
+
+    private val getContentLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            val med = currentMedicationForPhoto ?: return@registerForActivityResult
+            try {
+                val inputStream = requireContext().contentResolver.openInputStream(uri)
+                val originalBitmap = BitmapFactory.decodeStream(inputStream)
+                inputStream?.close()
+                if (originalBitmap != null) {
+                    val maxDim = 600
+                    val scale = maxDim.toFloat() / maxOf(originalBitmap.width, originalBitmap.height)
+                    val scaledBitmap = if (scale < 1f) {
+                        Bitmap.createScaledBitmap(originalBitmap, (originalBitmap.width * scale).toInt(), (originalBitmap.height * scale).toInt(), true)
+                    } else {
+                        originalBitmap
+                    }
+                    val outputStream = ByteArrayOutputStream()
+                    scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream)
+                    val base64String = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+
+                    med.photoUrl = base64String
+                    viewModel.updateMedicationTakenStatus(med, true, base64String)
+
+                    currentPreviewBinding?.let { prevBinding ->
+                        prevBinding.ivPreviewPhoto.setImageBitmap(scaledBitmap)
+                        prevBinding.tvNoPhoto.isVisible = false
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -138,10 +189,22 @@ class DashboardFragment : Fragment() {
     private fun setupMedicationList() {
         medicationAdapter = MedicationAdapter(
             onMedicationChecked = { medication, isTakenToday ->
-                viewModel.updateMedicationTakenStatus(medication, isTakenToday)
+                if (!isSameDay(selectedCalendar, Calendar.getInstance())) {
+                    Toast.makeText(requireContext(), "Status minum obat hanya dapat diubah untuk jadwal hari ini.", Toast.LENGTH_SHORT).show()
+                    medicationAdapter.notifyDataSetChanged()
+                    return@MedicationAdapter
+                }
+                if (isTakenToday) {
+                    showUploadPhotoDialog(medication)
+                } else {
+                    viewModel.updateMedicationTakenStatus(medication, false)
+                }
             },
             onMedicationEdit = { medication ->
                 openMedicationForm(medication.id)
+            },
+            onMedicationCardClick = { medication ->
+                showMedicationDetailDialog(medication)
             }
         )
         binding.rvMedications.apply {
@@ -180,10 +243,15 @@ class DashboardFragment : Fragment() {
             allMedications = medications
             applyFilterAndRender()
         }
+        viewModel.historyList.observe(viewLifecycleOwner) { history ->
+            allHistory = history
+            applyFilterAndRender()
+        }
     }
 
     private fun applyFilterAndRender() {
         val selectedDayNumber = getIndonesianDayOfWeekNumber(selectedCalendar)
+        val isToday = isSameDay(selectedCalendar, Calendar.getInstance())
         
         val filteredByDate = allMedications.filter { medication ->
             val matchesDay = medication.repeatDays.isEmpty() || medication.repeatDays.contains(selectedDayNumber)
@@ -202,6 +270,20 @@ class DashboardFragment : Fragment() {
             } else true
 
             matchesDay && isAfterStart
+        }.map { medication ->
+            if (isToday) {
+                medication
+            } else {
+                val historyForDay = allHistory.find { history ->
+                    val historyCal = Calendar.getInstance().apply { timeInMillis = history.takenAt }
+                    history.medicationId == medication.id && isSameDay(historyCal, selectedCalendar)
+                }
+                if (historyForDay != null) {
+                    medication.copy(isTakenToday = true, photoUrl = historyForDay.photoUrl)
+                } else {
+                    medication.copy(isTakenToday = false, photoUrl = "")
+                }
+            }
         }
 
         medicationAdapter.setMedications(filteredByDate)
@@ -279,6 +361,83 @@ class DashboardFragment : Fragment() {
             Calendar.SATURDAY -> "Sab"
             else -> ""
         }
+    }
+
+    private fun showUploadPhotoDialog(medication: Medication) {
+        val dialogBinding = DialogUploadPhotoBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        dialogBinding.btnSelectPhoto.setOnClickListener {
+            currentMedicationForPhoto = medication
+            currentPreviewBinding = null
+            dialog.dismiss()
+            getContentLauncher.launch("image/*")
+        }
+
+        dialogBinding.btnCancelDialog.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showMedicationDetailDialog(medication: Medication) {
+        val dialogBinding = DialogMedicationPreviewBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        dialogBinding.tvPreviewName.text = medication.name
+        dialogBinding.tvPreviewDosage.text = "Dosis: ${medication.dosage}"
+        val timeStr = if (medication.intakeHour in 0..23 && medication.intakeMinute in 0..59) {
+            String.format(Locale.getDefault(), "%02d:%02d", medication.intakeHour, medication.intakeMinute)
+        } else {
+            "Jam belum diatur"
+        }
+        dialogBinding.tvPreviewTime.text = "⏰ $timeStr"
+
+        if (medication.photoUrl.isNotEmpty()) {
+            dialogBinding.tvNoPhoto.isVisible = false
+            try {
+                val decodedBytes = Base64.decode(medication.photoUrl, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                if (bitmap != null) {
+                    dialogBinding.ivPreviewPhoto.setImageBitmap(bitmap)
+                } else {
+                    dialogBinding.ivPreviewPhoto.load(medication.photoUrl)
+                }
+            } catch (e: Exception) {
+                dialogBinding.ivPreviewPhoto.load(medication.photoUrl)
+            }
+        } else {
+            dialogBinding.tvNoPhoto.isVisible = true
+            dialogBinding.ivPreviewPhoto.setImageDrawable(null)
+        }
+
+        dialogBinding.btnUploadNewPhoto.setOnClickListener {
+            currentMedicationForPhoto = medication
+            currentPreviewBinding = dialogBinding
+            getContentLauncher.launch("image/*")
+        }
+
+        dialogBinding.btnCloseDialog.setOnClickListener {
+            currentPreviewBinding = null
+            dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {
+            if (currentPreviewBinding == dialogBinding) {
+                currentPreviewBinding = null
+            }
+        }
+
+        dialog.show()
     }
 
     override fun onDestroyView() {

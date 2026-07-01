@@ -112,16 +112,19 @@ class MedRepositoryImpl : MedRepository {
     override suspend fun setMedicationTakenStatus(
         targetUid: String,
         medicationId: String,
-        isTakenToday: Boolean
+        isTakenToday: Boolean,
+        photoUrl: String?
     ): Medication {
         val docRef = firestore.collection("users").document(targetUid).collection("medications").document(medicationId)
         val updatedAt = System.currentTimeMillis()
-        docRef.update(
-            mapOf(
-                "isTakenToday" to isTakenToday,
-                "updatedAt" to updatedAt
-            )
-        ).await()
+        val updateMap = mutableMapOf<String, Any>(
+            "isTakenToday" to isTakenToday,
+            "updatedAt" to updatedAt
+        )
+        if (photoUrl != null) {
+            updateMap["photoUrl"] = photoUrl
+        }
+        docRef.update(updateMap).await()
 
         val updatedMed = getMedicationById(targetUid, medicationId) ?: throw Exception("Not found")
 
@@ -133,7 +136,8 @@ class MedRepositoryImpl : MedRepository {
                 "id" to historyDoc.id,
                 "medicationId" to medicationId,
                 "medicationName" to updatedMed.name,
-                "takenAt" to updatedAt
+                "takenAt" to updatedAt,
+                "photoUrl" to (photoUrl ?: updatedMed.photoUrl)
             )
             historyDoc.set(historyData).await()
         } else {

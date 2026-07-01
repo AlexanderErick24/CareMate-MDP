@@ -10,12 +10,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.mdp.caremate.R
 import com.mdp.caremate.databinding.FragmentMedFormBinding
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -116,8 +119,12 @@ class MedFormFragment : Fragment() {
     }
 
     private fun showDatePicker() {
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.from(MaterialDatePicker.todayInUtcMilliseconds()))
+
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Pilih Mulai Tanggal")
+            .setCalendarConstraints(constraintsBuilder.build())
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
@@ -137,12 +144,41 @@ class MedFormFragment : Fragment() {
         binding.tilMedStartDate.setOnClickListener { showDatePicker() }
 
         binding.btnSaveMedication.setOnClickListener {
+            val startDateStr = binding.etMedStartDate.text?.toString().orEmpty()
+            if (startDateStr.isNotEmpty()) {
+                try {
+                    val format = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+                    val selectedDate = format.parse(startDateStr)
+                    if (selectedDate != null) {
+                        val startCal = Calendar.getInstance().apply {
+                            time = selectedDate
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }
+                        val todayCal = Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }
+                        if (startCal.before(todayCal)) {
+                            Toast.makeText(requireContext(), "Tanggal mulai obat tidak boleh sebelum hari ini.", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
             viewModel.saveMedication(
                 name = binding.etMedName.text?.toString().orEmpty(),
                 dosage = binding.etMedDosage.text?.toString().orEmpty(),
                 hourText = selectedHour.toString(),
                 minuteText = selectedMinute.toString(),
-                startDate = binding.etMedStartDate.text?.toString().orEmpty(),
+                startDate = startDateStr,
                 isRecurringForever = binding.switchRecurringForever.isChecked,
                 repeatDays = selectedDays.toList().sorted()
             )

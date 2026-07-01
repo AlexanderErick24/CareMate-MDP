@@ -53,12 +53,12 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }.asLiveData()
 
-    fun updateMedicationTakenStatus(medication: Medication, isTakenToday: Boolean) {
+    fun updateMedicationTakenStatus(medication: Medication, isTakenToday: Boolean, photoUrl: String? = null) {
         viewModelScope.launch {
             try {
                 val uid = targetUidFlow.value
                 if (uid != null) {
-                    medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday)
+                    medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday, photoUrl)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

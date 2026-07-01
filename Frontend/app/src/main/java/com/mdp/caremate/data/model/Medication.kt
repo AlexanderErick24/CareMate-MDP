@@ -21,6 +21,9 @@ data class Medication(
     @set:PropertyName("isRecurringForever")
     var isRecurringForever: Boolean = true,
     val repeatDays: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7),
+    @get:PropertyName("photoUrl")
+    @set:PropertyName("photoUrl")
+    var photoUrl: String = "",
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 )

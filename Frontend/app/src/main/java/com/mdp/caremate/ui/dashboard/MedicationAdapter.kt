@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,6 +17,7 @@ import java.util.Locale
 class MedicationAdapter(
     private val onMedicationChecked: (Medication, Boolean) -> Unit,
     private val onMedicationEdit: (Medication) -> Unit,
+    private val onMedicationCardClick: (Medication) -> Unit,
     private val onFilteredCountChanged: (Int) -> Unit = {}
 ) : ListAdapter<Medication, MedicationAdapter.MedicationViewHolder>(DiffCallback) {
     private var allItems: List<Medication> = emptyList()
@@ -67,7 +69,10 @@ class MedicationAdapter(
             binding.tvMedicationName.text = medication.name
             binding.tvMedicationDosage.text = medication.dosage
             binding.tvMedicationTime.text = medicationTimeText(medication)
-            binding.root.setOnClickListener { onMedicationEdit(medication) }
+            binding.tvPhotoIndicator.visibility = if (medication.photoUrl.isNotEmpty()) View.VISIBLE else View.GONE
+
+            binding.root.setOnClickListener { onMedicationCardClick(medication) }
+            binding.cardMedicationItem.setOnClickListener { onMedicationCardClick(medication) }
             binding.btnEditMedication.setOnClickListener { onMedicationEdit(medication) }
 
             val context = binding.root.context

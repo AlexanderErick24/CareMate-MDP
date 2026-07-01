@@ -1,10 +1,14 @@
 package com.mdp.caremate.ui.dashboard
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mdp.caremate.R
 import com.mdp.caremate.data.model.Medication
 import com.mdp.caremate.databinding.ItemMedicationBinding
 import java.util.Locale
@@ -66,10 +70,21 @@ class MedicationAdapter(
             binding.root.setOnClickListener { onMedicationEdit(medication) }
             binding.btnEditMedication.setOnClickListener { onMedicationEdit(medication) }
 
-            binding.cbTaken.setOnCheckedChangeListener(null)
-            binding.cbTaken.isChecked = medication.isTakenToday
-            binding.cbTaken.setOnCheckedChangeListener { _, isChecked ->
-                onMedicationChecked(medication, isChecked)
+            val context = binding.root.context
+            if (medication.isTakenToday) {
+                binding.cardMedicationItem.setCardBackgroundColor(Color.parseColor("#D9EAFD"))
+                binding.btnTakeAction.text = "↩ Batalkan"
+                binding.btnTakeAction.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                binding.btnTakeAction.setTextColor(Color.parseColor("#4A4D4C"))
+            } else {
+                binding.cardMedicationItem.setCardBackgroundColor(Color.WHITE)
+                binding.btnTakeAction.text = "Sudah Minum"
+                binding.btnTakeAction.backgroundTintList = ContextCompat.getColorStateList(context, R.color.caremate_primary)
+                binding.btnTakeAction.setTextColor(Color.WHITE)
+            }
+
+            binding.btnTakeAction.setOnClickListener {
+                onMedicationChecked(medication, !medication.isTakenToday)
             }
         }
     }

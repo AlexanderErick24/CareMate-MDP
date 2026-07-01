@@ -81,7 +81,10 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
         name: String,
         dosage: String,
         hourText: String,
-        minuteText: String
+        minuteText: String,
+        startDate: String = "",
+        isRecurringForever: Boolean = true,
+        repeatDays: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7)
     ) {
         val trimmedName = name.trim()
         val trimmedDosage = dosage.trim()
@@ -115,6 +118,9 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
                     intakeMinute = minute,
                     isTakenToday = false,
                     isEnabled = true,
+                    startDate = startDate,
+                    isRecurringForever = isRecurringForever,
+                    repeatDays = repeatDays,
                     createdAt = selectedMedication.value?.createdAt ?: now,
                     updatedAt = now
                 )

@@ -1,29 +1,39 @@
 package com.mdp.caremate.ui.dashboard
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.navigation.fragment.findNavController
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mdp.caremate.R
 import com.mdp.caremate.data.model.Medication
 import com.mdp.caremate.databinding.FragmentDashboardBinding
 import com.mdp.caremate.ui.medicationform.MedFormFragment
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private val viewModel: DashboardViewModel by viewModels()
     private lateinit var medicationAdapter: MedicationAdapter
-    private var filteredMedicationCount: Int = 0
+    private var allMedications: List<Medication> = emptyList()
+    private var selectedCalendar: Calendar = Calendar.getInstance()
+    private val calendarDays = mutableListOf<Calendar>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,12 +47,91 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMedicationList()
+        setupCalendarStrip()
         setupSwipeToDelete()
         observeMedicationList()
         setupSearch()
         
         binding.btnHistory.setOnClickListener {
             HistoryBottomSheetFragment().show(childFragmentManager, HistoryBottomSheetFragment.TAG)
+        }
+    }
+
+    private fun setupCalendarStrip() {
+        calendarDays.clear()
+        val today = Calendar.getInstance()
+        
+        // Generate 7 days: 3 days before today, today, 3 days after today
+        for (offset in -3..3) {
+            val cal = Calendar.getInstance()
+            cal.add(Calendar.DAY_OF_YEAR, offset)
+            calendarDays.add(cal)
+        }
+
+        val dateCards = listOf(
+            binding.cardDate1 to (binding.tvDateNum1 to binding.tvDayName1),
+            binding.cardDate2 to (binding.tvDateNum2 to binding.tvDayName2),
+            binding.cardDate3 to (binding.tvDateNum3 to binding.tvDayName3),
+            binding.cardDate4 to (binding.tvDateNum4 to binding.tvDayName4),
+            binding.cardDate5 to (binding.tvDateNum5 to binding.tvDayName5),
+            binding.cardDate6 to (binding.tvDateNum6 to binding.tvDayName6),
+            binding.cardDate7 to (binding.tvDateNum7 to binding.tvDayName7)
+        )
+
+        dateCards.forEachIndexed { index, (cardView, textViews) ->
+            val cal = calendarDays[index]
+            val (tvNum, tvName) = textViews
+
+            tvNum.text = cal.get(Calendar.DAY_OF_MONTH).toString()
+            tvName.text = if (isSameDay(cal, today)) {
+                "Hari Ini"
+            } else {
+                getIndonesianShortDayName(cal)
+            }
+
+            cardView.setOnClickListener {
+                selectedCalendar = cal.clone() as Calendar
+                updateCalendarStripSelection()
+                applyFilterAndRender()
+            }
+        }
+
+        updateCalendarStripSelection()
+    }
+
+    private fun updateCalendarStripSelection() {
+        val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
+        binding.tvDashboardSubtitle.text = dateFormat.format(selectedCalendar.time)
+
+        val dateCards = listOf(
+            binding.cardDate1 to (binding.tvDateNum1 to binding.tvDayName1),
+            binding.cardDate2 to (binding.tvDateNum2 to binding.tvDayName2),
+            binding.cardDate3 to (binding.tvDateNum3 to binding.tvDayName3),
+            binding.cardDate4 to (binding.tvDateNum4 to binding.tvDayName4),
+            binding.cardDate5 to (binding.tvDateNum5 to binding.tvDayName5),
+            binding.cardDate6 to (binding.tvDateNum6 to binding.tvDayName6),
+            binding.cardDate7 to (binding.tvDateNum7 to binding.tvDayName7)
+        )
+
+        val primaryColor = ContextCompat.getColor(requireContext(), R.color.caremate_primary)
+        val neutralColor = ContextCompat.getColor(requireContext(), R.color.caremate_neutral)
+        val mutedColor = ContextCompat.getColor(requireContext(), R.color.caremate_muted)
+
+        dateCards.forEachIndexed { index, (cardView, textViews) ->
+            val cal = calendarDays[index]
+            val (tvNum, tvName) = textViews
+
+            if (isSameDay(cal, selectedCalendar)) {
+                cardView.setCardBackgroundColor(primaryColor)
+                cardView.strokeWidth = 0
+                tvNum.setTextColor(Color.WHITE)
+                tvName.setTextColor(Color.WHITE)
+            } else {
+                cardView.setCardBackgroundColor(Color.WHITE)
+                cardView.strokeWidth = 1
+                tvNum.setTextColor(neutralColor)
+                tvName.setTextColor(mutedColor)
+            }
         }
     }
 
@@ -53,10 +142,6 @@ class DashboardFragment : Fragment() {
             },
             onMedicationEdit = { medication ->
                 openMedicationForm(medication.id)
-            },
-            onFilteredCountChanged = { filteredCount ->
-                filteredMedicationCount = filteredCount
-                updateEmptyState()
             }
         )
         binding.rvMedications.apply {
@@ -92,11 +177,37 @@ class DashboardFragment : Fragment() {
 
     private fun observeMedicationList() {
         viewModel.todaysMedications.observe(viewLifecycleOwner) { medications ->
-            medicationAdapter.setMedications(medications)
-            renderSummary(medications)
-            binding.rvMedications.isVisible = medications.isNotEmpty()
-            updateEmptyState()
+            allMedications = medications
+            applyFilterAndRender()
         }
+    }
+
+    private fun applyFilterAndRender() {
+        val selectedDayNumber = getIndonesianDayOfWeekNumber(selectedCalendar)
+        
+        val filteredByDate = allMedications.filter { medication ->
+            val matchesDay = medication.repeatDays.isEmpty() || medication.repeatDays.contains(selectedDayNumber)
+            
+            val isAfterStart = if (medication.startDate.isNotEmpty()) {
+                try {
+                    val format = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+                    val start = format.parse(medication.startDate)
+                    if (start != null) {
+                        val startCal = Calendar.getInstance().apply { time = start }
+                        !isBeforeDay(selectedCalendar, startCal)
+                    } else true
+                } catch (e: Exception) {
+                    true
+                }
+            } else true
+
+            matchesDay && isAfterStart
+        }
+
+        medicationAdapter.setMedications(filteredByDate)
+        
+        binding.rvMedications.isVisible = filteredByDate.isNotEmpty()
+        binding.tvEmptyState.isVisible = filteredByDate.isEmpty()
     }
 
     private fun setupSearch() {
@@ -105,31 +216,6 @@ class DashboardFragment : Fragment() {
         }
         binding.fabAddMedication.setOnClickListener {
             findNavController().navigate(R.id.action_dest_dashboard_to_dest_med_form)
-        }
-    }
-
-    private fun renderSummary(medications: List<Medication>) {
-        val totalCount = medications.size
-        val takenCount = medications.count { it.isTakenToday }
-        val remainingCount = totalCount - takenCount
-
-        binding.tvTotalCount.text = getString(R.string.dashboard_total_format, totalCount)
-        binding.tvTakenCount.text = getString(R.string.dashboard_taken_format, takenCount)
-        binding.tvSectionTitle.text = getString(R.string.dashboard_section_title)
-        binding.tvDashboardSubtitle.text = getString(R.string.dashboard_subtitle)
-        binding.cardTaken.alpha = if (remainingCount == 0) 1f else 0.98f
-    }
-
-    private fun updateEmptyState() {
-        val hasAnyMedications = viewModel.todaysMedications.value.orEmpty().isNotEmpty()
-        val noFilteredResult = hasAnyMedications && filteredMedicationCount == 0
-        val noData = !hasAnyMedications
-
-        binding.tvEmptyState.isVisible = noData || noFilteredResult
-        binding.tvEmptyState.text = if (noData) {
-            getString(R.string.dashboard_empty_state)
-        } else {
-            getString(R.string.dashboard_search_empty_state)
         }
     }
 
@@ -156,6 +242,43 @@ class DashboardFragment : Fragment() {
                 medicationAdapter.notifyItemChanged(position)
             }
             .show()
+    }
+
+    private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+            cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+    }
+
+    private fun isBeforeDay(cal1: Calendar, cal2: Calendar): Boolean {
+        if (cal1.get(Calendar.YEAR) < cal2.get(Calendar.YEAR)) return true
+        if (cal1.get(Calendar.YEAR) > cal2.get(Calendar.YEAR)) return false
+        return cal1.get(Calendar.DAY_OF_YEAR) < cal2.get(Calendar.DAY_OF_YEAR)
+    }
+
+    private fun getIndonesianDayOfWeekNumber(cal: Calendar): Int {
+        return when (cal.get(Calendar.DAY_OF_WEEK)) {
+            Calendar.MONDAY -> 1
+            Calendar.TUESDAY -> 2
+            Calendar.WEDNESDAY -> 3
+            Calendar.THURSDAY -> 4
+            Calendar.FRIDAY -> 5
+            Calendar.SATURDAY -> 6
+            Calendar.SUNDAY -> 7
+            else -> 1
+        }
+    }
+
+    private fun getIndonesianShortDayName(cal: Calendar): String {
+        return when (cal.get(Calendar.DAY_OF_WEEK)) {
+            Calendar.SUNDAY -> "Min"
+            Calendar.MONDAY -> "Sen"
+            Calendar.TUESDAY -> "Sel"
+            Calendar.WEDNESDAY -> "Rab"
+            Calendar.THURSDAY -> "Kam"
+            Calendar.FRIDAY -> "Jum"
+            Calendar.SATURDAY -> "Sab"
+            else -> ""
+        }
     }
 
     override fun onDestroyView() {

@@ -1,231 +1,457 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/caremate_tertiary"
-    android:padding="16dp"
+    android:fillViewport="true"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardHeader"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/caremate_primary"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="0dp"
-        app:contentPadding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="16dp">
 
+        <!-- Top Header Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/caremate_primary"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="2dp"
+            app:contentPadding="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvDashboardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jadwal Kesehatan"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvDashboardSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Jumat, 20 Februari 2026"
+                    android:textColor="#EAF4F0"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDashboardTitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Horizontal Calendar Strip -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/layoutCalendarStrip"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardHeader">
 
-            <TextView
-                android:id="@+id/tvDashboardTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dashboard_title"
-                android:textColor="@android:color/white"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+            <!-- Day 1 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/caremate_neutral" />
+                    <TextView
+                        android:id="@+id/tvDayName1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sel"
+                        android:textSize="11sp"
+                        android:textColor="@color/caremate_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tvDashboardSubtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/dashboard_subtitle"
-                android:textColor="#EAF4F0"
-                android:textSize="14sp" />
+            <!-- Day 2 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="18"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/caremate_neutral" />
+                    <TextView
+                        android:id="@+id/tvDayName2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rab"
+                        android:textSize="11sp"
+                        android:textColor="@color/caremate_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Day 3 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="19"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/caremate_neutral" />
+                    <TextView
+                        android:id="@+id/tvDayName3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kam"
+                        android:textSize="11sp"
+                        android:textColor="@color/caremate_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Day 4 (Today / Selected) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/caremate_primary"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white" />
+                    <TextView
+                        android:id="@+id/tvDayName4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hari Ini"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Day 5 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="21"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/caremate_neutral" />
+                    <TextView
+                        android:id="@+id/tvDayName5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sab"
+                        android:textSize="11sp"
+                        android:textColor="@color/caremate_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Day 6 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="22"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/caremate_neutral" />
+                    <TextView
+                        android:id="@+id/tvDayName6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Min"
+                        android:textSize="11sp"
+                        android:textColor="@color/caremate_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Day 7 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDate7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/tvDateNum7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/caremate_neutral" />
+                    <TextView
+                        android:id="@+id/tvDayName7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sen"
+                        android:textSize="11sp"
+                        android:textColor="@color/caremate_muted" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilSearch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxStrokeColor="@color/caremate_primary"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/caremate_muted"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardHeader"
-        app:startIconDrawable="@android:drawable/ic_menu_search"
-        app:startIconTint="@color/caremate_primary">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDashboardSearch"
-            android:layout_width="match_parent"
+        <!-- Section Title & History Button -->
+        <TextView
+            android:id="@+id/tvSectionTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/dashboard_search_hint"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:paddingVertical="14dp"
+            android:layout_marginTop="20dp"
+            android:text="Jadwal Minum Obat"
             android:textColor="@color/caremate_neutral"
-            android:textColorHint="@color/caremate_muted" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btnHistory"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutCalendarStrip" />
 
-    <LinearLayout
-        android:id="@+id/layoutSummary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilSearch">
+        <TextView
+            android:id="@+id/btnHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lihat Riwayat"
+            android:textColor="@color/caremate_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvSectionTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvSectionTitle" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardTotal"
+        <!-- Search input (Hidden or compact if needed, let's make it compact below title) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="22dp"
-            app:cardElevation="0dp"
-            app:contentPadding="16dp"
-            app:strokeColor="@color/caremate_outline"
-            app:strokeWidth="1dp">
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/caremate_primary"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/caremate_muted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
+            app:startIconDrawable="@android:drawable/ic_menu_search"
+            app:startIconTint="@color/caremate_primary">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDashboardSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:hint="@string/dashboard_search_hint"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:paddingVertical="12dp"
+                android:textColor="@color/caremate_neutral"
+                android:textColorHint="@color/caremate_muted" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/tvTotalLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dashboard_label_total"
-                    android:textColor="@color/caremate_muted"
-                    android:textSize="12sp" />
+        <!-- Summary (Compact/Hidden for compatibility) -->
+        <LinearLayout
+            android:id="@+id/layoutSummary"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilSearch">
 
-                <TextView
-                    android:id="@+id/tvTotalCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="0 obat"
-                    android:textColor="@color/caremate_neutral"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTotal"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+                <TextView android:id="@+id/tvTotalCount" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardTaken"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTaken"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
+                <TextView android:id="@+id/tvTakenCount" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- RecyclerView Medications -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMedications"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="22dp"
-            app:cardElevation="0dp"
-            app:contentPadding="16dp"
-            app:strokeColor="@color/caremate_outline"
-            app:strokeWidth="1dp">
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_medication" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <!-- Empty State -->
+        <TextView
+            android:id="@+id/tvEmptyState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:gravity="center"
+            android:text="Belum ada jadwal obat untuk tanggal ini."
+            android:textColor="@color/caremate_muted"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle" />
 
-                <TextView
-                    android:id="@+id/tvTakenLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dashboard_label_taken"
-                    android:textColor="@color/caremate_muted"
-                    android:textSize="12sp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddMedication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:contentDescription="Tambah jadwal obat"
+            app:backgroundTint="@color/caremate_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
-                <TextView
-                    android:id="@+id/tvTakenCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="0 sudah diminum"
-                    android:textColor="@color/caremate_neutral"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvSectionTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/dashboard_section_title"
-        android:textColor="@color/caremate_neutral"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/btnHistory"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutSummary" />
-
-    <TextView
-        android:id="@+id/btnHistory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lihat Riwayat"
-        android:textColor="@color/caremate_primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tvSectionTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvSectionTitle" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMedications"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_medication" />
-
-    <TextView
-        android:id="@+id/tvEmptyState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/dashboard_empty_state"
-        android:textColor="@color/caremate_muted"
-        android:textSize="14sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSectionTitle" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddMedication"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:contentDescription="Tambah jadwal obat"
-        app:backgroundTint="@color/caremate_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

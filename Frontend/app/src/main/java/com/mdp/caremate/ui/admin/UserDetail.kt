@@ -62,7 +62,7 @@ class UserDetail : Fragment() {
         // Atur warna badge / background role secara dinamis
         if (user.role.equals("Caregiver", ignoreCase = true)) {
             binding.tvDetailRole.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light))
-            binding.tvDetailRole.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_green))
+            binding.tvDetailRole.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
             // Tampilkan section CV Caregiver, Sembunyikan section Family
             binding.cardCaregiverCvSection.visibility = View.VISIBLE
@@ -86,7 +86,7 @@ class UserDetail : Fragment() {
             }
 
         } else {
-            binding.tvDetailRole.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.holo_purple))
+            binding.tvDetailRole.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light))
             binding.tvDetailRole.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
 
             // Tampilkan section Family, Sembunyikan section CV Caregiver

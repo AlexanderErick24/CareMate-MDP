@@ -8,25 +8,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels // Butuh library fragment-ktx untuk delegasi ini
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mdp.caremate.R
 import com.mdp.caremate.data.model.Event
 import com.mdp.caremate.databinding.FragmentManagementEventAdminDashboardBinding
+import java.util.Locale
 
 class ManagementEventAdminDashboard : Fragment() {
 
-    // View Binding setup untuk Fragment
     private var _binding: FragmentManagementEventAdminDashboardBinding? = null
     private val binding get() = _binding!!
 
-    // Variabel untuk Adapter dan List Data
-    private lateinit var eventAdapter: EventAdapter // Anda perlu membuat file adapter ini (ada di bawah)
-    private var fullEventList = ArrayList<Event>()
+    // Inisialisasi ViewModel secara bersih menggunakan Jetpack ktx delegasi
+    private val viewModel: EventViewModel by viewModels()
+
+    private lateinit var eventAdapter: EventAdapter
+
+    private val fullEventList = ArrayList<Event>()
+    private val displayList = ArrayList<Event>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate layout menggunakan View Binding
         _binding = FragmentManagementEventAdminDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,36 +40,63 @@ class ManagementEventAdminDashboard : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Inisialisasi Data Dummy & RecyclerView
-        setupDummyData()
+        // 1. Inisialisasi Komponen Komponen Utama UI
         setupRecyclerView()
-
-        // 2. Setup Aksi Tombol-Tombol Atas (Header)
-        binding.btnBack.setOnClickListener {
-            // Aksi kembali, contoh jika menggunakan Fragment Manager biasa:
-            parentFragmentManager.popBackStack()
-        }
-
-        binding.btnNotification.setOnClickListener {
-            Toast.makeText(requireContext(), "Membuka Notifikasi", Toast.LENGTH_SHORT).show()
-        }
-
-        // 3. Setup Fitur Pencarian (Search Bar EditText)
         setupSearchBar()
+        setupClickListeners()
 
-        // 4. Setup Floating Action Button (FAB) Tambah Event
-        binding.fabAddEvent.setOnClickListener {
-            Toast.makeText(requireContext(), "Tambah Event Baru", Toast.LENGTH_SHORT).show()
-            // TODO: Pindah ke Fragment/Activity Input Event Baru
+        // 2. Hubungkan Pengamat (Observer) ke ViewModel
+        observeViewModel()
+
+        // 3. Tarik data dari database (Hanya dijalankan saat pertama kali halaman dibuat)
+        if (savedInstanceState == null) {
+            viewModel.fetchEvents()
+        }
+    }
+
+    private fun observeViewModel() {
+        // Mengamati perubahan data list event
+        viewModel.events.observe(viewLifecycleOwner) { events ->
+            if (_binding == null || !isAdded) return@observe
+
+            fullEventList.clear()
+            if (events.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Tidak ada data event", Toast.LENGTH_SHORT).show()
+            } else {
+                fullEventList.addAll(events)
+            }
+
+            // Jalankan filter pencarian sinkron dengan teks di SearchBar saat ini
+            applySearch(binding.etSearchEvent.text.toString())
         }
 
+        // Mengamati state loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (_binding == null) return@observe
+            // Anda bisa menyalakan ProgressBar/Shimmer di sini jika ada di XML layout Anda
+        }
+
+        // Mengamati jika ada error dari sistem database Firebase
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            if (_binding == null || !isAdded || message == null) return@observe
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun setupRecyclerView() {
-        // Init adapter dengan listener klik item jika dibutuhkan
-        eventAdapter = EventAdapter(fullEventList) { event ->
-            Toast.makeText(requireContext(), "Mengklik: ${event.name}", Toast.LENGTH_SHORT).show()
-        }
+        eventAdapter = EventAdapter(
+            displayList,
+            onEditClick = { event ->
+                if (isAdded) {
+                    Toast.makeText(requireContext(), "Edit: ${event.name}", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onPesertaClick = { event ->
+                if (isAdded) {
+                    Toast.makeText(requireContext(), "Melihat peserta: ${event.name}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
 
         binding.rvEvents.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -73,24 +106,51 @@ class ManagementEventAdminDashboard : Fragment() {
     }
 
     private fun setupSearchBar() {
-        // Menemukan EditText di dalam bungkusan LinearLayout pencarian
-        // Karena EditText di XML Anda belum memiliki ID, mari kita buat logic pencarian yang aman
-        // Cara terbaik: Buka XML Anda, tambahkan id pada EditText tersebut, misal: android:id="@+id/etSearchEvent"
-
-        // Asumsi jika Anda sudah menambahkan android:id="@+id/etSearchEvent" pada EditText di XML:
-        // binding.etSearchEvent.addTextChangedListener(object : TextWatcher { ... })
+        binding.etSearchEvent.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                applySearch(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
-    private fun setupDummyData() {
-        fullEventList.clear()
-        fullEventList.add(Event("1", "Donor Darah CareMate", "15 Juni 2026", "09:00", "Surabaya", "100", true))
-        fullEventList.add(Event("2", "Seminar IT Consultant", "20 Juni 2026", "13:00", "Kampus ISTTS", "50", true))
-        fullEventList.add(Event("3", "Workshop Odoo ERP", "25 Juni 2026", "10:00", "Online Zoom", "200", false))
+    private fun applySearch(query: String) {
+        displayList.clear()
+        val cleanQuery = query.trim().lowercase(Locale.getDefault())
+
+        if (cleanQuery.isEmpty()) {
+            displayList.addAll(fullEventList)
+        } else {
+            for (event in fullEventList) {
+                if (event.name.lowercase(Locale.getDefault()).contains(cleanQuery) ||
+                    event.place.lowercase(Locale.getDefault()).contains(cleanQuery)) {
+                    displayList.add(event)
+                }
+            }
+        }
+
+        // Jika EventAdapter Anda memegang fungsi pembantu custom untuk update list seperti updateList()
+        // Anda juga bisa memanggilnya di sini: eventAdapter.updateList(displayList)
+        eventAdapter.notifyDataSetChanged()
+    }
+
+    private fun setupClickListeners() {
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        binding.btnNotification.setOnClickListener {
+            Toast.makeText(requireContext(), "Membuka Notifikasi", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.fabAddEvent.setOnClickListener {
+            findNavController().navigate(R.id.action_adminEvents_to_eventFormFragment)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Bersihkan binding untuk mencegah memory leak
         _binding = null
     }
 }

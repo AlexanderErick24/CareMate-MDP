@@ -3,7 +3,12 @@ package com.mdp.caremate.ui.admin
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mdp.caremate.data.model.Event
+import com.mdp.caremate.data.sources.remote.ApiConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class EventFormViewModel : ViewModel() {
@@ -14,9 +19,6 @@ class EventFormViewModel : ViewModel() {
     private val _isActionSuccess = MutableLiveData<Boolean>()
     val isActionSuccess: LiveData<Boolean> get() = _isActionSuccess
 
-    /**
-     * Memvalidasi input dan memetakan data ke Objek Event sebelum disimpan
-     */
     fun saveEvent(
         currentEventId: String?,
         name: String,
@@ -30,7 +32,6 @@ class EventFormViewModel : ViewModel() {
             return
         }
 
-        // Generate ID baru jika tambah data, gunakan ID lama jika mode edit
         val id = currentEventId ?: UUID.randomUUID().toString()
 
         val eventData = Event(
@@ -43,26 +44,41 @@ class EventFormViewModel : ViewModel() {
             listed = true
         )
 
-        // TODO: Hubungkan ke Repository / Firebase / Room Anda di sini
-        // repository.insertOrUpdateEvent(eventData)
+        viewModelScope.launch {
+            try {
+                // Eksekusi pengiriman data ke Node.js backend di I/O Thread
+                withContext(Dispatchers.IO) {
+                    ApiConfig.getWebService().insertEvent(eventData)
+                }
 
-        _toastMessage.value = "Event '${eventData.name}' berhasil disimpan"
-        _isActionSuccess.value = true
+                _toastMessage.value = "Event '${eventData.name}' berhasil disimpan ke database"
+                _isActionSuccess.value = true
+            } catch (e: Exception) {
+                _toastMessage.value = "Gagal menyimpan ke database: ${e.message}"
+                e.printStackTrace()
+            }
+        }
     }
 
-    /**
-     * Logika untuk menghapus Event berdasarkan ID
-     */
     fun deleteEvent(currentEventId: String?) {
         if (currentEventId == null) {
             _toastMessage.value = "Gagal menghapus: ID Event tidak ditemukan!"
             return
         }
 
-        // TODO: Hubungkan ke Repository / Firebase / Room untuk menghapus data
-        // repository.deleteEvent(currentEventId)
+        viewModelScope.launch {
+            try {
+                // Eksekusi penghapusan data di I/O Thread
+                withContext(Dispatchers.IO) {
+                    ApiConfig.getWebService().deleteEvent(currentEventId)
+                }
 
-        _toastMessage.value = "Event berhasil dihapus"
-        _isActionSuccess.value = true
+                _toastMessage.value = "Event berhasil dihapus dari database"
+                _isActionSuccess.value = true
+            } catch (e: Exception) {
+                _toastMessage.value = "Gagal menghapus data: ${e.message}"
+                e.printStackTrace()
+            }
+        }
     }
 }

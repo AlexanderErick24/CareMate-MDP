@@ -28,8 +28,8 @@ class UserAdapter(
                 binding.tvUserRole.setBackgroundResource(R.drawable.bg_btn_secondary) // contoh file drawable
                 binding.tvUserRole.setTextColor(ContextCompat.getColor(itemView.context, R.color.text_green))
             } else {
-                binding.tvUserRole.setBackgroundResource(R.drawable.bg_tab_active)
-                binding.tvUserRole.setTextColor(ContextCompat.getColor(itemView.context, R.color.border_purple))
+                binding.tvUserRole.setBackgroundResource(R.drawable.bg_btn_secondary)
+                binding.tvUserRole.setTextColor(ContextCompat.getColor(itemView.context, R.color.text_green))
             }
 
             // 3. Logika Indikator Status Akun (Aktif / Non-aktif)
@@ -38,9 +38,9 @@ class UserAdapter(
                 binding.tvStatusText.text = "Active"
                 binding.tvStatusText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.holo_green_dark))
             } else {
-                binding.viewStatusIndicator.setBackgroundResource(R.drawable.bg_btn_secondary) // Dot Abu-abu/Merah
+                binding.viewStatusIndicator.setBackgroundResource(R.drawable.bg_tab_inactive) // Dot Abu-abu/Merah
                 binding.tvStatusText.text = "Suspended"
-                binding.tvStatusText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.darker_gray))
+                binding.tvStatusText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.holo_red_light))
             }
 
             // 4. Event Listener Klik Item

@@ -117,7 +117,8 @@ class EventFormFragment : Fragment() {
 
     // 4. Mengecek mode edit data lama
     private fun checkEditMode() {
-        val argsEvent = arguments?.getSerializable("EXTRA_EVENT") as? Event
+        // PERBAIKAN: Diubah menjadi getParcelable karena model Event menggunakan @Parcelize
+        val argsEvent = arguments?.getParcelable<Event>("EXTRA_EVENT")
 
         if (argsEvent != null) {
             currentEventId = argsEvent.eid

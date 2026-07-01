@@ -105,11 +105,23 @@
         android:name="com.mdp.caremate.ui.admin.AdminCommunityDashboardFragment"
         android:label="adminDashboard"
         tools:layout="@layout/fragment_admin_community_dashboard"/>
+
+    <!-- Events -->
     <fragment
         android:id="@+id/adminEvents"
         android:name="com.mdp.caremate.ui.admin.ManagementEventAdminDashboard"
         android:label="adminEvent"
-        tools:layout="@layout/fragment_management_event_admin_dashboard" />
+        tools:layout="@layout/fragment_management_event_admin_dashboard" >
+        <action
+            android:id="@+id/action_adminEvents_to_eventFormFragment"
+            app:destination="@id/eventForm" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventForm"
+        android:name="com.mdp.caremate.ui.admin.EventFormFragment"
+        android:label="eventForm" />
+
+    <!-- Users -->
     <fragment
         android:id="@+id/adminUsers"
         android:name="com.mdp.caremate.ui.admin.UsersFragment"
@@ -119,7 +131,6 @@
             android:id="@+id/action_adminUsers_to_userDetail"
             app:destination="@id/userDetail" />
     </fragment>
-
     <fragment
         android:id="@+id/userDetail"
         android:name="com.mdp.caremate.ui.admin.UserDetail"

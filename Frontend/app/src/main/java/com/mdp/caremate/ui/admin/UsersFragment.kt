@@ -9,12 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels // Menggunakan delegasi Jetpack ktx
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.button.MaterialButton
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mdp.caremate.R
 import com.mdp.caremate.data.model.User
 import com.mdp.caremate.databinding.FragmentUsersBinding
@@ -24,7 +23,8 @@ class UsersFragment : Fragment() {
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
 
-    private val db = FirebaseFirestore.getInstance()
+    // Inisialisasi ViewModel secara bersih mengikuti referensi Event
+    private val viewModel: UserViewModel by viewModels()
 
     private val allUsersList = ArrayList<User>()
     private val filteredList = ArrayList<User>()
@@ -43,38 +43,51 @@ class UsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 1. Inisialisasi Komponen Komponen Utama UI
         setupRecyclerView()
         setupSearch()
         setupFilterTabs()
         setupClickListeners()
 
-        fetchUsersFromDatabase()
+        // 2. Hubungkan Pengamat (Observer) ke ViewModel
+        observeViewModel()
+
+        // 3. Tarik data dari database (Hanya dijalankan saat pertama kali halaman dibuat)
+        if (savedInstanceState == null) {
+            viewModel.fetchUsers()
+        }
     }
 
-    private fun fetchUsersFromDatabase() {
-        db.collection("users")
-            .addSnapshotListener { snapshots, error ->
-                // Cegah error jika fragment sudah tidak aktif di screen
-                if (_binding == null || !isAdded) return@addSnapshotListener
+    private fun observeViewModel() {
+        // Mengamati perubahan data list user
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            if (_binding == null || !isAdded) return@observe
 
-                if (error != null) {
-                    Toast.makeText(requireContext(), "Gagal mengambil data: ${error.message}", Toast.LENGTH_SHORT).show()
-                    return@addSnapshotListener
-                }
-
-                if (snapshots != null) {
-                    allUsersList.clear()
-                    for (document in snapshots) {
-                        val user = document.toObject(User::class.java)
-                        if (!user.role.equals("Admin", ignoreCase = true)) {
-                            allUsersList.add(user)
-                        }
-                    }
-
-                    setupDashboardStats()
-                    applyFilterAndSearch(binding.etSearch.text.toString())
-                }
+            allUsersList.clear()
+            if (users.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Tidak ada data user", Toast.LENGTH_SHORT).show()
+            } else {
+                allUsersList.addAll(users)
             }
+
+            // Perbarui visualisasi card statistik dashboard atas
+            setupDashboardStats()
+
+            // Jalankan filter pencarian & tab sinkron dengan teks saat ini
+            applyFilterAndSearch(binding.etSearch.text.toString())
+        }
+
+        // Mengamati state loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (_binding == null) return@observe
+            // Anda bisa menyalakan ProgressBar/Shimmer di sini jika ada di XML layout Anda
+        }
+
+        // Mengamati jika ada error dari FirebaseSource
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            if (_binding == null || !isAdded || message == null) return@observe
+            Toast.makeText(requireContext(), "Gagal mengambil data: $message", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun setupDashboardStats() {
@@ -83,9 +96,8 @@ class UsersFragment : Fragment() {
         val totalUsers = allUsersList.size
         val totalCaregivers = allUsersList.count { it.role.equals("Caregiver", ignoreCase = true) }
         val totalFamily = allUsersList.count { it.role.equals("Family", ignoreCase = true) }
-        val activeNow = allUsersList.count { it.status } // Menghitung user dengan status = true
+        val activeNow = allUsersList.count { it.status }
 
-        // Menggunakan pemanggilan ID secara aman dan spesifik lewat binding card internal
         binding.cardTotalUsers.let { card ->
             card.findViewById<TextView>(R.id.lblTotal)?.let { lbl ->
                 val container = lbl.parent as? ViewGroup
@@ -169,13 +181,10 @@ class UsersFragment : Fragment() {
         }
     }
 
-    // Perbaikan: Menggunakan vararg agar fleksibel menerima berapapun jumlah chip yang tidak aktif
     private fun updateTabUI(activeButton: MaterialButton, vararg inactiveButtons: MaterialButton) {
-        // Menggunakan warna hijau dari XML asli (#2D4A43)
         activeButton.setBackgroundColor(Color.parseColor("#2D4A43"))
         activeButton.setTextColor(Color.WHITE)
 
-        // Menggunakan warna abu-abu dari XML asli (#E5E7EB) dan teks hitam/abu (#4B5563)
         for (button in inactiveButtons) {
             button.setBackgroundColor(Color.parseColor("#E5E7EB"))
             button.setTextColor(Color.parseColor("#4B5563"))
@@ -186,10 +195,9 @@ class UsersFragment : Fragment() {
         filteredList.clear()
 
         for (user in allUsersList) {
-            // Logika filter berdasarkan status dan role
             val matchesFilter = when (currentFilter) {
                 "ALL" -> true
-                "INACTIVE" -> !user.status // Jika status = false (User nonaktif)
+                "INACTIVE" -> !user.status
                 else -> user.role.equals(currentFilter, ignoreCase = true)
             }
 

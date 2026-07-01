@@ -80,6 +80,11 @@
         <action
             android:id="@+id/action_dest_profile_to_dest_edit_profile"
             app:destination="@id/dest_edit_profile" />
+        <action
+            android:id="@+id/action_dest_profile_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

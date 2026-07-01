@@ -12,6 +12,7 @@ import android.app.AlertDialog
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.mdp.caremate.data.repositories.ProfileRepositoryImpl
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 
@@ -44,6 +45,11 @@ class ProfileFragment : Fragment() {
 
         binding.btnEditProfile.setOnClickListener {
             findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_dest_edit_profile)
+        }
+        
+        binding.btnLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_login)
         }
         
         binding.cardGabungKeluarga.setOnClickListener {

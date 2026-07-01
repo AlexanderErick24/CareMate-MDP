@@ -34,30 +34,45 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         viewModelScope.launch {
-            val userResult = firebaseSource.getCurrentUser()
-            if (userResult.isSuccess) {
-                val user = userResult.getOrNull()
-                if (user != null) {
-                    targetUid = if (user.role == "caregiver" && user.connectedPatientUid.isNotEmpty()) {
-                        user.connectedPatientUid
-                    } else {
-                        user.uid
-                    }
-                }
-            }
+            getTargetUid()
         }
     }
 
+    private suspend fun getTargetUid(): String {
+        if (targetUid.isNotEmpty()) return targetUid
+        val userResult = firebaseSource.getCurrentUser()
+        if (userResult.isSuccess) {
+            val user = userResult.getOrNull()
+            if (user != null) {
+                targetUid = if (user.role == "caregiver" && user.connectedPatientUid.isNotEmpty()) {
+                    user.connectedPatientUid
+                } else {
+                    user.uid
+                }
+            }
+        }
+        return targetUid
+    }
+
     fun loadMedication(medicationId: String) {
-        if (medicationId.isEmpty() || targetUid.isEmpty()) return
+        if (medicationId.isEmpty()) return
         viewModelScope.launch {
-            val medication = medRepository.getMedicationById(targetUid, medicationId)
-            if (medication != null) {
-                currentMedicationId = medicationId
-                _selectedMedication.value = medication
-                _isEditing.value = true
-            } else {
-                _message.value = "Data obat tidak ditemukan."
+            try {
+                val uid = getTargetUid()
+                if (uid.isEmpty()) {
+                    _message.value = "Gagal memuat profil pengguna."
+                    return@launch
+                }
+                val medication = medRepository.getMedicationById(uid, medicationId)
+                if (medication != null) {
+                    currentMedicationId = medicationId
+                    _selectedMedication.value = medication
+                    _isEditing.value = true
+                } else {
+                    _message.value = "Data obat tidak ditemukan."
+                }
+            } catch (e: Exception) {
+                _message.value = "Gagal memuat data obat: ${e.message}"
             }
         }
     }
@@ -83,45 +98,56 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
             return
         }
 
-        if (targetUid.isEmpty()) {
-            _message.value = "Gagal memuat target pasien."
-            return
-        }
-
         viewModelScope.launch {
-            val now = System.currentTimeMillis()
-            val medication = Medication(
-                id = currentMedicationId,
-                name = trimmedName,
-                dosage = trimmedDosage,
-                intakeHour = hour,
-                intakeMinute = minute,
-                isTakenToday = false,
-                isEnabled = true,
-                createdAt = selectedMedication.value?.createdAt ?: now,
-                updatedAt = now
-            )
+            try {
+                val uid = getTargetUid()
+                if (uid.isEmpty()) {
+                    _message.value = "Gagal memuat target pasien."
+                    return@launch
+                }
 
-            if (currentMedicationId.isNotEmpty()) {
-                val updatedMedication = medRepository.updateMedication(targetUid, medication)
-                scheduler.schedule(updatedMedication)
-                _message.value = "Jadwal obat berhasil diperbarui."
-            } else {
-                val insertedMedication = medRepository.insertMedication(targetUid, medication)
-                scheduler.schedule(insertedMedication)
-                _message.value = "Jadwal obat berhasil disimpan."
+                val now = System.currentTimeMillis()
+                val medication = Medication(
+                    id = currentMedicationId,
+                    name = trimmedName,
+                    dosage = trimmedDosage,
+                    intakeHour = hour,
+                    intakeMinute = minute,
+                    isTakenToday = false,
+                    isEnabled = true,
+                    createdAt = selectedMedication.value?.createdAt ?: now,
+                    updatedAt = now
+                )
+
+                if (currentMedicationId.isNotEmpty()) {
+                    val updatedMedication = medRepository.updateMedication(uid, medication)
+                    scheduler.schedule(updatedMedication)
+                    _message.value = "Jadwal obat berhasil diperbarui."
+                } else {
+                    val insertedMedication = medRepository.insertMedication(uid, medication)
+                    scheduler.schedule(insertedMedication)
+                    _message.value = "Jadwal obat berhasil disimpan."
+                }
+                _closeScreen.value = true
+            } catch (e: Exception) {
+                _message.value = "Gagal menyimpan jadwal obat: ${e.message}"
             }
-            _closeScreen.value = true
         }
     }
 
     fun deleteMedication() {
-        if (currentMedicationId.isEmpty() || targetUid.isEmpty()) return
+        if (currentMedicationId.isEmpty()) return
         viewModelScope.launch {
-            medRepository.deleteMedicationById(targetUid, currentMedicationId)
-            scheduler.cancel(currentMedicationId)
-            _message.value = "Jadwal obat berhasil dihapus."
-            _closeScreen.value = true
+            try {
+                val uid = getTargetUid()
+                if (uid.isEmpty()) return@launch
+                medRepository.deleteMedicationById(uid, currentMedicationId)
+                scheduler.cancel(currentMedicationId)
+                _message.value = "Jadwal obat berhasil dihapus."
+                _closeScreen.value = true
+            } catch (e: Exception) {
+                _message.value = "Gagal menghapus jadwal obat: ${e.message}"
+            }
         }
     }
 

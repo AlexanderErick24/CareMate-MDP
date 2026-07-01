@@ -76,7 +76,17 @@
         android:id="@+id/dest_profile"
         android:name="com.mdp.caremate.ui.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_dest_profile_to_dest_edit_profile"
+            app:destination="@id/dest_edit_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dest_edit_profile"
+        android:name="com.mdp.caremate.ui.profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
 
     <!-- FAMILY -->
     <fragment

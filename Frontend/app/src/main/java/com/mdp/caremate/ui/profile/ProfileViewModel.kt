@@ -47,4 +47,33 @@ class ProfileViewModel(
             _isLoading.value = false
         }
     }
+
+    private val _updateSuccess = MutableLiveData<Boolean>()
+    val updateSuccess: LiveData<Boolean> get() = _updateSuccess
+
+    fun resetUpdateSuccess() {
+        _updateSuccess.value = false
+    }
+
+    fun updateUserProfile(
+        name: String,
+        jobTitle: String,
+        age: Int,
+        bio: String,
+        experience: List<String>,
+        skills: List<String>
+    ) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.updateUserProfile(name, jobTitle, age, bio, experience, skills)
+            if (result.isSuccess) {
+                _toastMessage.value = "Profil berhasil diperbarui!"
+                fetchCurrentUser()
+                _updateSuccess.value = true
+            } else {
+                _toastMessage.value = "Gagal memperbarui profil: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
 }

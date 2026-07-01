@@ -147,12 +147,14 @@ class MedRepositoryImpl : MedRepository {
             
             val snap = historyCollection
                 .whereEqualTo("medicationId", medicationId)
-                .whereGreaterThanOrEqualTo("takenAt", startOfDay)
                 .get().await()
                 
             val batch = firestore.batch()
             for (d in snap.documents) {
-                batch.delete(d.reference)
+                val takenAt = d.getLong("takenAt") ?: 0L
+                if (takenAt >= startOfDay) {
+                    batch.delete(d.reference)
+                }
             }
             batch.commit().await()
         }

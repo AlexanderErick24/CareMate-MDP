@@ -351,10 +351,11 @@ class FirebaseSource {
         }
     }
 
-    suspend fun updateUserProfile(jobTitle: String, age: Int, bio: String, experience: List<String>, skills: List<String>): Result<String> {
+    suspend fun updateUserProfile(name: String, jobTitle: String, age: Int, bio: String, experience: List<String>, skills: List<String>): Result<String> {
         return try {
             val uid = auth.currentUser?.uid ?: throw Exception("User not logged in")
             val updates = mapOf(
+                "name" to name,
                 "jobTitle" to jobTitle,
                 "age" to age,
                 "bio" to bio,

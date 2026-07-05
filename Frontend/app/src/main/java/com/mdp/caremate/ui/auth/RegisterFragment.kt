@@ -60,6 +60,29 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         // =========================
+        // HANDLE ADD FAMILY MEMBER
+        // =========================
+        val isFromFamily = arguments?.getBoolean("isFromFamily") ?: false
+        val pairingCodeFromArg = arguments?.getString("pairingCode") ?: ""
+
+        if (isFromFamily) {
+            // 1. Langsung otomatis kepencet radio button Family
+            rbFamily.isChecked = true
+
+            // 2. Hilangkan radio button Caregiver (sesuai request "gausa ada")
+            rbCaregiver.visibility = View.GONE
+
+            // 3. Pastikan Pairing Code muncul & Patient Name hilang
+            etPairingCode.visibility = View.VISIBLE
+            etPatientName.visibility = View.GONE
+
+            // 4. (Opsional tapi direkomendasikan)
+            // Langsung isikan pairing code-nya dan kunci biar user ga salah ketik
+            etPairingCode.setText(pairingCodeFromArg)
+            etPairingCode.isEnabled = false
+        }
+
+        // =========================
         // FIREBASE + VIEWMODEL
         // =========================
 

@@ -15,6 +15,8 @@ import com.mdp.caremate.R
 
 import com.mdp.caremate.data.repositories.AuthRepositoryImpl
 import com.mdp.caremate.data.sources.remote.FirebaseSource
+import com.mdp.caremate.ui.auth.AuthViewModel
+import com.mdp.caremate.ui.dashboard.DashboardViewModel
 
 import com.mdp.caremate.ui.family.management.adapter.FamilyMemberAdapter
 
@@ -22,6 +24,7 @@ class FamilyManagementFragment :
     Fragment(
         R.layout.fragment_family_management
     ) {
+    private lateinit var authViewModel: AuthViewModel
 
     private lateinit var viewModel:
             FamilyManagementViewModel
@@ -82,13 +85,28 @@ class FamilyManagementFragment :
             adapter.submitList(it)
         }
 
+        authViewModel =
+            ViewModelProvider(
+                this,
+                factory
+            )[AuthViewModel::class.java]
+
+        val userPairingCode = authViewModel.currentUser.value?.pairingCode ?: ""
+
         btnAddFamily.setOnClickListener {
             Toast.makeText(
                 requireContext(),
                 "Register your new member now",
                 Toast.LENGTH_LONG
             ).show()
-            findNavController().navigate(R.id.action_family_management_to_register)
+            val action =
+                FamilyManagementFragmentDirections
+                    .actionFamilyManagementToRegister(
+                        isFromFamily = true,
+                        pairingCode = userPairingCode
+                    )
+
+            findNavController().navigate(action)
         }
 
         viewModel.isPremiumRequired.observe(

@@ -53,21 +53,29 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }.asLiveData()
 
-    fun updateMedicationTakenStatus(medication: Medication, isTakenToday: Boolean) {
+    fun updateMedicationTakenStatus(medication: Medication, isTakenToday: Boolean, photoUrl: String? = null) {
         viewModelScope.launch {
-            val uid = targetUidFlow.value
-            if (uid != null) {
-                medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday)
+            try {
+                val uid = targetUidFlow.value
+                if (uid != null) {
+                    medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday, photoUrl)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
     fun deleteMedication(medication: Medication) {
         viewModelScope.launch {
-            val uid = targetUidFlow.value
-            if (uid != null) {
-                medRepository.deleteMedication(uid, medication)
-                scheduler.cancel(medication.id)
+            try {
+                val uid = targetUidFlow.value
+                if (uid != null) {
+                    medRepository.deleteMedication(uid, medication)
+                    scheduler.cancel(medication.id)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

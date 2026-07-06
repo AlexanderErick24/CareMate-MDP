@@ -12,13 +12,14 @@ class ProfileRepositoryImpl(
     }
 
     override suspend fun updateUserProfile(
+        name: String,
         jobTitle: String,
         age: Int,
         bio: String,
         experience: List<String>,
         skills: List<String>
     ): Result<String> {
-        return firebaseSource.updateUserProfile(jobTitle, age, bio, experience, skills)
+        return firebaseSource.updateUserProfile(name, jobTitle, age, bio, experience, skills)
     }
 
     override suspend fun requestJoinFamily(targetCode: String): Result<String> {

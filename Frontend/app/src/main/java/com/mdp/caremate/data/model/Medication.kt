@@ -1,7 +1,6 @@
 package com.mdp.caremate.data.model
 
 import com.google.firebase.firestore.DocumentId
-
 import com.google.firebase.firestore.PropertyName
 
 data class Medication(
@@ -17,6 +16,14 @@ data class Medication(
     @get:PropertyName("isEnabled")
     @set:PropertyName("isEnabled")
     var isEnabled: Boolean = true,
+    val startDate: String = "",
+    @get:PropertyName("isRecurringForever")
+    @set:PropertyName("isRecurringForever")
+    var isRecurringForever: Boolean = true,
+    val repeatDays: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7),
+    @get:PropertyName("photoUrl")
+    @set:PropertyName("photoUrl")
+    var photoUrl: String = "",
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 )

@@ -9,9 +9,8 @@ class PremiumRemoteDataSourceImpl(
 ) : PremiumRemoteDataSource {
 
     override suspend fun analyzeMood(content: String): Journal {
-        // 1. Bungkus teks input menjadi JSON Request
+        // 1. Bungkus teks input menjadi JSON Request (Prompt diatur di sisi Backend)
         val request = MoodRequestJson(content)
-
         // 2. Tembak API menggunakan Retrofit
         val responseJson = webService.analyzeMood(request)
 

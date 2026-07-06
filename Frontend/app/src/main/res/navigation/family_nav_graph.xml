@@ -23,8 +23,22 @@
 
     <fragment
         android:id="@+id/chatFragment"
+        android:name="com.mdp.caremate.ui.chat.ChatRoomListFragment">
+        <action
+            android:id="@+id/action_chatRoomList_to_familyChat"
+            app:destination="@id/familyChatFragment"/>
+        <action
+            android:id="@+id/action_chatRoomList_to_aiChat"
+            app:destination="@id/aiChatFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/familyChatFragment"
         android:name="com.mdp.caremate.ui.chat.ChatFragment"/>
 
+    <fragment
+        android:id="@+id/aiChatFragment"
+        android:name="com.mdp.caremate.ui.chat.JournalingChatFragment"/>
     <fragment
         android:id="@+id/familyManagementFragment"
         android:name="com.mdp.caremate.ui.family.management.FamilyManagementFragment">

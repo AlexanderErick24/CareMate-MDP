@@ -1,99 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="0dp"
-    app:contentPadding="16dp"
-    app:strokeColor="@color/caremate_outline"
-    app:strokeWidth="1dp"
-    tools:context=".ui.dashboard.MedicationAdapter">
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    android:layout_marginBottom="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:id="@+id/viewAccent"
-            android:layout_width="5dp"
-            android:layout_height="0dp"
-            android:background="@color/caremate_primary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvMedicationName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:textColor="@color/caremate_neutral"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/cbTaken"
-            app:layout_constraintStart_toEndOf="@id/viewAccent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Paracetamol" />
-
-        <TextView
-            android:id="@+id/tvMedicationDosage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="12dp"
-            android:textColor="@color/caremate_muted"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toStartOf="@+id/cbTaken"
-            app:layout_constraintStart_toEndOf="@id/viewAccent"
-            app:layout_constraintTop_toBottomOf="@id/tvMedicationName"
-            tools:text="2 tablet setelah makan" />
+    <!-- Left Timeline Column -->
+    <LinearLayout
+        android:layout_width="65dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/tvMedicationTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_time_chip"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:textColor="@color/caremate_primary"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/viewAccent"
-            app:layout_constraintTop_toBottomOf="@id/tvMedicationDosage"
-            tools:text="08:00" />
-
-        <ImageButton
-            android:id="@+id/btnEditMedication"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Edit obat"
-            android:padding="6dp"
-            android:src="@android:drawable/ic_menu_edit"
-            android:tint="@color/caremate_primary"
-            app:layout_constraintEnd_toStartOf="@id/cbTaken"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbTaken"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/caremate_primary"
-            android:text="@string/dashboard_checkbox_taken"
             android:textColor="@color/caremate_neutral"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="18:00" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+        <View
+            android:id="@+id/viewTimelineLine"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:background="#D1C7BD" />
+    </LinearLayout>
+
+    <!-- Right Medication Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardMedicationItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        app:strokeColor="@color/caremate_outline"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Top Row: Icon, Info, Edit Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    app:cardBackgroundColor="#F4EDE3"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_pill"
+                        app:tint="@color/caremate_primary" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvMedicationName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/caremate_neutral"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        tools:text="rivastigminc" />
+
+                    <TextView
+                        android:id="@+id/tvMedicationDosage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/caremate_muted"
+                        android:textSize="14sp"
+                        tools:text="sebelum tidur" />
+
+                    <TextView
+                        android:id="@+id/tvPhotoIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="📷 Ada Foto Bukti Minum"
+                        android:textColor="@color/caremate_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btnEditMedication"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Edit obat"
+                    android:padding="6dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="@color/caremate_neutral" />
+            </LinearLayout>
+
+            <!-- Bottom Action Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTakeAction"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="16dp"
+                android:text="Sudah Minum"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="16dp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

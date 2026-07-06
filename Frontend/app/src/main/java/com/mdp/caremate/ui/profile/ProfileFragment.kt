@@ -11,6 +11,8 @@ import com.mdp.caremate.databinding.FragmentProfileBinding
 import android.app.AlertDialog
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.mdp.caremate.data.repositories.ProfileRepositoryImpl
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 
@@ -42,8 +44,12 @@ class ProfileFragment : Fragment() {
         viewModel.fetchCurrentUser()
 
         binding.btnEditProfile.setOnClickListener {
-            // Nanti pindah ke EditProfileFragment
-            Toast.makeText(requireContext(), "Edit Profile clicked!", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_dest_edit_profile)
+        }
+        
+        binding.btnLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_login)
         }
         
         binding.cardGabungKeluarga.setOnClickListener {
@@ -88,6 +94,25 @@ class ProfileFragment : Fragment() {
                 binding.tvProfileAge.text = if (user.age == 0) "Umur belum diatur" else "${user.age} Years Old"
                 binding.tvProfileBio.text = if (user.bio.isEmpty()) "Belum ada bio" else user.bio
                 
+                if (user.experience.isNotEmpty()) {
+                    binding.tvProfileExperience.text = user.experience.joinToString("\n") { "• $it" }
+                } else {
+                    binding.tvProfileExperience.text = "Belum ada pengalaman kerja"
+                }
+
+                binding.chipGroupSkills.removeAllViews()
+                if (user.skills.isNotEmpty()) {
+                    for (skill in user.skills) {
+                        val chip = com.google.android.material.chip.Chip(requireContext()).apply {
+                            text = skill
+                            setChipBackgroundColorResource(android.R.color.transparent)
+                            chipBackgroundColor = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#EAF4F0"))
+                            setTextColor(android.graphics.Color.parseColor("#386458"))
+                        }
+                        binding.chipGroupSkills.addView(chip)
+                    }
+                }
+
                 if (user.pairingCode.isNotEmpty()) {
                     binding.tvPairingCode.visibility = View.VISIBLE
                     binding.tvPairingCode.text = "Kode Anda: ${user.pairingCode}"

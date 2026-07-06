@@ -66,17 +66,28 @@
         android:label="Detail Event"
         tools:layout="@layout/fragment_event_detail" />
 
-    <fragment
-        android:id="@+id/dest_premium"
-        android:name="com.mdp.caremate.ui.premium.JournalingFragment"
-        android:label="Premium Services"
-        tools:layout="@layout/fragment_journaling" />
+
 
     <fragment
         android:id="@+id/dest_profile"
         android:name="com.mdp.caremate.ui.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_dest_profile_to_dest_edit_profile"
+            app:destination="@id/dest_edit_profile" />
+        <action
+            android:id="@+id/action_dest_profile_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dest_edit_profile"
+        android:name="com.mdp.caremate.ui.profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
 
     <!-- FAMILY -->
     <fragment
@@ -95,9 +106,26 @@
     <!-- CHAT -->
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.mdp.caremate.ui.chat.ChatFragment"
+        android:name="com.mdp.caremate.ui.chat.ChatRoomListFragment"
         android:label="Chat Message"
+        tools:layout="@layout/fragment_chat_room_list">
+        <action
+            android:id="@+id/action_chatRoomList_to_familyChat"
+            app:destination="@id/familyChatFragment"/>
+        <action
+            android:id="@+id/action_chatRoomList_to_aiChat"
+            app:destination="@id/aiChatFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/familyChatFragment"
+        android:name="com.mdp.caremate.ui.chat.ChatFragment"
         tools:layout="@layout/fragment_chat"/>
+
+    <fragment
+        android:id="@+id/aiChatFragment"
+        android:name="com.mdp.caremate.ui.chat.JournalingChatFragment"
+        tools:layout="@layout/fragment_journaling_chat"/>
 
     <!-- ADMIN -->
     <fragment

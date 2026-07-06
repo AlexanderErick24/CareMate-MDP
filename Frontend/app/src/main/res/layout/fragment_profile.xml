@@ -212,19 +212,13 @@
                     android:layout_marginBottom="12dp" />
 
                 <TextView
+                    android:id="@+id/tvProfileExperience"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• Senior Care Assistant (2020 - Present)"
+                    android:text="Belum ada pengalaman kerja"
                     android:textColor="#404845"
                     android:textSize="14sp"
-                    android:layout_marginBottom="6dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Nursing Home Volunteer (2018 - 2020)"
-                    android:textColor="#404845"
-                    android:textSize="14sp" />
+                    android:lineSpacingExtra="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -258,37 +252,10 @@
                     android:id="@+id/chipGroupSkills"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:chipSpacingVertical="4dp">
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="First Aid"
-                        app:chipBackgroundColor="#EAF4F0"
-                        android:textColor="#386458"
-                        app:chipStrokeWidth="0dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Medication Management"
-                        app:chipBackgroundColor="#EAF4F0"
-                        android:textColor="#386458"
-                        app:chipStrokeWidth="0dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Patient Mobility"
-                        app:chipBackgroundColor="#EAF4F0"
-                        android:textColor="#386458"
-                        app:chipStrokeWidth="0dp" />
-
-                </com.google.android.material.chip.ChipGroup>
+                    app:chipSpacingVertical="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- BUTTONS -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
@@ -300,6 +267,21 @@
             android:textStyle="bold"
             app:backgroundTint="#386458"
             app:cornerRadius="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Keluar / Logout"
+            android:textAllCaps="false"
+            android:textColor="#BA1A1A"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp"
+            app:strokeColor="#BA1A1A"
+            app:strokeWidth="1.5dp" />
 
     </LinearLayout>
 </ScrollView>

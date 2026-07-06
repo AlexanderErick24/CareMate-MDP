@@ -18,6 +18,7 @@ interface MedRepository {
     suspend fun setMedicationTakenStatus(
         targetUid: String,
         medicationId: String,
-        isTakenToday: Boolean
+        isTakenToday: Boolean,
+        photoUrl: String? = null
     ): Medication
 }

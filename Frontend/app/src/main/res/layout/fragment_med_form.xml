@@ -14,13 +14,14 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardMedFormHeader"
-            android:layout_width="0dp"
+            android:id="@+id/cardMedFormContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/caremate_primary"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="0dp"
-            app:contentPadding="20dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="32dp"
+            app:cardElevation="8dp"
+            app:contentPadding="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -30,161 +31,358 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- Title -->
                 <TextView
                     android:id="@+id/tvMedFormTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/med_form_title_add"
-                    android:textColor="@android:color/white"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:text="Tambah Jadwal Obat"
+                    android:textColor="@color/caremate_neutral"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
+                <!-- Hidden Subtitle for compatibility -->
                 <TextView
                     android:id="@+id/tvMedFormSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/med_form_subtitle"
-                    android:textColor="#EAF4F0"
-                    android:textSize="14sp" />
+                    android:visibility="gone" />
+
+                <!-- Nama Obat -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMedName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama Obat"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/caremate_primary"
+                    app:boxStrokeWidth="1.5dp"
+                    app:startIconDrawable="@drawable/ic_pill"
+                    app:startIconTint="@color/caremate_primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMedName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapWords"
+                        android:paddingVertical="14dp"
+                        android:textColor="@color/caremate_neutral"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Deskripsi / Dosis / Aturan -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMedDosage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Deskripsi / Dosis / Aturan"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/caremate_primary"
+                    app:boxStrokeWidth="1.5dp"
+                    app:startIconDrawable="@drawable/ic_info_circle"
+                    app:startIconTint="@color/caremate_primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMedDosage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:paddingVertical="14dp"
+                        android:textColor="@color/caremate_neutral"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Jam Minum -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMedTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Jam Minum"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/caremate_primary"
+                    app:boxStrokeWidth="1.5dp"
+                    app:startIconDrawable="@drawable/ic_clock"
+                    app:startIconTint="@color/caremate_primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMedTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:paddingVertical="14dp"
+                        android:text="08:00"
+                        android:textColor="@color/caremate_neutral"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Hidden inputs for compatibility -->
+                <EditText
+                    android:id="@+id/etMedHour"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/etMedMinute"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+
+                <!-- Durasi Pengobatan Header -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Durasi Pengobatan"
+                    android:textColor="@color/caremate_neutral"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Mulai Tanggal -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMedStartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Mulai Tanggal"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxCornerRadiusBottomEnd="20dp"
+                    app:boxCornerRadiusBottomStart="20dp"
+                    app:boxCornerRadiusTopEnd="20dp"
+                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxStrokeColor="@color/caremate_primary"
+                    app:boxStrokeWidth="1.5dp"
+                    app:startIconDrawable="@drawable/ic_calendar"
+                    app:startIconTint="@color/caremate_primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etMedStartDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:paddingVertical="14dp"
+                        android:textColor="@color/caremate_neutral"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Berulang Selamanya Switch -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Berulang Selamanya"
+                            android:textColor="@color/caremate_neutral"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Tidak ada tanggal berakhir"
+                            android:textColor="@color/caremate_muted"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchRecurringForever"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/caremate_outline" />
+
+                <!-- Ulangi Setiap Hari -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Ulangi Setiap Hari:"
+                    android:textColor="@color/caremate_neutral"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <!-- Day Chips -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvDay1"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="S"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvDay2"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="S"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvDay3"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="R"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvDay4"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="K"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvDay5"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="J"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvDay6"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="S"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvDay7"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:background="@drawable/bg_day_chip"
+                        android:gravity="center"
+                        android:text="M"
+                        android:textColor="@color/color_day_chip_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
+                <!-- Action Buttons -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveMedication"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="32dp"
+                    android:text="Simpan Jadwal Obat"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/caremate_primary"
+                    app:cornerRadius="18dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDeleteMedication"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Hapus Jadwal"
+                    android:textAllCaps="false"
+                    android:textColor="#BA1A1A"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:cornerRadius="18dp"
+                    app:strokeColor="#BA1A1A"
+                    app:strokeWidth="1.5dp" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMedName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            app:boxBackgroundColor="@color/white"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/caremate_primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardMedFormHeader">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMedName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/med_form_name_hint"
-                android:inputType="textCapWords"
-                android:textColor="@color/caremate_neutral"
-                android:textColorHint="@color/caremate_muted" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMedDosage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            app:boxBackgroundColor="@color/white"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/caremate_primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilMedName">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMedDosage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/med_form_dosage_hint"
-                android:inputType="textMultiLine"
-                android:minLines="2"
-                android:textColor="@color/caremate_neutral"
-                android:textColorHint="@color/caremate_muted" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:id="@+id/layoutTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilMedDosage">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeColor="@color/caremate_primary">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedHour"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/med_form_hour_hint"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/caremate_neutral"
-                    android:textColorHint="@color/caremate_muted" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeColor="@color/caremate_primary">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedMinute"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/med_form_minute_hint"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/caremate_neutral"
-                    android:textColorHint="@color/caremate_muted" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSaveMedication"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="@string/med_form_save"
-            android:textAllCaps="false"
-            app:backgroundTint="@color/caremate_primary"
-            app:cornerRadius="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTime" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteMedication"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/med_form_delete"
-            android:textAllCaps="false"
-            android:visibility="gone"
-            app:backgroundTint="@color/caremate_neutral"
-            app:cornerRadius="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSaveMedication" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -21,6 +21,7 @@ val PremiumViewModelFactory = object : ViewModelProvider.Factory {
 
             when {
                 isAssignableFrom(PremiumViewModel::class.java) -> PremiumViewModel(premiumRepository)
+                isAssignableFrom(com.mdp.caremate.ui.family.alert.AiAlertViewModel::class.java) -> com.mdp.caremate.ui.family.alert.AiAlertViewModel(premiumRepository)
 
                 // Kalau nanti Edo butuh Factory untuk Medication, bisa ditambah di sini:
                 // isAssignableFrom(MedicationViewModel::class.java) -> MedicationViewModel(application.medicationRepository)

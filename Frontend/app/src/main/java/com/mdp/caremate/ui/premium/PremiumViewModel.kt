@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdp.caremate.data.model.Journal
 import com.mdp.caremate.data.repositories.PremiumRepository
+import com.mdp.caremate.data.sources.remote.ChatHistoryItem
+import com.mdp.caremate.data.sources.remote.ChatHistoryPart
 import kotlinx.coroutines.launch
 
 class PremiumViewModel (
@@ -65,26 +67,34 @@ class PremiumViewModel (
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // 1. Tembak API AI (Internet)
-                val result = repository.analyzeMood(content)
-                
-                // Tambahkan caregiverId ke hasil agar disimpan dengan benar
-                // SERTA kembalikan 'content' menjadi teks asli pengguna (bukan prompt lengkap)
-                val finalResult = result.copy(caregiverId = caregiverId, content = content)
-                
-                _journalResult.value = finalResult
-
-                // 2. Simpan hasilnya ke Database Lokal (Room)
-                repository.insertJournal(finalResult)
-
-                // Pemicu Alert Kelelahan (Burnout) jika skor mood sangat rendah (stres)
-                if (finalResult.moodScore <= 3) {
-                    _burnoutAlert.value = true
-                } else {
-                    _burnoutAlert.value = false
+                // 1. Susun riwayat percakapan dari jurnal yang sudah ada di lokal
+                // agar AI "mengingat" konteks percakapan sebelumnya
+                val history = _journalList.flatMap { journal ->
+                    val items = mutableListOf<ChatHistoryItem>()
+                    if (journal.content.isNotBlank()) {
+                        items.add(ChatHistoryItem("user", listOf(ChatHistoryPart(journal.content))))
+                    }
+                    if (journal.aiAnalysis.isNotBlank()) {
+                        items.add(ChatHistoryItem("model", listOf(ChatHistoryPart(journal.aiAnalysis))))
+                    }
+                    items
                 }
 
-                // 3. Perbarui daftar riwayat di layar
+                // 2. Tembak API AI dengan konten + riwayat
+                val result = repository.analyzeMood(content, history)
+
+                // 3. Kunci caregiverId dan kembalikan content asli
+                val finalResult = result.copy(caregiverId = caregiverId, content = content)
+
+                _journalResult.value = finalResult
+
+                // 4. Simpan ke Database Lokal
+                repository.insertJournal(finalResult)
+
+                // 5. Pemicu Alert Burnout
+                _burnoutAlert.value = finalResult.moodScore <= 3
+
+                // 6. Perbarui daftar riwayat
                 refreshHistoryList(caregiverId)
 
             } catch (e: Exception) {

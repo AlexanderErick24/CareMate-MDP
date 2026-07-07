@@ -17,6 +17,11 @@ interface WebService {
     // Mengirim nama makanan atau link foto, menerima data kalori
     @POST("premium/analyze-nutrition")
     suspend fun analyzeNutrition(@Body request: NutritionRequestJson): NutritionJson
+    
+    // Endpoint untuk AI Vision Medication Verification
+    // Mengirim base64 gambar dan nama obat yang diharapkan
+    @POST("premium/verify-medication")
+    suspend fun verifyMedication(@Body request: MedicationVerifyRequestJson): MedicationVerifyResponseJson
 
     // Endpoint untuk mengambil seluruh daftar event komunitas
     @GET("api/events")

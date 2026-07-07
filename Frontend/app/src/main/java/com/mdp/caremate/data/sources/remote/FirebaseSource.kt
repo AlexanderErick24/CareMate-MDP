@@ -705,4 +705,42 @@ class FirebaseSource {
             Result.failure(e)
         }
     }
+
+    suspend fun saveAiAlert(alert: com.mdp.caremate.data.model.AiAlert): Result<Unit> {
+        return try {
+            firestore.collection("ai_alerts")
+                .document(alert.id)
+                .set(alert)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getAiAlertsForFamily(): Result<List<com.mdp.caremate.data.model.AiAlert>> {
+        return try {
+            val currentUid = auth.currentUser?.uid ?: return Result.failure(Exception("Not logged in"))
+            val currentUser = firestore.collection("users").document(currentUid).get().await()
+            val role = currentUser.getString("role") ?: ""
+            val caregiverUid = if (role == "caregiver") {
+                currentUid
+            } else {
+                currentUser.getString("caregiverUid") ?: ""
+            }
+
+            val snapshot = firestore.collection("ai_alerts")
+                .whereEqualTo("caregiverId", caregiverUid)
+                .get()
+                .await()
+
+            val alerts = snapshot.documents.mapNotNull {
+                it.toObject(com.mdp.caremate.data.model.AiAlert::class.java)
+            }.sortedByDescending { it.timestamp }
+            
+            Result.success(alerts)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

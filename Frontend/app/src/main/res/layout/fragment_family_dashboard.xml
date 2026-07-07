@@ -128,7 +128,10 @@
                             android:textColor="#191C1B"/>
 
                         <TextView
-                            android:text="Ready to help you"
+                            android:id="@+id/tvCaregiverMood"
+                            android:text="Mood Status: Loading..."
+                            android:textColor="#386458"
+                            android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
@@ -164,9 +167,13 @@
             <!-- AI ALERT -->
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAiAlert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="16dp">
 
                 <LinearLayout

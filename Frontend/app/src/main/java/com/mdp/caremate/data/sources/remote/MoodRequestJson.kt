@@ -3,9 +3,14 @@ package com.mdp.caremate.data.sources.remote
 import com.mdp.caremate.data.model.Journal
 import com.mdp.caremate.data.model.Nutrition
 
+// Model untuk satu item riwayat percakapan (sesuai format Gemini)
+data class ChatHistoryPart(val text: String)
+data class ChatHistoryItem(val role: String, val parts: List<ChatHistoryPart>)
+
 // Data yang dikirim dari Android ke Backend Node.js
 data class MoodRequestJson(
-    val content: String
+    val content: String,
+    val history: List<ChatHistoryItem> = emptyList()
 )
 
 // Data yang diterima Android dari Backend Node.js

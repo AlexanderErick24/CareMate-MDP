@@ -59,6 +59,23 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                 val uid = targetUidFlow.value
                 if (uid != null) {
                     medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday, photoUrl)
+                    
+                    // Trigger AI Verification if photo was uploaded
+                    if (isTakenToday && !photoUrl.isNullOrEmpty()) {
+                        try {
+                            val app = getApplication<com.mdp.caremate.CareMateApplication>()
+                            val premiumRepo = app.premiumRepository
+                            val alert = premiumRepo.verifyMedication(photoUrl, medication.name)
+                            
+                            // Save to Firestore so family can see
+                            val caregiverId = uid // the caregiver taking the action
+                            val finalAlert = alert.copy(caregiverId = caregiverId)
+                            premiumRepo.saveAiAlert(finalAlert)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            // Handle AI failure silently or log it
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

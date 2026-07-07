@@ -3,40 +3,72 @@ package com.mdp.caremate.ui.admin
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mdp.caremate.data.model.Event
-
-data class DashboardMetricsState(
-    val totalEvents: Int = 0,
-    val totalCapacitySlots: Int = 0,
-    val unlistedEventsCount: Int = 0,
-    val capacityTrendText: String = ""
-)
+import com.mdp.caremate.data.model.User
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class DashboardViewModel : ViewModel() {
 
-    private val _metricsState = MutableLiveData<DashboardMetricsState>()
-    val metricsState: LiveData<DashboardMetricsState> get() = _metricsState
+    private val firestore = FirebaseFirestore.getInstance()
 
-    /**
-     * Call this function when you fetch your event collection from Firebase,
-     * Room Database, or an API client.
-     */
-    fun processEventData(eventsList: List<Event>) {
-        val totalEvents = eventsList.size
+    private val _activeUsersCount = MutableLiveData<Int>()
+    val activeUsersCount: LiveData<Int> get() = _activeUsersCount
 
-        // Sum up all slots safely converting String to Integer
-        val totalCapacity = eventsList.sumOf { event ->
-            event.capacity.toIntOrNull() ?: 0
+    private val _activeEventsCount = MutableLiveData<Int>()
+    val activeEventsCount: LiveData<Int> get() = _activeEventsCount
+
+    fun fetchDashboardStats() {
+        viewModelScope.launch {
+            // 1. Ambil user & hitung totalnya
+            val users = getAllUser()
+            _activeUsersCount.value = users.size
+
+            // 2. Ambil event & hitung yang listed == true DAN belum lewat dari sekarang
+            val events = getAllEvent()
+
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            val now = Calendar.getInstance().time
+
+            val activeAndUpcomingCount = events.count { event ->
+                // Pastikan status listed bernilai true
+                if (!event.listed) return@count false
+
+                try {
+                    // Gabungkan date dan time (contoh: "25/12/2026" + " " + "19:00")
+                    val fullDateTimeStr = "${event.date} ${event.time}"
+                    val eventDateTime = sdf.parse(fullDateTimeStr)
+
+                    // Event dianggap aktif jika tanggalnya setelah waktu saat ini (now)
+                    eventDateTime != null && eventDateTime.after(now)
+                } catch (e: Exception) {
+                    // Jika format tanggal salah/gagal parse, jangan dihitung sebagai event aktif
+                    false
+                }
+            }
+
+            _activeEventsCount.value = activeAndUpcomingCount
         }
+    }
 
-        // Filter elements where listed == false
-        val unlistedCount = eventsList.count { !it.listed }
+    private suspend fun getAllEvent(): List<Event> {
+        return try {
+            firestore.collection("events").get().await().toObjects(Event::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 
-        _metricsState.value = DashboardMetricsState(
-            totalEvents = totalEvents,
-            totalCapacitySlots = totalCapacity,
-            unlistedEventsCount = unlistedCount,
-            capacityTrendText = "👥 Avg: ${if (totalEvents > 0) totalCapacity / totalEvents else 0} slots per event"
-        )
+    private suspend fun getAllUser(): List<User> {
+        return try {
+            firestore.collection("users").get().await().toObjects(User::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 }

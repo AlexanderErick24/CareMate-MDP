@@ -21,11 +21,13 @@ class EventFormFragment : Fragment() {
     private var _binding: FragmentEventFormBinding? = null
     private val binding get() = _binding!!
 
-    // Inisialisasi ViewModel
     private val viewModel: EventFormViewModel by viewModels()
 
     private val calendar = Calendar.getInstance()
     private var currentEventId: String? = null
+
+    // Variabel lokal untuk menyimpan status listed bawaan data lama
+    private var isCurrentlyListed: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +46,6 @@ class EventFormFragment : Fragment() {
         checkEditMode()
     }
 
-    // 1. Logika untuk memunculkan dialog Tanggal dan Waktu (Tetap berada di Fragment karena bagian dari UI)
     private fun setupPickers() {
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -84,25 +85,41 @@ class EventFormFragment : Fragment() {
         }
     }
 
-    // 2. Meneruskan interaksi aksi tombol ke ViewModel
     private fun setupActionButtons() {
+        // TOMBOL 1: SAVE (Menyimpan data tanpa mengubah status asli)
         binding.btnSaveEvent.setOnClickListener {
-            val name = binding.etEventName.text.toString().trim()
-            val date = binding.etEventDate.text.toString().trim()
-            val time = binding.etEventTime.text.toString().trim()
-            val place = binding.etEventPlace.text.toString().trim()
-            val capacity = binding.etEventCapacity.text.toString().trim()
-
-            // Delegasikan proses penyimpanan dan validasi ke ViewModel
-            viewModel.saveEvent(currentEventId, name, date, time, place, capacity)
+            sendEventData(targetListedStatus = isCurrentlyListed)
         }
 
+        // TOMBOL 2: POST KE PUBLIK (Memaksa status listed menjadi true)
+        binding.btnPost.setOnClickListener {
+            sendEventData(targetListedStatus = true)
+        }
+
+        // TOMBOL 3: HAPUS EVENT
         binding.btnDeleteEvent.setOnClickListener {
-            viewModel.deleteEvent(currentEventId)
+            val id = currentEventId
+            if (id != null) {
+                // Minta ViewModel untuk memproses penghapusan ke database
+                viewModel.deleteEvent(id)
+            } else {
+                Toast.makeText(requireContext(), "Gagal menghapus: ID Event tidak ditemukan", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    // 3. Mengamati state/data perubahan dari ViewModel
+    // Helper untuk menghemat penulisan parsing data teks input
+    private fun sendEventData(targetListedStatus: Boolean) {
+        val name = binding.etEventName.text.toString().trim()
+        val date = binding.etEventDate.text.toString().trim()
+        val time = binding.etEventTime.text.toString().trim()
+        val place = binding.etEventPlace.text.toString().trim()
+        val capacity = binding.etEventCapacity.text.toString().trim()
+        val selectedTimestamp = calendar.timeInMillis
+
+        viewModel.saveEvent(currentEventId, name, date, time, place, capacity, selectedTimestamp, targetListedStatus)
+    }
+
     private fun setupObservers() {
         viewModel.toastMessage.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -110,26 +127,53 @@ class EventFormFragment : Fragment() {
 
         viewModel.isActionSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                parentFragmentManager.popBackStack() // Kembali ke screen sebelumnya jika aksi berhasil
+                parentFragmentManager.popBackStack()
             }
         }
     }
 
-    // 4. Mengecek mode edit data lama
     private fun checkEditMode() {
-        // PERBAIKAN: Diubah menjadi getParcelable karena model Event menggunakan @Parcelize
         val argsEvent = arguments?.getParcelable<Event>("EXTRA_EVENT")
 
         if (argsEvent != null) {
             currentEventId = argsEvent.eid
-            binding.tvEventFormTitle.text = "Ubah rincian Event"
-            binding.btnDeleteEvent.visibility = View.VISIBLE
+            binding.tvEventFormTitle.text = "             Ubah rincian Event"
 
             binding.etEventName.setText(argsEvent.name)
             binding.etEventDate.setText(argsEvent.date)
             binding.etEventTime.setText(argsEvent.time)
             binding.etEventPlace.setText(argsEvent.place)
             binding.etEventCapacity.setText(argsEvent.capacity)
+
+            isCurrentlyListed = argsEvent.listed
+
+            // Atur visibilitas tombol berdasarkan status terdaftar (listed) saat ini
+            binding.btnDeleteEvent.visibility = View.VISIBLE
+
+            if (!isCurrentlyListed) {
+                // Jika masih draft, tampilkan tombol Post ke Publik
+                binding.btnPost.visibility = View.VISIBLE
+            } else {
+                // Jika sudah live/listed, sembunyikan tombol Post karena sudah publik
+                binding.btnPost.visibility = View.GONE
+            }
+
+            try {
+                val fullDateTimeStr = "${argsEvent.date} ${argsEvent.time}"
+                val parser = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                val savedDate = parser.parse(fullDateTimeStr)
+
+                if (savedDate != null) {
+                    calendar.time = savedDate
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            // Mode Tambah Baru: Hanya ada tombol Save, tombol lainnya disembunyikan
+            binding.btnDeleteEvent.visibility = View.GONE
+            binding.btnPost.visibility = View.GONE
+            isCurrentlyListed = false
         }
     }
 

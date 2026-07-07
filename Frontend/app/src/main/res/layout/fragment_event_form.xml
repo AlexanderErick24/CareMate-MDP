@@ -182,7 +182,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:text="@string/med_form_save"
+            android:text="Save"
             android:textAllCaps="false"
             app:backgroundTint="@color/caremate_primary"
             app:cornerRadius="16dp"
@@ -190,20 +190,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tilEventCapacity" />
 
+        <!-- BUTTON POST KE PUBLIK -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Post ke Publik"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            app:backgroundTint="@color/caremate_primary"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnSaveEvent" />
+
         <!-- BUTTON DELETE -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDeleteEvent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/med_form_delete"
+            android:text="Hapus"
             android:textAllCaps="false"
             android:visibility="gone"
             app:backgroundTint="@color/caremate_neutral"
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSaveEvent" />
+            app:layout_constraintTop_toBottomOf="@id/btnPost" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

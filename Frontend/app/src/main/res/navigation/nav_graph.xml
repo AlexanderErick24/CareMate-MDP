@@ -164,4 +164,14 @@
         android:name="com.mdp.caremate.ui.admin.UserDetail"
         android:label="UserDetailFragment"
         tools:layout="@layout/fragment_user_detail" />
+    <fragment
+        android:id="@+id/adminSettings"
+        android:name="com.mdp.caremate.ui.admin.AdminSetting"
+        android:label="AdminSetting"
+        tools:layout="@layout/fragment_admin_setting"/>
+
+    <action
+        android:id="@+id/action_admin_container_to_login"
+        app:destination="@id/loginFragment" />
+
 </navigation>

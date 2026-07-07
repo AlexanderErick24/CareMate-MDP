@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels // Menggunakan delegasi Jetpack ktx
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.button.MaterialButton
@@ -23,11 +23,10 @@ class UsersFragment : Fragment() {
     private var _binding: FragmentUsersBinding? = null
     private val binding get() = _binding!!
 
-    // Inisialisasi ViewModel secara bersih mengikuti referensi Event
     private val viewModel: UserViewModel by viewModels()
 
+    // Menyimpan data asli dari Firebase secara terpisah agar tidak terdistorsi saat filtering
     private val allUsersList = ArrayList<User>()
-    private val filteredList = ArrayList<User>()
     private var userAdapter: UserAdapter? = null
 
     private var currentFilter = "ALL"
@@ -43,47 +42,40 @@ class UsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Inisialisasi Komponen Komponen Utama UI
         setupRecyclerView()
         setupSearch()
         setupFilterTabs()
         setupClickListeners()
-
-        // 2. Hubungkan Pengamat (Observer) ke ViewModel
         observeViewModel()
 
-        // 3. Tarik data dari database (Hanya dijalankan saat pertama kali halaman dibuat)
         if (savedInstanceState == null) {
             viewModel.fetchUsers()
         }
     }
 
     private fun observeViewModel() {
-        // Mengamati perubahan data list user
         viewModel.users.observe(viewLifecycleOwner) { users ->
             if (_binding == null || !isAdded) return@observe
 
             allUsersList.clear()
-            if (users.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Tidak ada data user", Toast.LENGTH_SHORT).show()
-            } else {
+            if (!users.isNullOrEmpty()) {
                 allUsersList.addAll(users)
+            } else {
+                Toast.makeText(requireContext(), "Tidak ada data user", Toast.LENGTH_SHORT).show()
             }
 
-            // Perbarui visualisasi card statistik dashboard atas
+            // 1. Update counter dashboard atas dengan data paling fresh dari Firebase
             setupDashboardStats()
 
-            // Jalankan filter pencarian & tab sinkron dengan teks saat ini
+            // 2. Jalankan ulang filter & search agar UI List langsung sinkron
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
-        // Mengamati state loading
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (_binding == null) return@observe
-            // Anda bisa menyalakan ProgressBar/Shimmer di sini jika ada di XML layout Anda
+            // Implementasikan ProgressBar/Shimmer Anda di sini jika ada
         }
 
-        // Mengamati jika ada error dari FirebaseSource
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             if (_binding == null || !isAdded || message == null) return@observe
             Toast.makeText(requireContext(), "Gagal mengambil data: $message", Toast.LENGTH_LONG).show()
@@ -128,11 +120,11 @@ class UsersFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        userAdapter = UserAdapter(filteredList) { selectedUser ->
+        // Inisialisasi adapter dengan list kosong di awal
+        userAdapter = UserAdapter(ArrayList()) { selectedUser ->
             val bundle = Bundle().apply {
                 putParcelable("ARG_USER", selectedUser)
             }
-
             findNavController().navigate(
                 R.id.action_adminUsers_to_userDetail,
                 bundle
@@ -192,7 +184,7 @@ class UsersFragment : Fragment() {
     }
 
     private fun applyFilterAndSearch(query: String) {
-        filteredList.clear()
+        val temporaryFilteredList = ArrayList<User>()
 
         for (user in allUsersList) {
             val matchesFilter = when (currentFilter) {
@@ -205,11 +197,12 @@ class UsersFragment : Fragment() {
                     user.email.contains(query, ignoreCase = true)
 
             if (matchesFilter && matchesSearch) {
-                filteredList.add(user)
+                temporaryFilteredList.add(user)
             }
         }
 
-        userAdapter?.notifyDataSetChanged()
+        // Memperbarui data di dalam adapter secara aman menggunakan method internal adapter
+        userAdapter?.updateData(temporaryFilteredList)
     }
 
     private fun setupClickListeners() {
@@ -217,9 +210,6 @@ class UsersFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        binding.fabAddUser.setOnClickListener {
-            Toast.makeText(requireContext(), "Membuka Form Tambah Admin / User", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onDestroyView() {

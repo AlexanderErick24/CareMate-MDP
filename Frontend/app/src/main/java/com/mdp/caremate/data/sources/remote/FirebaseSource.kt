@@ -18,6 +18,8 @@ class FirebaseSource {
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
+    // USER
+
     suspend fun getAllUser(): List<User> {
         return try {
             firestore.collection("users")
@@ -41,6 +43,8 @@ class FirebaseSource {
         }
     }
 
+    // EVENT
+
     suspend fun getAllEvent(): List<Event> {
         return try {
             firestore.collection("events")
@@ -51,6 +55,33 @@ class FirebaseSource {
             emptyList()
         }
     }
+
+    suspend fun saveEvent(event: Event): Boolean {
+        return try {
+            firestore.collection("events")
+                .document(event.eid) // Menggunakan ID yang sudah dibuat di ViewModel
+                .set(event)
+                .await()
+            true // Berhasil
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false // Gagal
+        }
+    }
+
+    suspend fun deleteEvent(eventId: String): Boolean {
+        return try {
+            firestore.collection("events")
+                .document(eventId)
+                .delete()
+                .await()
+            true // Berhasil menghapus
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false // Gagal menghapus
+        }
+    }
+
 
     suspend fun register(
         name: String,

@@ -13,11 +13,6 @@
         android:title="Events" />
 
     <item
-        android:id="@+id/adminReports"
-        android:icon="@drawable/ic_reports"
-        android:title="Reports" />
-
-    <item
         android:id="@+id/adminUsers"
         android:icon="@drawable/ic_plus"
         android:title="Users" />

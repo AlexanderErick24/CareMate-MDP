@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 1. ATUR MENU SECARA DINAMIS BERDASARKAN DESTINATION ID
             when (destination.id) {
-                R.id.adminDashboard, R.id.adminEvents, R.id.adminUsers, R.id.adminReports, R.id.adminSettings -> {
+                R.id.adminDashboard, R.id.adminEvents, R.id.adminUsers, R.id.adminSettings -> {
                     // Jika tujuan navigasi adalah salah satu halaman admin, ganti menu ke admin
                     binding.bottomNav.menu.clear()
                     binding.bottomNav.inflateMenu(R.menu.menu_bottom_nav)

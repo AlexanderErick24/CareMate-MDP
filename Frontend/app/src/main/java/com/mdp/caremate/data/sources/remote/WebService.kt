@@ -6,6 +6,7 @@ import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Path
 import com.mdp.caremate.data.model.Event
+import retrofit2.http.DELETE
 
 interface WebService {
     // Endpoint untuk AI Mindful Journaling
@@ -30,4 +31,12 @@ interface WebService {
     // Endpoint untuk mengambil detail event komunitas berdasarkan ID
     @GET("api/events/{id}")
     suspend fun getEventById(@Path("id") id: String): Event
+
+    // Endpoint untuk menambahkan atau memperbarui event baru ke database
+    @POST("api/events")
+    suspend fun insertEvent(@Body event: Event)
+
+    // Endpoint untuk menghapus event berdasarkan ID
+    @DELETE("api/events/{id}")
+    suspend fun deleteEvent(@Path("id") id: String)
 }

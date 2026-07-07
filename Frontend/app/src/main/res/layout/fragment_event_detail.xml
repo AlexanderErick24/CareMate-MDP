@@ -12,10 +12,11 @@
         android:id="@+id/cardDetailHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/caremate_secondary"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
-        app:contentPadding="20dp"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/caremate_primary"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp"
+        app:contentPadding="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,7 +36,8 @@
                 android:drawableStart="@android:drawable/ic_media_previous"
                 android:drawablePadding="4dp"
                 android:text="@string/community_back"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
             <!-- Judul event -->
             <TextView
@@ -43,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="Seminar Kesehatan Lansia 2025" />
 
@@ -52,14 +54,16 @@
                 android:id="@+id/tvDetailDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_time_chip"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_badge_white"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="6dp"
                 android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:textColor="@color/caremate_secondary"
+                android:paddingVertical="6dp"
+                android:textColor="#1E463C"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                tools:text="20 Juni 2025" />
+                tools:text="20 Juni 2025 • 08:00 WIB" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -137,7 +141,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/community_detail_organizer_label"
+                        android:text="Informasi Kuota &amp; Kapasitas"
                         android:textColor="@color/caremate_muted"
                         android:textSize="12sp" />
 

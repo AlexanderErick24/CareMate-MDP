@@ -27,10 +27,10 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             if (userResult.isSuccess) {
                 val user = userResult.getOrNull()
                 if (user != null) {
-                    targetUidFlow.value = if (user.role == "caregiver" && user.connectedPatientUid.isNotEmpty()) {
-                        user.connectedPatientUid
-                    } else {
-                        user.uid
+                    targetUidFlow.value = when {
+                        user.role == "caregiver" && user.connectedPatientUid.isNotEmpty() -> user.connectedPatientUid
+                        user.role == "family" -> user.caregiverUid
+                        else -> user.uid
                     }
                 }
             }

@@ -153,4 +153,22 @@
         android:name="com.mdp.caremate.ui.admin.UserDetail"
         android:label="UserDetailFragment"
         tools:layout="@layout/fragment_user_detail" />
+
+    <!-- SMART NUTRITION GENERATOR -->
+    <fragment
+        android:id="@+id/dest_smart_nutrition"
+        android:name="com.mdp.caremate.ui.smartnutrition.SmartNutritionFragment"
+        android:label="Smart Nutrition"
+        tools:layout="@layout/fragment_smart_nutrition">
+        <action
+            android:id="@+id/action_smart_nutrition_to_recipe_detail"
+            app:destination="@id/dest_recipe_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dest_recipe_detail"
+        android:name="com.mdp.caremate.ui.smartnutrition.RecipeDetailFragment"
+        android:label="Detail Resep"
+        tools:layout="@layout/fragment_recipe_detail" />
+
 </navigation>

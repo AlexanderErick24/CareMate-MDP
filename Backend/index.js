@@ -489,3 +489,115 @@ app.patch('/api/admin/bypass-premium/:userId', (req, res) => {
         res.status(500).json({ error: "Gagal mengubah status premium user." });
     }
 });
+
+
+// =====================================================================
+// ENDPOINT: POST /api/smart-nutrition/generate
+// Menerima profil medis pasien, jenis makanan, bahan, dan history revisi
+// Mengembalikan 4-6 opsi resep (atau mengupdate resep via chat)
+// =====================================================================
+app.post('/api/smart-nutrition/generate', async (req, res) => {
+    try {
+        const { patientProfile, mealType, ingredients, history, revisionPrompt } = req.body;
+
+        // Validasi input minimal
+        if (!patientProfile || !mealType) {
+            return res.status(400).json({ error: "patientProfile dan mealType wajib diisi." });
+        }
+
+        const { diagnosis, allergies, texture, preferences } = patientProfile;
+
+        // System Instruction yang sangat ketat untuk Ahli Gizi AI
+        const systemInstruction = `
+Kamu adalah seorang Ahli Gizi Klinis berlisensi dan Koki Profesional.
+Tugasmu adalah merancang resep makanan yang LEZAT dan SANGAT AMAN berdasarkan kondisi pasien.
+
+PROFIL PASIEN INI (MUTLAK HARUS DIPATUHI):
+- Penyakit Utama: ${diagnosis || 'Tidak ada spesifik'}
+- Alergi Makanan: ${allergies || 'Tidak ada'}
+- Tekstur / Pantangan Lain: ${texture || 'Normal'}
+- Preferensi: ${preferences || 'Normal'}
+
+ATURAN KESELAMATAN:
+1. DILARANG KERAS menggunakan bahan yang disebutkan di bagian Alergi Makanan.
+2. Semua bahan dan takaran HARUS disesuaikan dengan standar diet Penyakit Utama pasien.
+3. Berikan porsi standar (misal untuk 1 porsi/orang).
+
+FORMAT OUTPUT:
+Kamu WAJIB mengembalikan murni JSON array yang berisi 4 sampai 6 buah objek resep.
+Struktur JSON (Array of Objects):
+[
+  {
+    "id": "recipe-uuid-unik",
+    "title": "Nama Makanan Menarik",
+    "imageSearchKeyword": "Keyword bahasa inggris spesifik untuk mencari stok foto di Unsplash",
+    "estTimeMin": 30,
+    "medicalRationale": "Satu atau dua kalimat penjelasan medis kenapa ini aman untuk pasien.",
+    "safetyBadge": "Aman untuk [Penyakit]",
+    "ingredients": [
+      { "name": "Bahan A", "amount": "100 gram" }
+    ],
+    "steps": [
+      "Langkah 1...",
+      "Langkah 2..."
+    ],
+    "youtubeQuery": "cara membuat [nama makanan]"
+  }
+]
+DILARANG memberikan teks markdown seperti \`\`\`json. Output harus LANGSUNG berupa Array JSON valid.
+        `.trim();
+
+        // Bangun prompt pengguna
+        let userPrompt = "";
+        if (revisionPrompt) {
+            userPrompt = `Caregiver meminta revisi dari resep sebelumnya: "${revisionPrompt}". Tolong berikan 4-6 opsi resep baru atau yang sudah dimodifikasi sesuai permintaan ini, dengan TETAP MEMATUHI pantangan medis pasien.`;
+        } else {
+            const bahanInfo = ingredients ? `Bahan yang tersedia: ${ingredients}` : "Bahan bebas (sarankan yang sehat).";
+            userPrompt = `Tolong buatkan 4-6 opsi resep untuk waktu makan: ${mealType}. ${bahanInfo}`;
+        }
+
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.5-flash",
+            systemInstruction: systemInstruction,
+            generationConfig: {
+                temperature: 0.7, // Sedikit kreatif tapi tetap patuh aturan medis
+                responseMimeType: "application/json" // Memaksa Gemini merespons dalam JSON murni
+            }
+        });
+
+        // Chat session (jika ada history untuk konteks revisi)
+        const chatHistory = Array.isArray(history) ? history : [];
+        const chat = model.startChat({ history: chatHistory });
+
+        const result = await chat.sendMessage(userPrompt);
+        const aiResponseText = result.response.text();
+
+        let recipesData = [];
+        try {
+            recipesData = JSON.parse(aiResponseText);
+            // Validasi jika respons bukan array
+            if (!Array.isArray(recipesData)) {
+                recipesData = [recipesData]; 
+            }
+            
+            // Beri UUID unik untuk tiap resep (bantu frontend)
+            recipesData = recipesData.map(recipe => ({
+                ...recipe,
+                id: recipe.id || crypto.randomUUID()
+            }));
+
+        } catch (error) {
+            console.error("Gagal parse JSON resep dari Gemini:", aiResponseText);
+            return res.status(500).json({ error: "Gagal memproses resep dari AI." });
+        }
+
+        res.status(200).json({
+            message: "Resep berhasil dibuat.",
+            data: recipesData
+        });
+
+    } catch (error) {
+        console.error("Kesalahan API Smart Nutrition:", error);
+        res.status(500).json({ error: "Terjadi kesalahan server saat memproses resep." });
+    }
+});

@@ -2,6 +2,7 @@ package com.mdp.caremate.ui.community
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +34,18 @@ class EventAdapter(
             binding.tvEventTitle.text = event.name
             binding.tvEventDate.text = "${event.date} ${event.time}"
             binding.tvEventLocation.text = event.place
+            
+            binding.btnEdit.isVisible = false
+            val capText = if (event.capacity.contains("/") || event.capacity.contains("Kapasitas", ignoreCase = true)) {
+                event.capacity
+            } else if (event.capacity.isNotEmpty()) {
+                "Kapasitas: ${event.capacity}"
+            } else {
+                "Terbuka untuk Umum"
+            }
+            binding.btnPeserta.text = capText
+            binding.btnPeserta.isClickable = false
+            
             binding.root.setOnClickListener { onEventClick(event) }
         }
     }

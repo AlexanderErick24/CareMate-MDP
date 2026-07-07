@@ -10,7 +10,19 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.mdp.caremate.ui.auth.RegisterFragment"/>
+        android:name="com.mdp.caremate.ui.auth.RegisterFragment">
+
+        <argument
+            android:name="isFromFamily"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+
+        <argument
+            android:name="pairingCode"
+            app:argType="string"
+            android:defaultValue=""/>
+
+    </fragment>
 
     <fragment
         android:id="@+id/familyDashboardFragment"

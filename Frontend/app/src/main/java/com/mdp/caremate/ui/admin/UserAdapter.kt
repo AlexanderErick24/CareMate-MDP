@@ -1,49 +1,55 @@
 package com.mdp.caremate.ui.admin
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mdp.caremate.R
 import com.mdp.caremate.data.model.User
-import com.mdp.caremate.databinding.ItemUserBinding // Pastikan layout item bernama item_user.xml
+import com.mdp.caremate.databinding.ItemUserBinding
 
 class UserAdapter(
-    private val userList: List<User>,
-    private val onItemClick: (User) -> Unit // Callback untuk menghandle klik pada item user
+    // 1. Mengubah List menjadi ArrayList agar isi datanya bisa dimanipulasi (clear & addAll)
+    private val userList: ArrayList<User>,
+    private val onItemClick: (User) -> Unit
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+
+    // 2. Fungsi krusial untuk memperbarui data secara realtime dari Fragment
+    fun updateData(newUsers: List<User>) {
+        userList.clear()
+        userList.addAll(newUsers)
+        notifyDataSetChanged()
+    }
 
     inner class UserViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(user: User) {
-            // 1. Set Data Tekstual Utama
             binding.tvUserName.text = user.name
             binding.tvUserEmail.text = user.email
             binding.tvUserRole.text = user.role
 
-            // 2. Logika Badge / Chip berdasarkan Role Pengguna
+            // 3. Perbaikan Logika Badge berdasarkan Role Pengguna
             if (user.role.equals("Caregiver", ignoreCase = true)) {
-                binding.tvUserRole.setBackgroundResource(R.drawable.bg_btn_secondary) // contoh file drawable
+                binding.tvUserRole.setBackgroundResource(R.drawable.bg_btn_secondary)
                 binding.tvUserRole.setTextColor(ContextCompat.getColor(itemView.context, R.color.text_green))
             } else {
-                binding.tvUserRole.setBackgroundResource(R.drawable.bg_tab_active)
-                binding.tvUserRole.setTextColor(ContextCompat.getColor(itemView.context, R.color.border_purple))
+                // Silakan ganti background & warna teks ini jika role 'Family' ingin dibedakan visualnya
+                binding.tvUserRole.setBackgroundResource(R.drawable.bg_btn_secondary)
+                binding.tvUserRole.setTextColor(ContextCompat.getColor(itemView.context, R.color.text_green))
             }
 
-            // 3. Logika Indikator Status Akun (Aktif / Non-aktif)
+            // 4. Logika Indikator Status Akun (Aktif / Non-aktif)
             if (user.status) {
                 binding.viewStatusIndicator.setBackgroundResource(R.drawable.bg_btn_primary) // Dot Hijau
                 binding.tvStatusText.text = "Active"
                 binding.tvStatusText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.holo_green_dark))
             } else {
-                binding.viewStatusIndicator.setBackgroundResource(R.drawable.bg_btn_secondary) // Dot Abu-abu/Merah
+                binding.viewStatusIndicator.setBackgroundResource(R.drawable.bg_tab_inactive) // Dot Abu-abu/Merah
                 binding.tvStatusText.text = "Suspended"
-                binding.tvStatusText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.darker_gray))
+                binding.tvStatusText.setTextColor(ContextCompat.getColor(itemView.context, android.R.color.holo_red_light))
             }
 
-            // 4. Event Listener Klik Item
             itemView.setOnClickListener { onItemClick(user) }
         }
     }

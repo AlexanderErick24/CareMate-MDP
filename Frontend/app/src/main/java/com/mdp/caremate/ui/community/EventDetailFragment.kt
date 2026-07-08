@@ -59,8 +59,15 @@ class EventDetailFragment : Fragment() {
                 binding.tvDetailTitle.text = event.name
                 binding.tvDetailDate.text = "${event.date} ${event.time}"
                 binding.tvDetailLocation.text = event.place
-                binding.tvDetailOrganizer.text = "Kapasitas: ${event.capacity}"
-                binding.tvDetailDescription.text = "Event Komunitas dari CareMate" // Fallback text karena kolom description sudah dihapus
+                val capText = if (event.capacity.contains("/") || event.capacity.contains("Kapasitas", ignoreCase = true)) {
+                    event.capacity
+                } else if (event.capacity.isNotEmpty()) {
+                    "${event.capacity} (Terbuka untuk Umum)"
+                } else {
+                    "Terbuka untuk Umum / Tanpa Batas"
+                }
+                binding.tvDetailOrganizer.text = capText
+                binding.tvDetailDescription.text = "Acara kesehatan komunitas resmi yang diselenggarakan oleh CareMate untuk mendukung kesehatan fisik dan mental para caregiver serta lansia. Silakan hadir tepat waktu sesuai jadwal dan lokasi yang tertera."
             }
         }
     }

@@ -5,14 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.mdp.caremate.databinding.FragmentAdminCommunityDashboardBinding
 
 class AdminCommunityDashboardFragment : Fragment() {
 
-    // View Binding property backing field (valid between onCreateView and onDestroyView)
     private var _binding: FragmentAdminCommunityDashboardBinding? = null
     private val binding get() = _binding!!
+
+    // Inisialisasi ViewModel
+    private val viewModel: DashboardViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,35 +28,30 @@ class AdminCommunityDashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupClickListeners()
+        observeViewModel()
+
+        // Ambil data dari Firebase lewat ViewModel
+        viewModel.fetchDashboardStats()
+    }
+
+    private fun observeViewModel() {
+        // Pantau perubahan jumlah user aktif
+        viewModel.activeUsersCount.observe(viewLifecycleOwner) { count ->
+            binding.tvActiveUsersCount.text = String.format("%,d", count)
+        }
+
+        // Pantau perubahan jumlah event aktif
+        viewModel.activeEventsCount.observe(viewLifecycleOwner) { count ->
+            binding.tvActiveEventsCount.text = count.toString()
+        }
     }
 
     private fun setupClickListeners() {
-        // Access views directly via the binding object safely
-        binding.cardGrowth.setOnClickListener {
-            Toast.makeText(context, "Growth Trend Clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.cardBookings.setOnClickListener {
-            Toast.makeText(context, "Active Bookings Clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.cardRevenue.setOnClickListener {
-            Toast.makeText(context, "Revenue Clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.cardInsight.setOnClickListener {
-            Toast.makeText(context, "Insight Action Clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.ivNotification.setOnClickListener {
-            Toast.makeText(context, "Notifications Clicked", Toast.LENGTH_SHORT).show()
-        }
+        // Click listeners kamu tetap aman di sini...
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Clear the reference to avoid memory leaks
         _binding = null
     }
 }

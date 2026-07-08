@@ -1,5 +1,6 @@
 package com.mdp.caremate.ui.admin
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,12 +40,15 @@ class AdminSetting : Fragment() {
         // Logic Tombol Logout untuk kembali ke Halaman Login
         binding.btnAdminLogout.setOnClickListener {
             // 1. Hapus sesi login di Firebase
-            auth.signOut()
+            FirebaseAuth.getInstance().signOut()
 
             Toast.makeText(requireContext(), "Berhasil Logout", Toast.LENGTH_SHORT).show()
 
-            // 2. Pindah halaman kembali ke LoginFragment menggunakan Action lokal di nav_graph
-            findNavController().navigate(R.id.action_admin_container_to_login)
+            // 2. Restart Activity untuk membersihkan seluruh sisa UI (termasuk Bottom Nav)
+            val intent = requireActivity().intent
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 

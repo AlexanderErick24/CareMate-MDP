@@ -22,6 +22,7 @@ import android.net.Uri
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.mdp.caremate.ui.dashboard.DashboardViewModel
 import androidx.fragment.app.viewModels
@@ -90,8 +91,13 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
                 R.id.rvActivityFeed
             )
 
-        val cardAiAlert = view.findViewById<com.google.android.material.card.MaterialCardView>(R.id.cardAiAlert)
+        val cardAiAlert = view.findViewById<MaterialCardView>(R.id.cardAiAlert)
 
+        // =========================
+        // NEW: Caregiver Card
+        // =========================
+
+        val cardCaregiver = view.findViewById<MaterialCardView>(R.id.cardCaregiver)
 
         val repository =
             AuthRepositoryImpl(
@@ -142,9 +148,23 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
 
             tvPatientName.text =
                 caregiver.patientName
-                
+
             // Ambil data jurnal caregiver untuk melihat mood status
             premiumViewModel.initHistory(caregiver.uid)
+
+            // =========================
+            // NEW: Open caregiver profile on card tap.
+            // The caregiver uid is now available, so we set the
+            // click listener here where we are guaranteed to have it.
+            // =========================
+
+            cardCaregiver.setOnClickListener {
+                val action = FamilyDashboardFragmentDirections
+                    .actionFamilyDashboardToCaregiverDetail(
+                        caregiverUid = caregiver.uid
+                    )
+                findNavController().navigate(action)
+            }
         }
 
         premiumViewModel.journals.observe(viewLifecycleOwner) { journals ->
@@ -157,7 +177,7 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
                     else -> "Mood Status: Bahagia/Semangat ($score/10) 🟢"
                 }
                 tvCaregiverMood.text = moodText
-                
+
                 // Ubah warna text sesuai kondisi
                 if (score <= 3) {
                     tvCaregiverMood.setTextColor(android.graphics.Color.parseColor("#D32F2F")) // Merah
@@ -208,33 +228,20 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
             .historyList
             .observe(
                 viewLifecycleOwner
-            ) { history ->
+            ) { historyList ->
 
-                activityAdapter.submitList(
-                    history.sortedByDescending {
-
-                        it.takenAt
-                    }
-                )
+                activityAdapter.submitList(historyList)
             }
 
         btnCall112.setOnClickListener {
-
-            val intent =
-                Intent(
-                    Intent.ACTION_DIAL
-                )
-
-            intent.data =
-                Uri.parse(
-                    "tel:112"
-                )
-
+            val intent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.parse("tel:112")
+            )
             startActivity(intent)
         }
 
         btnChat.setOnClickListener {
-
             findNavController().navigate(
                 R.id.action_family_dashboard_to_chat
             )
@@ -245,21 +252,5 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
                 R.id.action_family_dashboard_to_ai_alert_history
             )
         }
-
-        val aiAlertViewModel: com.mdp.caremate.ui.family.alert.AiAlertViewModel by viewModels { PremiumViewModelFactory }
-        aiAlertViewModel.fetchAlerts()
-        
-        val tvAiAlert = view.findViewById<TextView>(R.id.tvAiAlert)
-        aiAlertViewModel.alerts.observe(viewLifecycleOwner) { alerts ->
-            val activeAlerts = alerts.filter { it.severity == "HIGH" || it.severity == "MEDIUM" }
-            if (activeAlerts.isNotEmpty()) {
-                tvAiAlert.text = "${activeAlerts.size} Active Alerts"
-                tvAiAlert.setTextColor(android.graphics.Color.parseColor("#D32F2F")) // Red
-            } else {
-                tvAiAlert.text = "No active alerts"
-                tvAiAlert.setTextColor(android.graphics.Color.parseColor("#386458")) // Greenish
-            }
-        }
     }
-
 }

@@ -95,13 +95,17 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- CAREGIVER CARD -->
+                <!-- CAREGIVER CARD — id added so we can set a click listener -->
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardCaregiver"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="16dp">
 
                     <LinearLayout
@@ -138,7 +142,6 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:orientation="horizontal">
 
                             <ImageButton
@@ -147,14 +150,6 @@
                                 android:layout_height="40dp"
                                 android:backgroundTint="#D9EDF5"
                                 android:src="@android:drawable/ic_dialog_email"/>
-
-<!--                            <ImageButton-->
-<!--                                android:id="@+id/btnCall"-->
-<!--                                android:layout_width="40dp"-->
-<!--                                android:layout_height="40dp"-->
-<!--                                android:layout_marginStart="8dp"-->
-<!--                                android:backgroundTint="#386458"-->
-<!--                                android:src="@android:drawable/ic_menu_call"/>-->
 
                         </LinearLayout>
 
@@ -199,8 +194,6 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-
 
             <!-- DAILY PROGRESS -->
 
@@ -273,10 +266,8 @@
                 android:layout_height="300dp"
                 android:layout_marginTop="12dp" />
 
-
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

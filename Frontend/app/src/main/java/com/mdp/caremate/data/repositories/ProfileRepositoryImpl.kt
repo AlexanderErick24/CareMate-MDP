@@ -40,4 +40,20 @@ class ProfileRepositoryImpl(
     override suspend fun rejectJoinRequest(requestId: String): Result<String> {
         return firebaseSource.rejectJoinRequest(requestId)
     }
+
+    // New functions for Family Profile
+    override suspend fun updateUsername(newName: String): Result<String> {
+        return firebaseSource.updateUsername(newName)
+    }
+
+    override suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String
+    ): Result<String> {
+        return firebaseSource.changePassword(currentPassword, newPassword)
+    }
+
+    override suspend fun uploadProfilePhoto(photoBase64: String): Result<String> {
+        return firebaseSource.uploadProfilePhoto(photoBase64)
+    }
 }

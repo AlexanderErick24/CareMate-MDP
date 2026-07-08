@@ -8,13 +8,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mdp.caremate.databinding.FragmentProfileBinding
 
-import android.app.AlertDialog
-import android.widget.EditText
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Base64
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.google.firebase.auth.FirebaseAuth
 import com.mdp.caremate.data.repositories.ProfileRepositoryImpl
 import com.mdp.caremate.data.sources.remote.FirebaseSource
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 class ProfileFragment : Fragment() {
 
@@ -22,6 +28,10 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     
     private lateinit var viewModel: ProfileViewModel
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { processAndUploadPhoto(it) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +53,10 @@ class ProfileFragment : Fragment() {
         setupObservers()
         viewModel.fetchCurrentUser()
 
+        binding.flAvatarContainer.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+
         binding.btnEditProfile.setOnClickListener {
             findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_dest_edit_profile)
         }
@@ -51,31 +65,28 @@ class ProfileFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
             findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_login)
         }
-        
-        binding.cardGabungKeluarga.setOnClickListener {
-            showJoinFamilyDialog()
-        }
     }
-    
-    private fun showJoinFamilyDialog() {
-        val input = EditText(requireContext())
-        input.hint = "Contoh: CM-123A"
-        input.setPadding(48, 48, 48, 48)
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("Gabung Keluarga")
-            .setMessage("Masukkan kode keluarga dari Pengguna Utama (Pasien)")
-            .setView(input)
-            .setPositiveButton("Kirim") { _, _ ->
-                val code = input.text.toString().trim()
-                if (code.isNotEmpty()) {
-                    viewModel.requestJoinFamily(code)
+    private fun processAndUploadPhoto(uri: Uri) {
+        try {
+            val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uri)
+            val originalBitmap = BitmapFactory.decodeStream(inputStream)
+            if (originalBitmap != null) {
+                val maxDim = 500
+                val scale = maxDim.toFloat() / maxOf(originalBitmap.width, originalBitmap.height)
+                val scaledBitmap = if (scale < 1f) {
+                    Bitmap.createScaledBitmap(originalBitmap, (originalBitmap.width * scale).toInt(), (originalBitmap.height * scale).toInt(), true)
                 } else {
-                    Toast.makeText(requireContext(), "Kode tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                    originalBitmap
                 }
+                val outputStream = ByteArrayOutputStream()
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream)
+                val base64String = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+                viewModel.updateProfilePhoto(base64String)
             }
-            .setNegativeButton("Batal", null)
-            .show()
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Gagal memproses gambar", Toast.LENGTH_SHORT).show()
+        }
     }
     
     private fun setupObservers() {
@@ -94,6 +105,22 @@ class ProfileFragment : Fragment() {
                 binding.tvProfileAge.text = if (user.age == 0) "Umur belum diatur" else "${user.age} Years Old"
                 binding.tvProfileBio.text = if (user.bio.isEmpty()) "Belum ada bio" else user.bio
                 
+                if (user.photoUrl.isNotEmpty()) {
+                    try {
+                        val decodedBytes = Base64.decode(user.photoUrl, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        if (bitmap != null) {
+                            binding.ivProfileAvatar.setImageBitmap(bitmap)
+                        } else {
+                            binding.ivProfileAvatar.load(user.photoUrl)
+                        }
+                    } catch (e: Exception) {
+                        binding.ivProfileAvatar.load(user.photoUrl)
+                    }
+                } else {
+                    binding.ivProfileAvatar.setImageResource(android.R.drawable.ic_menu_gallery)
+                }
+
                 if (user.experience.isNotEmpty()) {
                     binding.tvProfileExperience.text = user.experience.joinToString("\n") { "• $it" }
                 } else {

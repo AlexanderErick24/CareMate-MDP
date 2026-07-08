@@ -22,6 +22,10 @@ class ProfileRepositoryImpl(
         return firebaseSource.updateUserProfile(name, jobTitle, age, bio, experience, skills)
     }
 
+    override suspend fun updateProfilePhoto(photoUrl: String): Result<String> {
+        return firebaseSource.updateProfilePhoto(photoUrl)
+    }
+
     override suspend fun requestJoinFamily(targetCode: String): Result<String> {
         return firebaseSource.requestJoinFamily(targetCode)
     }

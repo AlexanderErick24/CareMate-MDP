@@ -76,4 +76,18 @@ class ProfileViewModel(
             _isLoading.value = false
         }
     }
+
+    fun updateProfilePhoto(photoUrl: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.updateProfilePhoto(photoUrl)
+            if (result.isSuccess) {
+                _toastMessage.value = "Foto profil berhasil diperbarui!"
+                fetchCurrentUser()
+            } else {
+                _toastMessage.value = "Gagal memperbarui foto: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
 }

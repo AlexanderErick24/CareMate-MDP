@@ -20,6 +20,7 @@ data class User(
     val bio: String = "",
     val experience: List<String> = emptyList(),
     val skills: List<String> = emptyList(),
+    val photoUrl: String = "",
     
     // Fitur Gabung Keluarga
     val connectedPatientUid: String = "",

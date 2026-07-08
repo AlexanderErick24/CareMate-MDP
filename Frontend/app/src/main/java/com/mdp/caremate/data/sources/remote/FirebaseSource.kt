@@ -369,6 +369,16 @@ class FirebaseSource {
         }
     }
 
+    suspend fun updateProfilePhoto(photoUrl: String): Result<String> {
+        return try {
+            val uid = auth.currentUser?.uid ?: throw Exception("User not logged in")
+            firestore.collection("users").document(uid).update("photoUrl", photoUrl).await()
+            Result.success("Foto profil berhasil diperbarui")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun requestJoinFamily(targetCode: String): Result<String> {
         return try {
             val uid = auth.currentUser?.uid ?: throw Exception("User not logged in")

@@ -6,11 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Base64
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.mdp.caremate.data.repositories.ProfileRepositoryImpl
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 import com.mdp.caremate.databinding.FragmentEditProfileBinding
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 class EditProfileFragment : Fragment() {
 
@@ -18,6 +26,10 @@ class EditProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ProfileViewModel
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { processAndUploadPhoto(it) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +50,10 @@ class EditProfileFragment : Fragment() {
 
         setupObservers()
         viewModel.fetchCurrentUser()
+
+        binding.flEditAvatarContainer.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
 
         binding.btnSaveProfile.setOnClickListener {
             val name = binding.etProfileName.text.toString().trim()
@@ -64,6 +80,28 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    private fun processAndUploadPhoto(uri: Uri) {
+        try {
+            val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uri)
+            val originalBitmap = BitmapFactory.decodeStream(inputStream)
+            if (originalBitmap != null) {
+                val maxDim = 500
+                val scale = maxDim.toFloat() / maxOf(originalBitmap.width, originalBitmap.height)
+                val scaledBitmap = if (scale < 1f) {
+                    Bitmap.createScaledBitmap(originalBitmap, (originalBitmap.width * scale).toInt(), (originalBitmap.height * scale).toInt(), true)
+                } else {
+                    originalBitmap
+                }
+                val outputStream = ByteArrayOutputStream()
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream)
+                val base64String = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+                viewModel.updateProfilePhoto(base64String)
+            }
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Gagal memproses gambar", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun setupObservers() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.btnSaveProfile.isEnabled = !isLoading
@@ -77,13 +115,31 @@ class EditProfileFragment : Fragment() {
         }
 
         viewModel.userState.observe(viewLifecycleOwner) { user ->
-            if (user != null && binding.etProfileName.text.isNullOrEmpty()) {
-                binding.etProfileName.setText(user.name)
-                binding.etProfileJob.setText(user.jobTitle)
-                if (user.age > 0) binding.etProfileAge.setText(user.age.toString())
-                binding.etProfileBio.setText(user.bio)
-                binding.etProfileExp.setText(user.experience.joinToString("\n"))
-                binding.etProfileSkills.setText(user.skills.joinToString(", "))
+            if (user != null) {
+                if (user.photoUrl.isNotEmpty()) {
+                    try {
+                        val decodedBytes = Base64.decode(user.photoUrl, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        if (bitmap != null) {
+                            binding.ivEditProfileAvatar.setImageBitmap(bitmap)
+                        } else {
+                            binding.ivEditProfileAvatar.load(user.photoUrl)
+                        }
+                    } catch (e: Exception) {
+                        binding.ivEditProfileAvatar.load(user.photoUrl)
+                    }
+                } else {
+                    binding.ivEditProfileAvatar.setImageResource(android.R.drawable.ic_menu_gallery)
+                }
+
+                if (binding.etProfileName.text.isNullOrEmpty()) {
+                    binding.etProfileName.setText(user.name)
+                    binding.etProfileJob.setText(user.jobTitle)
+                    if (user.age > 0) binding.etProfileAge.setText(user.age.toString())
+                    binding.etProfileBio.setText(user.bio)
+                    binding.etProfileExp.setText(user.experience.joinToString("\n"))
+                    binding.etProfileSkills.setText(user.skills.joinToString(", "))
+                }
             }
         }
 

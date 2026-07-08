@@ -774,4 +774,60 @@ class FirebaseSource {
             Result.failure(e)
         }
     }
+
+    suspend fun updateUsername(newName: String): Result<String> {
+        return try {
+            val uid = auth.currentUser?.uid
+                ?: throw Exception("User not logged in")
+            firestore.collection("users")
+                .document(uid)
+                .update("name", newName)
+                .await()
+            Result.success("Nama berhasil diperbarui")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String
+    ): Result<String> {
+        return try {
+            val user = auth.currentUser
+                ?: throw Exception("User not logged in")
+
+            // Firebase requires re-authentication before changing password
+            val email = user.email
+                ?: throw Exception("Email tidak ditemukan")
+
+            val credential = com.google.firebase.auth.EmailAuthProvider
+                .getCredential(email, currentPassword)
+
+            user.reauthenticate(credential).await()
+            user.updatePassword(newPassword).await()
+
+            Result.success("Password berhasil diubah")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun uploadProfilePhoto(photoBase64: String): Result<String> {
+        return try {
+            val uid = auth.currentUser?.uid
+                ?: throw Exception("User not logged in")
+
+            // Store the base64 string directly in Firestore
+            // (same approach as medication photo in DashboardFragment)
+            firestore.collection("users")
+                .document(uid)
+                .update("photoUrl", photoBase64)
+                .await()
+
+            Result.success(photoBase64)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

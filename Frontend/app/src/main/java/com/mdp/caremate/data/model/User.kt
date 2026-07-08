@@ -25,6 +25,9 @@ data class User(
     val connectedPatientUid: String = "",
 
     // Fitur Admin
-    val status: Boolean = true // Enable / Disable
+    val status: Boolean = true, // Enable / Disable
+
+    // Fitur Foto Profil
+    val photoUrl: String = ""
 
 ): Parcelable

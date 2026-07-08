@@ -76,4 +76,49 @@ class ProfileViewModel(
             _isLoading.value = false
         }
     }
+
+    // =========================
+    // NEW: For Family Profile
+    // =========================
+
+    fun updateUsername(newName: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.updateUsername(newName)
+            if (result.isSuccess) {
+                _toastMessage.value = "Nama berhasil diperbarui!"
+                fetchCurrentUser() // refresh display
+            } else {
+                _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
+
+    fun changePassword(currentPassword: String, newPassword: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.changePassword(currentPassword, newPassword)
+            if (result.isSuccess) {
+                _toastMessage.value = "Password berhasil diubah!"
+            } else {
+                _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
+
+    fun uploadProfilePhoto(photoBase64: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.uploadProfilePhoto(photoBase64)
+            if (result.isSuccess) {
+                _toastMessage.value = "Foto profil berhasil diperbarui!"
+                fetchCurrentUser() // refresh display
+            } else {
+                _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
 }

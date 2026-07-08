@@ -184,11 +184,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun proceedToDashboard(role: String) {
-        Toast.makeText(
-            requireContext(),
-            "Login sebagai $role",
-            Toast.LENGTH_SHORT
-        ).show()
 
         when (role) {
             "caregiver" -> {

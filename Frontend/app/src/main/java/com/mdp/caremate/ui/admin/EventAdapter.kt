@@ -4,26 +4,37 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mdp.caremate.data.model.Event
-import com.mdp.caremate.databinding.ItemEventBinding // Pastikan Anda sudah membuat layout item_event.xml
+import com.mdp.caremate.databinding.ItemEventBinding // Sesuaikan dengan nama file XML item event kamu
 
 class EventAdapter(
-    private val listEvent: ArrayList<Event>,
-    private val onItemClick: (Event) -> Unit
+    private var eventList: List<Event>,
+    private val onEditClick: (Event) -> Unit,
+    private val onPesertaClick: (Event) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
-    inner class EventViewHolder(private val binding: ItemEventBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    inner class EventViewHolder(private val binding: ItemEventBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(event: Event) {
-            // Sesuaikan ID TextView di bawah ini dengan ID asli yang ada di file item_event.xml Anda
-            // Contoh implementasi:
-            // binding.tvItemTitle.text = event.name
-            // binding.tvItemDate.text = "${event.date} | ${event.time}"
-            // binding.tvItemLocation.text = event.place
+            binding.tvEventTitle.text = event.name
+            binding.tvEventLocation.text = event.place
 
-            binding.root.setOnClickListener {
-                onItemClick(event)
+            // Menggabungkan tanggal dan waktu
+            val dateTimeText = "${event.date} • ${event.time} WIB"
+            binding.tvEventDate.text = dateTimeText
+
+            // Set text kapasitas peserta (contoh dinamis menggunakan field capacity)
+            binding.btnPeserta.text = "Peserta (0/${event.capacity})"
+
+            // Status Badge berdasarkan attribute listed
+            if (event.listed) {
+                binding.tvStatus.text = "Listed"
+                // Anda bisa menyesuaikan warna atau drawable di sini jika diperlukan
+            } else {
+                binding.tvStatus.text = "Draft"
             }
+
+            // Aksi Klik Tombol
+            binding.btnEdit.setOnClickListener { onEditClick(event) }
+            binding.btnPeserta.setOnClickListener { onPesertaClick(event) }
         }
     }
 
@@ -33,8 +44,14 @@ class EventAdapter(
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-        holder.bind(listEvent[position])
+        holder.bind(eventList[position])
     }
 
-    override fun getItemCount(): Int = listEvent.size
+    override fun getItemCount(): Int = eventList.size
+
+    // Fungsi untuk memperbarui data setelah difilter atau di-fetch ulang
+    fun updateList(newList: List<Event>) {
+        this.eventList = newList
+        notifyDataSetChanged()
+    }
 }

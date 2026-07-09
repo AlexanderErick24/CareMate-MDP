@@ -22,6 +22,7 @@ data class Recipe(
     val title: String,
     val imageSearchKeyword: String,
     val estTimeMin: Int,
+    val portions: Int? = 1,
     val medicalRationale: String,
     val safetyBadge: String,
     val ingredients: List<RecipeIngredient>,
@@ -33,9 +34,7 @@ data class Recipe(
 data class GenerateRecipeRequest(
     val patientProfile: PatientMedicalProfile,
     val mealType: String,
-    val ingredients: String?,
-    val revisionPrompt: String? = null,
-    val history: List<String>? = null
+    val ingredients: String?
 )
 
 @JsonClass(generateAdapter = true)
@@ -43,3 +42,4 @@ data class GenerateRecipeResponse(
     val message: String,
     val data: List<Recipe>
 )
+

@@ -40,39 +40,31 @@ class RecipeDetailFragment : Fragment() {
     }
 
     private fun setupUI() {
-        // Contoh binding, di produksi ini diambil dari argumen (SafeArgs)
-        binding.tvRecipeTitle.text = "Sup Ayam Bayam Sehat"
-        binding.tvMedicalRationale.text = "Sup ayam bayam sangat baik untuk pasien Hipertensi karena kaldu dapat dibuat rendah natrium, dan bayam kaya akan kalium yang membantu mengontrol tekanan darah."
-        
-        val ingredientsText = "- 100gr Dada Ayam\n- 2 Ikat Bayam\n- 1 Siung Bawang Putih"
-        binding.tvIngredients.text = ingredientsText
-        
-        val stepsText = "1. Rebus dada ayam hingga empuk.\n2. Masukkan bawang putih cincang.\n3. Tambahkan bayam dan matikan api agar nutrisi terjaga."
-        binding.tvSteps.text = stepsText
+        val recipe = viewModel.selectedRecipe
+        if (recipe != null) {
+            binding.tvRecipeTitle.text = recipe.title
+            binding.tvMedicalRationale.text = recipe.medicalRationale
+            
+            val portions = recipe.portions ?: 1
+            val portionsText = "Porsi: $portions Orang\n\n"
+            val ingredientsText = portionsText + recipe.ingredients.joinToString("\n") { "- ${it.name} ${it.amount}" }
+            binding.tvIngredients.text = ingredientsText
+            
+            val stepsText = recipe.steps.mapIndexed { index, step -> "${index + 1}. $step" }.joinToString("\n")
+            binding.tvSteps.text = stepsText
 
-        val imageUrl = "https://source.unsplash.com/800x600/?chicken,soup"
-        binding.ivRecipeImage.load(imageUrl) {
-            crossfade(true)
-        }
+            val keyword = java.net.URLEncoder.encode(recipe.imageSearchKeyword + " food", "UTF-8")
+            val imageUrl = "https://image.pollinations.ai/prompt/${keyword}?width=600&height=400&nologo=true"
+            binding.ivRecipeImage.load(imageUrl) {
+                crossfade(true)
+                placeholder(android.R.drawable.ic_menu_gallery)
+                error(android.R.drawable.ic_menu_report_image)
+            }
 
-        binding.btnYoutube.setOnClickListener {
-            val query = "cara membuat sup ayam bayam sehat"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=\$query"))
-            startActivity(intent)
-        }
-
-        // Logika Chat Revisi
-        binding.btnSendRevision.setOnClickListener {
-            val revision = binding.etRevisionChat.text.toString().trim()
-            if (revision.isNotEmpty()) {
-                Toast.makeText(requireContext(), "Merevisi resep...", Toast.LENGTH_SHORT).show()
-                // Di sini panggil fungsi viewModel untuk merevisi:
-                // viewModel.generateRecipes(..., revisionPrompt = revision)
-                
-                binding.etRevisionChat.text.clear()
-                
-                // Kembali ke fragment sebelumnya (Grid View) atau tampilkan loading overlay
-                parentFragmentManager.popBackStack()
+            binding.btnYoutube.setOnClickListener {
+                val query = recipe.youtubeQuery ?: "cara membuat ${recipe.title}"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=$query"))
+                startActivity(intent)
             }
         }
     }

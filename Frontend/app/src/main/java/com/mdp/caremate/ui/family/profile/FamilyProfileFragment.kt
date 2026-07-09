@@ -191,10 +191,10 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
 
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-
-            requireActivity()
-                .findNavController(R.id.nav_host_fragment)
-                .navigate(R.id.action_family_container_to_login)
+            val intent = requireActivity().intent
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 

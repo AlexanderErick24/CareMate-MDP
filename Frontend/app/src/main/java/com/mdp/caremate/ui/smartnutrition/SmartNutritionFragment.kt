@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mdp.caremate.R
 import com.mdp.caremate.data.model.PatientMedicalProfile
@@ -19,8 +20,8 @@ class SmartNutritionFragment : Fragment() {
     private var _binding: FragmentSmartNutritionBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SmartNutritionViewModel by viewModels()
-    private lateinit val adapter: RecipeAdapter
+    private val viewModel: SmartNutritionViewModel by activityViewModels()
+    private lateinit var adapter: RecipeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +33,14 @@ class SmartNutritionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Cek status premium per-user
+        val isPremium = com.mdp.caremate.utils.PremiumUtils.isPremium(requireContext())
+        if (!isPremium) {
+            Toast.makeText(requireContext(), "Fitur ini hanya untuk pengguna Premium", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.paywallFragment)
+            return
+        }
 
         setupUI()
         observeViewModel()
@@ -46,9 +55,8 @@ class SmartNutritionFragment : Fragment() {
 
         // Setup RecyclerView Grid 2 Kolom
         adapter = RecipeAdapter { recipe ->
-            // Aksi saat Card ditekan -> Buka Halaman Detail Resep
-            Toast.makeText(requireContext(), "Buka Detail: \${recipe.title}", Toast.LENGTH_SHORT).show()
-            // TODO: Navigate to Recipe Detail Fragment
+            viewModel.selectedRecipe = recipe
+            findNavController().navigate(R.id.action_smart_nutrition_to_recipe_detail)
         }
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvRecipes.adapter = adapter
@@ -93,7 +101,8 @@ class SmartNutritionFragment : Fragment() {
 
     private fun checkMedicalProfile() {
         val sharedPref = requireActivity().getSharedPreferences("CareMatePrefs", Context.MODE_PRIVATE)
-        val isFilled = sharedPref.getBoolean("IS_MEDICAL_PROFILE_FILLED", false)
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val isFilled = sharedPref.getBoolean("IS_MEDICAL_PROFILE_FILLED_$uid", false)
         if (!isFilled) {
             showMedicalProfileForm()
         }
@@ -101,14 +110,15 @@ class SmartNutritionFragment : Fragment() {
 
     private fun getSavedMedicalProfile(): PatientMedicalProfile? {
         val sharedPref = requireActivity().getSharedPreferences("CareMatePrefs", Context.MODE_PRIVATE)
-        val isFilled = sharedPref.getBoolean("IS_MEDICAL_PROFILE_FILLED", false)
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val isFilled = sharedPref.getBoolean("IS_MEDICAL_PROFILE_FILLED_$uid", false)
         if (!isFilled) return null
         
         return PatientMedicalProfile(
-            diagnosis = sharedPref.getString("PATIENT_DIAGNOSIS", "") ?: "",
-            allergies = sharedPref.getString("PATIENT_ALLERGIES", "") ?: "",
-            texture = sharedPref.getString("PATIENT_TEXTURE", "") ?: "",
-            preferences = sharedPref.getString("PATIENT_PREFERENCES", "") ?: ""
+            diagnosis = sharedPref.getString("PATIENT_DIAGNOSIS_$uid", "") ?: "",
+            allergies = sharedPref.getString("PATIENT_ALLERGIES_$uid", "") ?: "",
+            texture = sharedPref.getString("PATIENT_TEXTURE_$uid", "") ?: "",
+            preferences = sharedPref.getString("PATIENT_PREFERENCES_$uid", "") ?: ""
         )
     }
 

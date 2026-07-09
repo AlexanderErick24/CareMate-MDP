@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/layoutChatRevision"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -122,39 +122,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <!-- Chat Revision Overlay at the bottom -->
-    <LinearLayout
-        android:id="@+id/layoutChatRevision"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:elevation="16dp"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <EditText
-            android:id="@+id/etRevisionChat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_bottom_sheet"
-            android:backgroundTint="#F5F5F5"
-            android:hint="Kurang sreg? Ketik revisi di sini..."
-            android:padding="12dp"
-            android:textSize="14sp" />
-
-        <ImageButton
-            android:id="@+id/btnSendRevision"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_send"
-            app:tint="@color/black" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

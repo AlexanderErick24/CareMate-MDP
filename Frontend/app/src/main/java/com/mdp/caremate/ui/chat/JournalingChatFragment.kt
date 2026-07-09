@@ -19,6 +19,8 @@ import com.mdp.caremate.ui.auth.AuthViewModelFactory
 import com.mdp.caremate.ui.premium.PremiumViewModel
 import com.mdp.caremate.ui.premium.PremiumViewModelFactory
 
+import androidx.navigation.fragment.findNavController
+
 class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
 
     private val viewModel by viewModels<PremiumViewModel> { PremiumViewModelFactory }
@@ -31,6 +33,14 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Cek status premium per-user
+        val isPremium = com.mdp.caremate.utils.PremiumUtils.isPremium(requireContext())
+        if (!isPremium) {
+            Toast.makeText(requireContext(), "Fitur AI Mindful Journaling hanya untuk pengguna Premium", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.paywallFragment)
+            return
+        }
 
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
         val etMessage = view.findViewById<EditText>(R.id.etMessage)

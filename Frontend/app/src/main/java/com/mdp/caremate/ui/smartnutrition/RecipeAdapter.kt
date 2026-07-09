@@ -27,13 +27,15 @@ class RecipeAdapter(private val onItemClick: (Recipe) -> Unit) :
         fun bind(recipe: Recipe) {
             binding.tvRecipeTitle.text = recipe.title
             binding.tvSafetyBadge.text = recipe.safetyBadge
-            binding.tvEstTime.text = "\${recipe.estTimeMin} Menit"
+            val portions = recipe.portions ?: 1
+            binding.tvEstTime.text = "${recipe.estTimeMin} Menit • $portions Porsi"
             
-            // Menggunakan Coil untuk mencari gambar stok dari Unsplash berdasarkan keyword dari Gemini
-            val imageUrl = "https://source.unsplash.com/400x300/?\${recipe.imageSearchKeyword.replace(" ", ",")},food"
+            val keyword = java.net.URLEncoder.encode(recipe.imageSearchKeyword + " food", "UTF-8")
+            val imageUrl = "https://image.pollinations.ai/prompt/${keyword}?width=600&height=400&nologo=true"
             binding.ivRecipeImage.load(imageUrl) {
                 crossfade(true)
-                // Di aplikasi nyata, tambahkan placeholder dan error image
+                placeholder(android.R.drawable.ic_menu_gallery)
+                error(android.R.drawable.ic_menu_report_image)
             }
 
             binding.root.setOnClickListener {

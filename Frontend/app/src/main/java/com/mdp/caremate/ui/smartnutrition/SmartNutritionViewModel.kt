@@ -26,13 +26,21 @@ class SmartNutritionViewModel : ViewModel() {
     private val _uiState = MutableLiveData<SmartNutritionState>(SmartNutritionState.Idle)
     val uiState: LiveData<SmartNutritionState> = _uiState
 
+    // Menyimpan resep yang dipilih untuk ditampilkan di halaman detail
+    var selectedRecipe: Recipe? = null
+
     // In a real app with DI (Hilt/Dagger), this would be injected.
     // For this prototype, we'll instantiate Retrofit here.
     private val api: SmartNutritionApi by lazy {
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .connectTimeout(45, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(45, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(45, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
 
         Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/") // Localhost for Android Emulator
@@ -62,7 +70,7 @@ class SmartNutritionViewModel : ViewModel() {
                     _uiState.value = SmartNutritionState.Error("Gagal mengambil resep: \${response.message()}")
                 }
             } catch (e: Exception) {
-                _uiState.value = SmartNutritionState.Error("Error: \${e.message}")
+                _uiState.value = SmartNutritionState.Error("Error: ${e.message}")
             }
         }
     }

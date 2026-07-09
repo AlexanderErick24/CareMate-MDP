@@ -187,6 +187,12 @@
         android:label="AdminSetting"
         tools:layout="@layout/fragment_admin_setting"/>
 
+    <fragment
+        android:id="@+id/paywallFragment"
+        android:name="com.mdp.caremate.ui.premium.PaywallFragment"
+        android:label="Paywall"
+        tools:layout="@layout/fragment_paywall" />
+
     <action
         android:id="@+id/action_admin_container_to_login"
         app:destination="@id/loginFragment" />

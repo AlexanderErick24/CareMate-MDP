@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_chat"/>
 
     <item
+        android:id="@+id/dest_smart_nutrition"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Resep AI" />
+
+    <item
         android:id="@+id/dest_community"
         android:icon="@android:drawable/ic_menu_agenda"
         android:title="Komunitas" />

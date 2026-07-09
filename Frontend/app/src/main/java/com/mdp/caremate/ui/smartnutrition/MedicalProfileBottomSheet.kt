@@ -51,12 +51,13 @@ class MedicalProfileBottomSheet : BottomSheetDialogFragment() {
 
             // Simpan ke SharedPreferences
             val sharedPref = requireActivity().getSharedPreferences("CareMatePrefs", Context.MODE_PRIVATE)
+            val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
             with(sharedPref.edit()) {
-                putString("PATIENT_DIAGNOSIS", profile.diagnosis)
-                putString("PATIENT_ALLERGIES", profile.allergies)
-                putString("PATIENT_TEXTURE", profile.texture)
-                putString("PATIENT_PREFERENCES", profile.preferences)
-                putBoolean("IS_MEDICAL_PROFILE_FILLED", true)
+                putString("PATIENT_DIAGNOSIS_$uid", profile.diagnosis)
+                putString("PATIENT_ALLERGIES_$uid", profile.allergies)
+                putString("PATIENT_TEXTURE_$uid", profile.texture)
+                putString("PATIENT_PREFERENCES_$uid", profile.preferences)
+                putBoolean("IS_MEDICAL_PROFILE_FILLED_$uid", true)
                 apply()
             }
 

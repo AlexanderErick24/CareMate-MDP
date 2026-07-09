@@ -28,7 +28,10 @@ data class User(
     // Fitur Admin
     val status: Boolean = true, // Enable / Disable
 
-    // Fitur Foto Profil
-    val photoUrl: String = ""
+    // Fitur Premium
+    @get:com.google.firebase.firestore.PropertyName("isPremium")
+    @set:com.google.firebase.firestore.PropertyName("isPremium")
+    var isPremium: Boolean = false
+
 
 ): Parcelable

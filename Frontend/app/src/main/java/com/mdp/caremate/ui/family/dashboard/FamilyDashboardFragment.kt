@@ -3,7 +3,6 @@ package com.mdp.caremate.ui.family.dashboard
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -14,9 +13,7 @@ import com.mdp.caremate.ui.auth.AuthViewModel
 import com.mdp.caremate.ui.auth.AuthViewModelFactory
 import com.mdp.caremate.ui.family.management.adapter.FamilyMemberAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.mdp.caremate.ui.family.dashboard.ActivityFeedAdapter
-
 import android.content.Intent
 import android.net.Uri
 import android.widget.ImageButton
@@ -28,9 +25,11 @@ import com.mdp.caremate.ui.dashboard.DashboardViewModel
 import androidx.fragment.app.viewModels
 import com.mdp.caremate.ui.premium.PremiumViewModel
 import com.mdp.caremate.ui.premium.PremiumViewModelFactory
+import com.mdp.caremate.ui.family.alert.AiAlertViewModel
 
 class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
     private val premiumViewModel by viewModels<PremiumViewModel> { PremiumViewModelFactory }
+    private val aiAlertViewModel by viewModels<AiAlertViewModel> { PremiumViewModelFactory }
     private lateinit var authViewModel: AuthViewModel
     private lateinit var dashboardViewModel: DashboardViewModel
 
@@ -92,6 +91,7 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
             )
 
         val cardAiAlert = view.findViewById<MaterialCardView>(R.id.cardAiAlert)
+        val tvAiAlert = view.findViewById<TextView>(R.id.tvAiAlert)
 
         // =========================
         // NEW: Caregiver Card
@@ -151,12 +151,9 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
 
             // Ambil data jurnal caregiver untuk melihat mood status
             premiumViewModel.initHistory(caregiver.uid)
-
-            // =========================
-            // NEW: Open caregiver profile on card tap.
-            // The caregiver uid is now available, so we set the
-            // click listener here where we are guaranteed to have it.
-            // =========================
+            
+            // Ambil data AI Alert (recognition obat dsb)
+            aiAlertViewModel.fetchAlerts()
 
             cardCaregiver.setOnClickListener {
                 val action = FamilyDashboardFragmentDirections
@@ -191,6 +188,8 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
                 tvCaregiverMood.setTextColor(android.graphics.Color.GRAY)
             }
         }
+
+
 
         dashboardViewModel
             .todaysMedications

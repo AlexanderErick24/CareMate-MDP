@@ -197,7 +197,7 @@ class DashboardFragment : Fragment() {
                     return@MedicationAdapter
                 }
                 if (isTakenToday) {
-                    val isPremium = viewModel.currentUserFlow.value?.isPremium == true
+                    val isPremium = com.mdp.caremate.utils.PremiumUtils.isPremium(requireContext())
                     if (isPremium) {
                         showUploadPhotoDialog(medication)
                     } else {

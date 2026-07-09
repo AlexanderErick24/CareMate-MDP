@@ -76,7 +76,7 @@ class EventDetailFragment : Fragment() {
                 val capText = if (event.capacity.contains("/") || event.capacity.contains("Kapasitas", ignoreCase = true)) {
                     event.capacity
                 } else if (event.capacity.isNotEmpty()) {
-                    "${event.capacity} (Terbuka untuk Umum)"
+                    "${event.capacity} "
                 } else {
                     "Terbuka untuk Umum / Tanpa Batas"
                 }

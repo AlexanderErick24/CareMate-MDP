@@ -110,6 +110,8 @@ class ChatFragment :
 
         viewModel.loadChatRoom()
 
+        authViewModel.getCurrentUser()
+
         authViewModel
             .getLinkedCaregiver()
 
@@ -124,6 +126,22 @@ class ChatFragment :
             rvChat.scrollToPosition(
                 it.size - 1
             )
+        }
+
+        authViewModel.currentUser.observe(
+            viewLifecycleOwner
+        ) { user ->
+
+            if (
+                user.role.equals(
+                    "caregiver",
+                    ignoreCase = true
+                )
+            ) {
+
+                caregiverName.text =
+                    user.name
+            }
         }
 
         authViewModel

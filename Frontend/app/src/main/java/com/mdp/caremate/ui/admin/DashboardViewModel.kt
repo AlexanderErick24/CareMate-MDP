@@ -23,13 +23,24 @@ class DashboardViewModel : ViewModel() {
     private val _activeEventsCount = MutableLiveData<Int>()
     val activeEventsCount: LiveData<Int> get() = _activeEventsCount
 
+    private val _totalRevenue = MutableLiveData<Long>()
+    val totalRevenue: LiveData<Long> get() = _totalRevenue
+
+    private val _premiumUsersCount = MutableLiveData<Int>()
+    val premiumUsersCount: LiveData<Int> get() = _premiumUsersCount
+
     fun fetchDashboardStats() {
         viewModelScope.launch {
             // 1. Ambil user & hitung totalnya
             val users = getAllUser()
             _activeUsersCount.value = users.size
 
-            // 2. Ambil event & hitung yang listed == true DAN belum lewat dari sekarang
+            // 2. Hitung jumlah user premium & total revenue (Rp 50.000 per user)
+            val premiumCount = users.count { it.isPremium }
+            _premiumUsersCount.value = premiumCount
+            _totalRevenue.value = premiumCount * 50_000L
+
+            // 3. Ambil event & hitung yang listed == true DAN belum lewat dari sekarang
             val events = getAllEvent()
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())

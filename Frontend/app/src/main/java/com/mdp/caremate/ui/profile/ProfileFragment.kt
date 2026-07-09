@@ -63,7 +63,10 @@ class ProfileFragment : Fragment() {
         
         binding.btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            findNavController().navigate(com.mdp.caremate.R.id.action_dest_profile_to_login)
+            val intent = requireActivity().intent
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 

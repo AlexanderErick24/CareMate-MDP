@@ -154,24 +154,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Revenue"
+                android:text="Total Revenue Premium"
                 android:textColor="@color/text_muted" />
 
             <TextView
+                android:id="@+id/tvTotalRevenue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="$15,200"
+                android:text="Rp 0"
                 android:textColor="@color/text_dark"
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvPremiumUsersCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="↘ -2% hari ini"
-                android:textColor="@color/text_red"
+                android:text="0 user premium"
+                android:textColor="@color/caremate_primary"
                 android:textSize="14sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

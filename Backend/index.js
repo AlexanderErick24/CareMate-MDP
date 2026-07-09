@@ -11,6 +11,18 @@ app.use(express.json()); // Wajib ada agar server bisa membaca JSON dari Retrofi
 // Inisialisasi Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Dummy Database (In-Memory)
+let users = [];
+let events = [];
+
+// Inisialisasi Midtrans
+const midtransClient = require('midtrans-client');
+let snap = new midtransClient.Snap({
+    isProduction: false,
+    serverKey: process.env.MIDTRANS_SERVER_KEY || 'SB-Mid-server-YOUR_SERVER_KEY_HERE',
+    clientKey: process.env.MIDTRANS_CLIENT_KEY || 'SB-Mid-client-YOUR_CLIENT_KEY_HERE'
+});
+
 // =====================================================================
 // ENDPOINT: POST /premium/analyze-mood
 // Menerima teks dari Android, memproses ke Gemini, dan membalas JSON
@@ -132,6 +144,79 @@ Keterangan moodScore:
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server Backend Caremate sudah berjalan di http://localhost:${PORT}`);
+});
+
+// =====================================================================
+// ENDPOINT: MIDTRANS PAYMENT
+// =====================================================================
+
+// 1. Create Transaction Token (Snap)
+app.post('/api/payment/create-transaction', async (req, res) => {
+    try {
+        const { userId, orderId, grossAmount, itemName } = req.body;
+        
+        if (!userId || !grossAmount) {
+             return res.status(400).json({ error: "userId dan grossAmount wajib diisi." });
+        }
+
+        let parameter = {
+            "transaction_details": {
+                "order_id": orderId || `ORDER-${crypto.randomUUID()}`,
+                "gross_amount": grossAmount
+            },
+            "item_details": [{
+                "id": "ITEM-PREMIUM-01",
+                "price": grossAmount,
+                "quantity": 1,
+                "name": itemName || "CareMate Premium"
+            }],
+            "customer_details": {
+                "first_name": "User",
+                "email": "user@caremate.com" // idealnya ambil dari database berdasarkan userId
+            },
+            "custom_field1": userId // Menyimpan userId untuk webhook
+        };
+
+        const transaction = await snap.createTransaction(parameter);
+        res.status(200).json({ token: transaction.token, redirect_url: transaction.redirect_url });
+    } catch (error) {
+        console.error("Gagal membuat transaksi midtrans:", error);
+        res.status(500).json({ error: "Gagal memproses pembayaran" });
+    }
+});
+
+// 2. Webhook Notification (Update isPremium status)
+app.post('/api/payment/webhook', async (req, res) => {
+    try {
+        const statusResponse = await snap.transaction.notification(req.body);
+        let orderId = statusResponse.order_id;
+        let transactionStatus = statusResponse.transaction_status;
+        let fraudStatus = statusResponse.fraud_status;
+        let userId = statusResponse.custom_field1;
+
+        console.log(`Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`);
+
+        if (transactionStatus == 'capture' || transactionStatus == 'settlement') {
+            if (fraudStatus == 'challenge') {
+                // TODO set transaction status on your database to 'challenge'
+            } else if (fraudStatus == 'accept' || transactionStatus == 'settlement') {
+                // UPDATE USER PREMIUM STATUS
+                if (userId) {
+                    const userIndex = users.findIndex(u => u.id === userId);
+                    if (userIndex !== -1) {
+                        users[userIndex].isPremium = true;
+                        console.log(`User ${userId} telah diupgrade menjadi Premium.`);
+                    } else {
+                        console.log(`User ${userId} tidak ditemukan dalam database dummy.`);
+                    }
+                }
+            }
+        }
+        res.status(200).send('OK');
+    } catch (error) {
+        console.error("Error Webhook:", error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 
@@ -487,5 +572,120 @@ app.patch('/api/admin/bypass-premium/:userId', (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ error: "Gagal mengubah status premium user." });
+    }
+});
+
+
+// =====================================================================
+// ENDPOINT: POST /api/smart-nutrition/generate
+// Menerima profil medis pasien, jenis makanan, bahan, dan history revisi
+// Mengembalikan 4-6 opsi resep (atau mengupdate resep via chat)
+// =====================================================================
+app.post('/api/smart-nutrition/generate', async (req, res) => {
+    try {
+        const { patientProfile, mealType, ingredients } = req.body;
+
+        // Validasi input minimal
+        if (!patientProfile || !mealType) {
+            return res.status(400).json({ error: "patientProfile dan mealType wajib diisi." });
+        }
+
+        const { diagnosis, allergies, texture, preferences } = patientProfile;
+
+        // System Instruction yang sangat ketat untuk Ahli Gizi AI
+        const systemInstruction = `
+Kamu adalah seorang Ahli Gizi Klinis berlisensi dan Koki Profesional.
+Tugasmu adalah merancang resep makanan yang LEZAT dan SANGAT AMAN berdasarkan kondisi pasien.
+
+PROFIL PASIEN INI (MUTLAK HARUS DIPATUHI):
+- Penyakit Utama: ${diagnosis || 'Tidak ada spesifik'}
+- Alergi Makanan: ${allergies || 'Tidak ada'}
+- Tekstur / Pantangan Lain: ${texture || 'Normal'}
+- Preferensi: ${preferences || 'Normal'}
+
+ATURAN KESELAMATAN:
+1. DILARANG KERAS menggunakan bahan yang disebutkan di bagian Alergi Makanan.
+2. Semua bahan dan takaran HARUS disesuaikan dengan standar diet Penyakit Utama pasien.
+3. Berikan porsi standar (misal untuk 1 porsi/orang).
+
+FORMAT OUTPUT:
+Kamu WAJIB mengembalikan murni JSON array yang berisi 4 sampai 6 buah objek resep.
+Struktur JSON (Array of Objects):
+[
+  {
+    "id": "recipe-uuid-unik",
+    "title": "Nama Makanan Menarik",
+    "imageSearchKeyword": "Keyword bahasa inggris spesifik untuk mencari stok foto di Unsplash",
+    "estTimeMin": 30,
+    "portions": 2,
+    "medicalRationale": "Satu atau dua kalimat penjelasan medis kenapa ini aman untuk pasien.",
+    "safetyBadge": "Aman untuk [Penyakit]",
+    "ingredients": [
+      { "name": "Bahan A", "amount": "100 gram" }
+    ],
+    "steps": [
+      "Langkah 1: (Berikan instruksi yang sangat detail, spesifik, dan mudah dipahami oleh pemula. Sertakan estimasi waktu, suhu jika perlu, dan ciri-ciri visual masakan/bahan di tahap tersebut)",
+      "Langkah 2..."
+    ],
+    "youtubeQuery": "cara membuat [nama makanan]"
+  }
+]
+DILARANG memberikan teks markdown seperti \`\`\`json. Output harus LANGSUNG berupa Array JSON valid.
+        `.trim();
+
+        // Bangun prompt pengguna
+        const bahanInfo = ingredients ? `Bahan yang tersedia: ${ingredients}` : "Bahan bebas (sarankan yang sehat).";
+        const userPrompt = `Tolong buatkan 4-6 opsi resep untuk waktu makan: ${mealType}. ${bahanInfo}`;
+
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.5-flash",
+            systemInstruction: systemInstruction,
+            generationConfig: {
+                temperature: 0.7, // Sedikit kreatif tapi tetap patuh aturan medis
+                responseMimeType: "application/json" // Memaksa Gemini merespons dalam JSON murni
+            }
+        });
+
+        const chat = model.startChat();
+
+        const result = await chat.sendMessage(userPrompt);
+        const aiResponseText = result.response.text();
+
+        // Bersihkan formatting markdown jika Gemini tetap mengembalikannya
+        const cleanJsonString = aiResponseText
+            .replace(/```json/gi, '')
+            .replace(/```/g, '')
+            .trim();
+
+        let recipesData = [];
+        try {
+            recipesData = JSON.parse(cleanJsonString);
+            // Validasi jika respons bukan array
+            if (!Array.isArray(recipesData)) {
+                recipesData = [recipesData]; 
+            }
+            
+            // Beri UUID unik untuk tiap resep (bantu frontend)
+            recipesData = recipesData.map(recipe => ({
+                ...recipe,
+                id: recipe.id || crypto.randomUUID()
+            }));
+
+        } catch (error) {
+            console.error("Gagal parse JSON resep dari Gemini:", aiResponseText);
+            return res.status(500).json({ error: "Gagal memproses resep dari AI." });
+        }
+
+        res.status(200).json({
+            message: "Resep berhasil dibuat.",
+            data: recipesData
+        });
+
+    } catch (error) {
+        console.error("Kesalahan API Smart Nutrition:", error);
+        if (error.cause) {
+            console.error("Detail Penyebab (Cause):", error.cause);
+        }
+        res.status(500).json({ error: "Terjadi kesalahan server saat memproses resep." });
     }
 });

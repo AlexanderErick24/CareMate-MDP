@@ -106,6 +106,10 @@ class DashboardFragment : Fragment() {
         binding.btnHistory.setOnClickListener {
             HistoryBottomSheetFragment().show(childFragmentManager, HistoryBottomSheetFragment.TAG)
         }
+
+        binding.btnSimulasiPremium.setOnClickListener {
+            findNavController().navigate(R.id.paywallFragment)
+        }
     }
 
     private fun setupCalendarStrip() {
@@ -372,6 +376,14 @@ class DashboardFragment : Fragment() {
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         dialogBinding.btnSelectPhoto.setOnClickListener {
+            val isPremium = com.mdp.caremate.utils.PremiumUtils.isPremium(requireContext())
+            if (!isPremium) {
+                dialog.dismiss()
+                Toast.makeText(requireContext(), "Fitur AI Vision hanya untuk pengguna Premium", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.paywallFragment)
+                return@setOnClickListener
+            }
+            
             currentMedicationForPhoto = medication
             currentPreviewBinding = null
             dialog.dismiss()
@@ -421,6 +433,14 @@ class DashboardFragment : Fragment() {
         }
 
         dialogBinding.btnUploadNewPhoto.setOnClickListener {
+            val isPremium = com.mdp.caremate.utils.PremiumUtils.isPremium(requireContext())
+            if (!isPremium) {
+                dialog.dismiss()
+                Toast.makeText(requireContext(), "Fitur AI Vision hanya untuk pengguna Premium", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.paywallFragment)
+                return@setOnClickListener
+            }
+            
             currentMedicationForPhoto = medication
             currentPreviewBinding = dialogBinding
             getContentLauncher.launch("image/*")

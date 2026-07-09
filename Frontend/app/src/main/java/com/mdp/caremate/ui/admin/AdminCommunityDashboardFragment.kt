@@ -44,6 +44,16 @@ class AdminCommunityDashboardFragment : Fragment() {
         viewModel.activeEventsCount.observe(viewLifecycleOwner) { count ->
             binding.tvActiveEventsCount.text = count.toString()
         }
+
+        // Pantau total revenue dari user premium
+        viewModel.totalRevenue.observe(viewLifecycleOwner) { revenue ->
+            binding.tvTotalRevenue.text = String.format("Rp %,d", revenue)
+        }
+
+        // Pantau jumlah user premium
+        viewModel.premiumUsersCount.observe(viewLifecycleOwner) { count ->
+            binding.tvPremiumUsersCount.text = "$count user premium × Rp 50.000"
+        }
     }
 
     private fun setupClickListeners() {

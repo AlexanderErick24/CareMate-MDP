@@ -31,10 +31,16 @@
         <action
             android:id="@+id/action_family_dashboard_to_chat"
             app:destination="@id/chatFragment"/>
-            
+
         <action
             android:id="@+id/action_family_dashboard_to_ai_alert_history"
             app:destination="@id/aiAlertHistoryFragment"/>
+
+        <!-- NEW action to open caregiver detail -->
+        <action
+            android:id="@+id/action_family_dashboard_to_caregiver_detail"
+            app:destination="@id/caregiverDetailFragment"/>
+
     </fragment>
 
     <fragment
@@ -55,6 +61,7 @@
     <fragment
         android:id="@+id/aiChatFragment"
         android:name="com.mdp.caremate.ui.chat.JournalingChatFragment"/>
+
     <fragment
         android:id="@+id/familyManagementFragment"
         android:name="com.mdp.caremate.ui.family.management.FamilyManagementFragment">
@@ -72,5 +79,17 @@
         android:id="@+id/aiAlertHistoryFragment"
         android:name="com.mdp.caremate.ui.family.alert.AiAlertHistoryFragment"
         android:label="AI Alert History"/>
+
+    <!-- NEW destination for caregiver detail -->
+    <fragment
+        android:id="@+id/caregiverDetailFragment"
+        android:name="com.mdp.caremate.ui.family.dashboard.CaregiverDetailFragment"
+        android:label="Caregiver Profile">
+
+        <argument
+            android:name="caregiverUid"
+            app:argType="string"/>
+
+    </fragment>
 
 </navigation>

@@ -10,4 +10,9 @@ interface ProfileRepository {
     suspend fun requestJoinFamily(targetCode: String): Result<String>
     suspend fun acceptJoinRequest(requestId: String, caregiverUid: String): Result<String>
     suspend fun rejectJoinRequest(requestId: String): Result<String>
+
+    // New functions for family profile
+    suspend fun updateUsername(newName: String): Result<String>
+    suspend fun changePassword(currentPassword: String, newPassword: String): Result<String>
+    suspend fun uploadProfilePhoto(photoBase64: String): Result<String>
 }

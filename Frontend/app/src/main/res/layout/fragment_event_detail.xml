@@ -83,6 +83,29 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Card Poster Event -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDetailPoster"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/caremate_outline"
+                app:strokeWidth="1dp"
+                tools:visibility="visible">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivDetailEventPoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Poster Detail Event"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Card Lokasi -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardDetailLocation"

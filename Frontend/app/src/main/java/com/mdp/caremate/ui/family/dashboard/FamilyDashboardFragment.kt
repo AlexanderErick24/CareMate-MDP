@@ -190,7 +190,6 @@ class FamilyDashboardFragment : Fragment(R.layout.fragment_family_dashboard) {
         }
 
 
-
         dashboardViewModel
             .todaysMedications
             .observe(

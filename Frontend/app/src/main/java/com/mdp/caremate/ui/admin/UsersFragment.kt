@@ -150,25 +150,32 @@ class UsersFragment : Fragment() {
     private fun setupFilterTabs() {
         binding.chipAll.setOnClickListener {
             currentFilter = "ALL"
-            updateTabUI(binding.chipAll, binding.chipCaregivers, binding.chipFamily, binding.chipInactive)
+            updateTabUI(binding.chipAll, binding.chipPremium, binding.chipCaregivers, binding.chipFamily, binding.chipInactive)
+            applyFilterAndSearch(binding.etSearch.text.toString())
+        }
+
+        // Tambahan Baru: Click Listener untuk Chip Premium
+        binding.chipPremium.setOnClickListener {
+            currentFilter = "PREMIUM"
+            updateTabUI(binding.chipPremium, binding.chipAll, binding.chipCaregivers, binding.chipFamily, binding.chipInactive)
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
         binding.chipCaregivers.setOnClickListener {
             currentFilter = "Caregiver"
-            updateTabUI(binding.chipCaregivers, binding.chipAll, binding.chipFamily, binding.chipInactive)
+            updateTabUI(binding.chipCaregivers, binding.chipAll, binding.chipPremium, binding.chipFamily, binding.chipInactive)
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
         binding.chipFamily.setOnClickListener {
             currentFilter = "Family"
-            updateTabUI(binding.chipFamily, binding.chipAll, binding.chipCaregivers, binding.chipInactive)
+            updateTabUI(binding.chipFamily, binding.chipAll, binding.chipPremium, binding.chipCaregivers, binding.chipInactive)
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
         binding.chipInactive.setOnClickListener {
             currentFilter = "INACTIVE"
-            updateTabUI(binding.chipInactive, binding.chipAll, binding.chipCaregivers, binding.chipFamily)
+            updateTabUI(binding.chipInactive, binding.chipAll, binding.chipPremium, binding.chipCaregivers, binding.chipFamily)
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
     }
@@ -189,7 +196,8 @@ class UsersFragment : Fragment() {
         for (user in allUsersList) {
             val matchesFilter = when (currentFilter) {
                 "ALL" -> true
-                "INACTIVE" -> !user.status
+                "INACTIVE" -> !user.status // Akun tersuspensi (tidak aktif)
+                "PREMIUM" -> user.isPremium // Memfilter hanya user dengan isPremium: true
                 else -> user.role.equals(currentFilter, ignoreCase = true)
             }
 
@@ -209,7 +217,6 @@ class UsersFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
     }
 
     override fun onDestroyView() {

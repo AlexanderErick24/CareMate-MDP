@@ -33,7 +33,8 @@ class EventRepositoryImpl : EventRepository {
                         time = time,
                         place = place,
                         capacity = capacity,
-                        listed = listed
+                        listed = listed,
+                        photoUrl = doc.getString("photoUrl") ?: ""
                     )
                 } ?: emptyList()
                 trySend(events)
@@ -52,7 +53,7 @@ class EventRepositoryImpl : EventRepository {
                 val place = doc.getString("place") ?: doc.getString("location") ?: ""
                 val capacity = doc.getString("capacity") ?: doc.getString("slots") ?: doc.getLong("capacity")?.toString() ?: doc.getLong("slots")?.toString() ?: ""
                 val listed = doc.getBoolean("listed") ?: true
-                return Event(eid = id, name = name, date = date, time = time, place = place, capacity = capacity, listed = listed)
+                return Event(eid = id, name = name, date = date, time = time, place = place, capacity = capacity, listed = listed, photoUrl = doc.getString("photoUrl") ?: "")
             }
 
             val querySnapshot = firestore.collection("events").whereEqualTo("eid", eventId).get().await()
@@ -65,7 +66,7 @@ class EventRepositoryImpl : EventRepository {
                 val place = firstDoc.getString("place") ?: firstDoc.getString("location") ?: ""
                 val capacity = firstDoc.getString("capacity") ?: firstDoc.getString("slots") ?: firstDoc.getLong("capacity")?.toString() ?: firstDoc.getLong("slots")?.toString() ?: ""
                 val listed = firstDoc.getBoolean("listed") ?: true
-                return Event(eid = id, name = name, date = date, time = time, place = place, capacity = capacity, listed = listed)
+                return Event(eid = id, name = name, date = date, time = time, place = place, capacity = capacity, listed = listed, photoUrl = firstDoc.getString("photoUrl") ?: "")
             }
             null
         } catch (e: Exception) {

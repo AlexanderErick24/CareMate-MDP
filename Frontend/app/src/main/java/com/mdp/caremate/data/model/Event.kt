@@ -21,5 +21,7 @@ data class Event(
     @SerializedName("slots")
     val capacity: String = "",
 
+    val photoUrl: String = "",
+
     val listed: Boolean = false
 ) : Parcelable

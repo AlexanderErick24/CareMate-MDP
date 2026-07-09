@@ -35,24 +35,28 @@ class AdminCommunityDashboardFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // Pantau perubahan jumlah user aktif
+        // 1. Pantau perubahan jumlah user aktif
         viewModel.activeUsersCount.observe(viewLifecycleOwner) { count ->
             binding.tvActiveUsersCount.text = String.format("%,d", count)
         }
 
-        // Pantau perubahan jumlah event aktif
+        // 2. Pantau perubahan jumlah event aktif
         viewModel.activeEventsCount.observe(viewLifecycleOwner) { count ->
             binding.tvActiveEventsCount.text = count.toString()
         }
 
-        // Pantau total revenue dari user premium
+        // 3. Pantau total revenue dari user premium
         viewModel.totalRevenue.observe(viewLifecycleOwner) { revenue ->
             binding.tvTotalRevenue.text = String.format("Rp %,d", revenue)
         }
 
-        // Pantau jumlah user premium
+        // 4. Pantau jumlah murni user premium aktif (Menampilkan angka di kartu baru)
         viewModel.premiumUsersCount.observe(viewLifecycleOwner) { count ->
-            binding.tvPremiumUsersCount.text = "$count user premium × Rp 50.000"
+            // Menampilkan jumlah angka user premium di card baru
+            binding.tvPremiumUsersCount.text = String.format("%,d", count)
+
+            // Mengubah info perkalian di card total revenue agar dinamis
+            binding.tvPremiumMultiplier.text = "$count × Rp 50.000"
         }
     }
 

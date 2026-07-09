@@ -31,16 +31,25 @@ class DashboardViewModel : ViewModel() {
 
     fun fetchDashboardStats() {
         viewModelScope.launch {
-            // 1. Ambil user & hitung totalnya
-            val users = getAllUser()
-            _activeUsersCount.value = users.size
+            // Ambil semua data user asli dari Firebase
+            val allUsers = getAllUser()
 
-            // 2. Hitung jumlah user premium & total revenue (Rp 50.000 per user)
-            val premiumCount = users.count { it.isPremium }
+            // 1. Hitung total user biasa yang aktif (Role "Admin" dilewati)
+            val activeUsersWithoutAdmin = allUsers.count { user ->
+                user.status && !user.role.equals("Admin", ignoreCase = true)
+            }
+            _activeUsersCount.value = activeUsersWithoutAdmin
+
+            // 2. Hitung jumlah user biasa yang premium (Role "Admin" dilewati)
+            val premiumCount = allUsers.count { user ->
+                user.isPremium && !user.role.equals("Admin", ignoreCase = true)
+            }
             _premiumUsersCount.value = premiumCount
+
+            // Hitung total revenue berdasarkan user premium non-admin
             _totalRevenue.value = premiumCount * 50_000L
 
-            // 3. Ambil event & hitung yang listed == true DAN belum lewat dari sekarang
+            // 3. Ambil event & hitung yang listed == true DAN belum lewat dari waktu sekarang
             val events = getAllEvent()
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
@@ -51,7 +60,7 @@ class DashboardViewModel : ViewModel() {
                 if (!event.listed) return@count false
 
                 try {
-                    // Gabungkan date dan time (contoh: "25/12/2026" + " " + "19:00")
+                    // Gabungkan date dan time (contoh: "25/12/2026 19:00")
                     val fullDateTimeStr = "${event.date} ${event.time}"
                     val eventDateTime = sdf.parse(fullDateTimeStr)
 

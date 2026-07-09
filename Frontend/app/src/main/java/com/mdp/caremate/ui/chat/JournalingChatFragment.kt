@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -45,7 +44,6 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
         val rvChat = view.findViewById<RecyclerView>(R.id.rvChat)
         val etMessage = view.findViewById<EditText>(R.id.etMessage)
         val btnSend = view.findViewById<ImageButton>(R.id.btnSend)
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
 
         adapter = JournalingChatAdapter()
         rvChat.adapter = adapter
@@ -93,7 +91,6 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             btnSend.isEnabled = !isLoading
         }
 

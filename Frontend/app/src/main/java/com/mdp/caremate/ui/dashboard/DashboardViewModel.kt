@@ -21,11 +21,15 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val targetUidFlow = MutableStateFlow<String?>(null)
 
+    private val _currentUserFlow = MutableStateFlow<com.mdp.caremate.data.model.User?>(null)
+    val currentUserFlow: LiveData<com.mdp.caremate.data.model.User?> = _currentUserFlow.asLiveData()
+
     init {
         viewModelScope.launch {
             val userResult = firebaseSource.getCurrentUser()
             if (userResult.isSuccess) {
                 val user = userResult.getOrNull()
+                _currentUserFlow.value = user
                 if (user != null) {
                     targetUidFlow.value = when {
                         user.role == "caregiver" && user.connectedPatientUid.isNotEmpty() -> user.connectedPatientUid
@@ -67,9 +71,10 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                             val premiumRepo = app.premiumRepository
                             val alert = premiumRepo.verifyMedication(photoUrl, medication.name)
                             
-                            // Save to Firestore so family can see
-                            val caregiverId = uid // the caregiver taking the action
-                            val finalAlert = alert.copy(caregiverId = caregiverId)
+                            // Save to Firestore so family can see. 
+                            // IMPORTANT: MUST use actual caregiver UID, not the patient's UID.
+                            val actualCaregiverUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                            val finalAlert = alert.copy(caregiverId = actualCaregiverUid)
                             premiumRepo.saveAiAlert(finalAlert)
                         } catch (e: Exception) {
                             e.printStackTrace()

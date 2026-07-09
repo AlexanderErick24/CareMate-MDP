@@ -99,14 +99,16 @@ class PaywallFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("http://10.0.2.2:3000/api/payment/create-transaction")
+                val urlStr = "${com.mdp.caremate.data.sources.remote.ApiConfig.BASE_URL}api/payment/create-transaction"
+                val url = URL(urlStr)
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
                 val jsonParam = JSONObject()
-                jsonParam.put("userId", "12345") // Ambil dari session yang aktif
+                val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: "unknown"
+                jsonParam.put("userId", uid) // Mengambil UID asli dari session FirebaseAuth aktif
                 jsonParam.put("grossAmount", 50000)
 
                 val os = OutputStreamWriter(conn.outputStream)

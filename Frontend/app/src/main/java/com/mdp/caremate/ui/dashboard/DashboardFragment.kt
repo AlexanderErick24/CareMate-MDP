@@ -107,9 +107,7 @@ class DashboardFragment : Fragment() {
             HistoryBottomSheetFragment().show(childFragmentManager, HistoryBottomSheetFragment.TAG)
         }
 
-        binding.btnSimulasiPremium.setOnClickListener {
-            findNavController().navigate(R.id.paywallFragment)
-        }
+
     }
 
     private fun setupCalendarStrip() {
@@ -199,7 +197,12 @@ class DashboardFragment : Fragment() {
                     return@MedicationAdapter
                 }
                 if (isTakenToday) {
-                    showUploadPhotoDialog(medication)
+                    val isPremium = viewModel.currentUserFlow.value?.isPremium == true
+                    if (isPremium) {
+                        showUploadPhotoDialog(medication)
+                    } else {
+                        viewModel.updateMedicationTakenStatus(medication, true)
+                    }
                 } else {
                     viewModel.updateMedicationTakenStatus(medication, false)
                 }

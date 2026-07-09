@@ -23,6 +23,15 @@ let snap = new midtransClient.Snap({
     clientKey: process.env.MIDTRANS_CLIENT_KEY || 'SB-Mid-client-YOUR_CLIENT_KEY_HERE'
 });
 
+// Fungsi utilitas untuk sanitasi input (Cegah Prompt Injection)
+function sanitizeInput(input, maxLength = 2000) {
+    if (!input || typeof input !== 'string') return '';
+    return input
+        .substring(0, maxLength)
+        .replace(/[<>{}[\]\\]/g, '') // Hapus karakter yang bisa menjadi delimiter palsu
+        .trim();
+}
+
 // =====================================================================
 // ENDPOINT: POST /premium/analyze-mood
 // Menerima teks dari Android, memproses ke Gemini, dan membalas JSON
@@ -37,12 +46,7 @@ app.post('/premium/analyze-mood', async (req, res) => {
         }
 
         // 2. Sanitasi Input - Cegah Prompt Injection
-        // Batasi panjang pesan dan strip karakter berbahaya yang bisa memanipulasi instruksi AI
-        const MAX_LENGTH = 2000;
-        const sanitizedContent = content
-            .substring(0, MAX_LENGTH)
-            .replace(/[<>{}[\]\\]/g, '') // Hapus karakter yang bisa menjadi delimiter palsu
-            .trim();
+        const sanitizedContent = sanitizeInput(content);
 
         // 3. System Instruction (BUKAN bagian dari prompt user)
         // Ini ditaruh di lapisan terpisah sehingga model WAJIB mematuhinya dan user tidak bisa menimpanya.
@@ -82,7 +86,7 @@ Keterangan moodScore:
             .slice(-20) // Batasi maksimal 20 pesan terakhir agar tidak membengkak
             .map(h => ({
                 role: h.role,
-                parts: [{ text: h.parts[0].text.substring(0, MAX_LENGTH) }]
+                parts: [{ text: sanitizeInput(h.parts[0].text) }]
             }));
 
         // 5. Inisialisasi model dengan System Instruction (cara resmi Gemini)
@@ -232,11 +236,14 @@ app.post('/premium/verify-medication', async (req, res) => {
             return res.status(400).json({ error: "imageBase64 dan expectedMedication wajib diisi." });
         }
 
+        // Sanitasi input agar user tidak bisa memanipulasi instruksi utama
+        const sanitizedExpectedMedication = sanitizeInput(expectedMedication, 200);
+
         // System Instruction khusus untuk Apoteker AI
         const systemInstruction = `
 Kamu adalah seorang Apoteker AI yang sangat teliti. Tugasmu adalah memverifikasi obat berdasarkan foto.
 Aturan:
-1. Bandingkan obat dalam foto dengan obat yang dijadwalkan: "${expectedMedication}".
+1. Bandingkan obat dalam foto dengan obat yang dijadwalkan: "${sanitizedExpectedMedication}".
 2. Apakah jenis obat, nama, atau wujudnya cocok?
 3. Kamu WAJIB merespons HANYA dalam format JSON berikut tanpa markdown atau teks tambahan:
 {
@@ -590,7 +597,13 @@ app.post('/api/smart-nutrition/generate', async (req, res) => {
             return res.status(400).json({ error: "patientProfile dan mealType wajib diisi." });
         }
 
-        const { diagnosis, allergies, texture, preferences } = patientProfile;
+        // Sanitasi input untuk mencegah Prompt Injection
+        const diagnosis = sanitizeInput(patientProfile.diagnosis, 300);
+        const allergies = sanitizeInput(patientProfile.allergies, 300);
+        const texture = sanitizeInput(patientProfile.texture, 300);
+        const preferences = sanitizeInput(patientProfile.preferences, 300);
+        const safeMealType = sanitizeInput(mealType, 100);
+        const safeIngredients = sanitizeInput(ingredients, 500);
 
         // System Instruction yang sangat ketat untuk Ahli Gizi AI
         const systemInstruction = `
@@ -634,8 +647,8 @@ DILARANG memberikan teks markdown seperti \`\`\`json. Output harus LANGSUNG beru
         `.trim();
 
         // Bangun prompt pengguna
-        const bahanInfo = ingredients ? `Bahan yang tersedia: ${ingredients}` : "Bahan bebas (sarankan yang sehat).";
-        const userPrompt = `Tolong buatkan 4-6 opsi resep untuk waktu makan: ${mealType}. ${bahanInfo}`;
+        const bahanInfo = safeIngredients ? `Bahan yang tersedia: ${safeIngredients}` : "Bahan bebas (sarankan yang sehat).";
+        const userPrompt = `Tolong buatkan 4-6 opsi resep untuk waktu makan: ${safeMealType}. ${bahanInfo}`;
 
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash",

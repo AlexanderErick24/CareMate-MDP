@@ -64,7 +64,11 @@ class RecipeDetailFragment : Fragment() {
             binding.btnYoutube.setOnClickListener {
                 val query = recipe.youtubeQuery ?: "cara membuat ${recipe.title}"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=$query"))
-                startActivity(intent)
+                try {
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Tidak ada aplikasi browser/youtube untuk membuka link", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

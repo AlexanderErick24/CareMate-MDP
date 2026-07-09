@@ -99,6 +99,11 @@ class PremiumViewModel (
 
             } catch (e: Exception) {
                 _errorMessage.value = "Gagal menganalisis: ${e.message}"
+                _errorMessage.value = null // Cegah re-emisi saat layar diputar
+                
+                // Refresh list untuk menghapus pesan "Ghost Loading Bubble" di UI 
+                // akibat pemanggilan adapter secara manual yang terputus di tengah jalan
+                refreshHistoryList(caregiverId)
             } finally {
                 _isLoading.value = false
             }

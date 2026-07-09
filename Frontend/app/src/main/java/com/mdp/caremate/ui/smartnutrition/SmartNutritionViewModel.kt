@@ -37,13 +37,13 @@ class SmartNutritionViewModel : ViewModel() {
         }
         val client = OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .connectTimeout(45, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(45, java.util.concurrent.TimeUnit.SECONDS)
-            .writeTimeout(45, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(90, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(90, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(90, java.util.concurrent.TimeUnit.SECONDS)
             .build()
 
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/") // Localhost for Android Emulator
+            .baseUrl(com.mdp.caremate.data.sources.remote.ApiConfig.BASE_URL) // Menggunakan BASE_URL tersentralisasi
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
@@ -72,6 +72,12 @@ class SmartNutritionViewModel : ViewModel() {
             } catch (e: Exception) {
                 _uiState.value = SmartNutritionState.Error("Error: ${e.message}")
             }
+        }
+    }
+
+    fun resetState() {
+        if (_uiState.value is SmartNutritionState.Error) {
+            _uiState.value = SmartNutritionState.Idle
         }
     }
 }

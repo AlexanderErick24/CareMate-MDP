@@ -43,14 +43,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- LOADING INDICATOR -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:indeterminate="true"/>
+    <!-- LOADING INDICATOR (Dihapus karena sudah pakai indikator chat bubble) -->
 
     <!-- CHAT -->
     <androidx.recyclerview.widget.RecyclerView

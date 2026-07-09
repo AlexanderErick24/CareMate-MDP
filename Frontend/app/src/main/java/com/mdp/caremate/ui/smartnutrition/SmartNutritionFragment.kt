@@ -56,7 +56,9 @@ class SmartNutritionFragment : Fragment() {
         // Setup RecyclerView Grid 2 Kolom
         adapter = RecipeAdapter { recipe ->
             viewModel.selectedRecipe = recipe
-            findNavController().navigate(R.id.action_smart_nutrition_to_recipe_detail)
+            if (findNavController().currentDestination?.id == R.id.dest_smart_nutrition) {
+                findNavController().navigate(R.id.action_smart_nutrition_to_recipe_detail)
+            }
         }
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvRecipes.adapter = adapter
@@ -94,6 +96,7 @@ class SmartNutritionFragment : Fragment() {
                 is SmartNutritionState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
+                    viewModel.resetState()
                 }
             }
         }

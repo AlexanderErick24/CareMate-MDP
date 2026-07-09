@@ -6,6 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mdp.caremate.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AiAlertHistoryAdapter(
     private var alertList: List<AiAlertHistoryItem> = listOf()
@@ -54,15 +58,20 @@ class AiAlertHistoryAdapter(
 
             val ivAlertThumbnail: android.widget.ImageView = itemView.findViewById(R.id.ivAlertThumbnail)
             if (!item.imageUrl.isNullOrEmpty()) {
-                try {
-                    val decodedBytes = android.util.Base64.decode(item.imageUrl, android.util.Base64.DEFAULT)
-                    val bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-                    if (bitmap != null) {
-                        ivAlertThumbnail.setImageBitmap(bitmap)
-                        ivAlertThumbnail.imageTintList = null // Clear the gray tint
+                // Decode in background to prevent UI lag
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val decodedBytes = android.util.Base64.decode(item.imageUrl, android.util.Base64.DEFAULT)
+                        val bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        if (bitmap != null) {
+                            withContext(Dispatchers.Main) {
+                                ivAlertThumbnail.setImageBitmap(bitmap)
+                                ivAlertThumbnail.imageTintList = null // Clear the gray tint
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
             } else {
                 ivAlertThumbnail.setImageResource(android.R.drawable.ic_menu_camera)

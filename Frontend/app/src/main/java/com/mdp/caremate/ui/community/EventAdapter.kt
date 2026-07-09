@@ -1,11 +1,15 @@
 package com.mdp.caremate.ui.community
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.mdp.caremate.data.model.Event
 import com.mdp.caremate.databinding.ItemEventBinding
 
@@ -45,6 +49,23 @@ class EventAdapter(
             }
             binding.btnPeserta.text = capText
             binding.btnPeserta.isClickable = false
+
+            if (!event.photoUrl.isNullOrEmpty()) {
+                binding.imgEventPoster.visibility = View.VISIBLE
+                try {
+                    val decodedBytes = Base64.decode(event.photoUrl, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    if (bitmap != null) {
+                        binding.imgEventPoster.setImageBitmap(bitmap)
+                    } else {
+                        binding.imgEventPoster.load(event.photoUrl)
+                    }
+                } catch (e: Exception) {
+                    binding.imgEventPoster.load(event.photoUrl)
+                }
+            } else {
+                binding.imgEventPoster.visibility = View.GONE
+            }
             
             binding.root.setOnClickListener { onEventClick(event) }
         }

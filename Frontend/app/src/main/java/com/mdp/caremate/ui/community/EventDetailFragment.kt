@@ -1,12 +1,15 @@
 package com.mdp.caremate.ui.community
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.mdp.caremate.data.model.Event
 import com.mdp.caremate.databinding.FragmentEventDetailBinding
 
@@ -28,25 +31,36 @@ class EventDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Ambil data dari Bundle yang dikirim CommunityFragment
-        val eventId = arguments?.getString(ARG_EVENT_ID).orEmpty()
-        val name = arguments?.getString(ARG_EVENT_NAME).orEmpty()
-        val date = arguments?.getString(ARG_EVENT_DATE).orEmpty()
-        val time = arguments?.getString(ARG_EVENT_TIME).orEmpty()
-        val place = arguments?.getString(ARG_EVENT_PLACE).orEmpty()
-        val capacity = arguments?.getString(ARG_EVENT_CAPACITY).orEmpty()
+        val argsEvent = arguments?.getParcelable<Event>("event")
+        if (argsEvent != null) {
+            viewModel.setEvent(argsEvent)
+        } else {
+            val eventId = arguments?.getString(ARG_EVENT_ID).orEmpty()
+            if (eventId.isNotEmpty()) {
+                val name = arguments?.getString(ARG_EVENT_NAME).orEmpty()
+                val date = arguments?.getString(ARG_EVENT_DATE).orEmpty()
+                val time = arguments?.getString(ARG_EVENT_TIME).orEmpty()
+                val place = arguments?.getString(ARG_EVENT_PLACE).orEmpty()
+                val capacity = arguments?.getString(ARG_EVENT_CAPACITY).orEmpty()
+                val photoUrl = arguments?.getString(ARG_EVENT_PHOTO_URL).orEmpty()
 
-        if (eventId.isNotEmpty()) {
-            viewModel.setEvent(
-                Event(
-                    eid = eventId,
-                    name = name,
-                    date = date,
-                    time = time,
-                    place = place,
-                    capacity = capacity
+                viewModel.setEvent(
+                    Event(
+                        eid = eventId,
+                        name = name,
+                        date = date,
+                        time = time,
+                        place = place,
+                        capacity = capacity,
+                        photoUrl = photoUrl
+                    )
                 )
-            )
+            } else {
+                val idArg = arguments?.getString("eventId")
+                if (idArg != null) {
+                    viewModel.loadEventById(idArg)
+                }
+            }
         }
 
         observeEvent()
@@ -68,6 +82,23 @@ class EventDetailFragment : Fragment() {
                 }
                 binding.tvDetailOrganizer.text = capText
                 binding.tvDetailDescription.text = "Acara kesehatan komunitas resmi yang diselenggarakan oleh CareMate untuk mendukung kesehatan fisik dan mental para caregiver serta lansia. Silakan hadir tepat waktu sesuai jadwal dan lokasi yang tertera."
+
+                if (!event.photoUrl.isNullOrEmpty()) {
+                    binding.cardDetailPoster.visibility = View.VISIBLE
+                    try {
+                        val decodedBytes = Base64.decode(event.photoUrl, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        if (bitmap != null) {
+                            binding.ivDetailEventPoster.setImageBitmap(bitmap)
+                        } else {
+                            binding.ivDetailEventPoster.load(event.photoUrl)
+                        }
+                    } catch (e: Exception) {
+                        binding.ivDetailEventPoster.load(event.photoUrl)
+                    }
+                } else {
+                    binding.cardDetailPoster.visibility = View.GONE
+                }
             }
         }
     }
@@ -90,5 +121,6 @@ class EventDetailFragment : Fragment() {
         const val ARG_EVENT_TIME = "arg_event_time"
         const val ARG_EVENT_PLACE = "arg_event_place"
         const val ARG_EVENT_CAPACITY = "arg_event_capacity"
+        const val ARG_EVENT_PHOTO_URL = "arg_event_photo_url"
     }
 }

@@ -44,6 +44,7 @@ class CommunityFragment : Fragment() {
                 putString(EventDetailFragment.ARG_EVENT_TIME, event.time)
                 putString(EventDetailFragment.ARG_EVENT_PLACE, event.place)
                 putString(EventDetailFragment.ARG_EVENT_CAPACITY, event.capacity)
+                putString(EventDetailFragment.ARG_EVENT_PHOTO_URL, event.photoUrl)
             }
             findNavController().navigate(R.id.action_dest_community_to_dest_event_detail, args)
         }

@@ -84,7 +84,7 @@ class EventAdapter(
             binding.tvEventDate.text = dateTimeText
 
             // Set text kapasitas peserta
-            binding.btnPeserta.text = "Peserta (0/${event.capacity})"
+            binding.btnPeserta.text = "Kapasitas: ${event.capacity}"
 
             // --- LOGIKA MENAMPILKAN FOTO EVENT (BASE64) ---
             if (!event.photoUrl.isNullOrEmpty()) {

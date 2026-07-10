@@ -473,6 +473,17 @@ class FirebaseSource {
         }
     }
 
+    suspend fun updateConnectedPatientUid(patientUid: String): Result<Boolean> {
+        return try {
+            val uid = auth.currentUser?.uid ?: throw Exception("User not logged in")
+            firestore.collection("users").document(uid)
+                .update("connectedPatientUid", patientUid).await()
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     // CHAT
     suspend fun createChatRoom(
         pairingCode: String,

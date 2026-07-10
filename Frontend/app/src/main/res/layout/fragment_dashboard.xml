@@ -38,26 +38,81 @@
 
                 <TextView
                     android:id="@+id/tvDashboardTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="Jadwal Kesehatan"
                     android:textColor="@android:color/white"
                     android:textSize="22sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/layoutCaregiverSyncHeader"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvDashboardSubtitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Jumat, 20 Februari 2026"
                     android:textColor="#EAF4F0"
                     android:textSize="14sp"
                     android:textStyle="italic"
+                    app:layout_constraintEnd_toStartOf="@id/layoutCaregiverSyncHeader"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDashboardTitle" />
+
+                <!-- Caregiver Sync Button in Header (Samping Kanan "Jadwal Kesehatan") -->
+                <LinearLayout
+                    android:id="@+id/layoutCaregiverSyncHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|end"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSyncPatient"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Sync Pasien"
+                        android:textAllCaps="false"
+                        android:textColor="@color/caremate_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="#FFFFFF"
+                        app:cornerRadius="18dp"
+                        app:icon="@drawable/ic_profile"
+                        app:iconSize="14dp"
+                        app:iconTint="@color/caremate_primary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUnsyncPatient"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="6dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Unsync"
+                        android:textAllCaps="false"
+                        android:textColor="#FFEBEE"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        app:cornerRadius="18dp"
+                        app:strokeColor="#FFEBEE"
+                        app:strokeWidth="1dp"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 

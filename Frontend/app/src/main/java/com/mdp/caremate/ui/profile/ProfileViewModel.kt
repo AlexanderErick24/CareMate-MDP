@@ -63,6 +63,18 @@ class ProfileViewModel(
         experience: List<String>,
         skills: List<String>
     ) {
+        if (name.trim().isEmpty()) {
+            _toastMessage.value = "Nama tidak boleh kosong"
+            return
+        }
+        if (age < 0 || age > 120) {
+            _toastMessage.value = "Usia harus bernilai valid (0 - 120 tahun)"
+            return
+        }
+        if (bio.length > 500) {
+            _toastMessage.value = "Bio maksimal 500 karakter"
+            return
+        }
         _isLoading.value = true
         viewModelScope.launch {
             val result = repository.updateUserProfile(name, jobTitle, age, bio, experience, skills)

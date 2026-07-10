@@ -12,10 +12,12 @@ import com.mdp.caremate.data.sources.local.MedicationAlarmScheduler
 import com.mdp.caremate.data.sources.remote.FirebaseSource
 import kotlinx.coroutines.launch
 
-class MedFormViewModel(application: Application) : AndroidViewModel(application) {
-    private val medRepository: MedRepository = MedRepositoryImpl()
-    private val firebaseSource = FirebaseSource()
-    private val scheduler = MedicationAlarmScheduler(application)
+class MedFormViewModel @JvmOverloads constructor(
+    application: Application,
+    private val medRepository: MedRepository = MedRepositoryImpl(),
+    private val firebaseSource: FirebaseSource = FirebaseSource(),
+    private val scheduler: MedicationAlarmScheduler = MedicationAlarmScheduler(application)
+) : AndroidViewModel(application) {
 
     private val _selectedMedication = MutableLiveData<Medication?>(null)
     val selectedMedication: LiveData<Medication?> = _selectedMedication
@@ -39,13 +41,14 @@ class MedFormViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private suspend fun getTargetUid(): String {
-        if (targetUid.isNotEmpty()) return targetUid
         val userResult = firebaseSource.getCurrentUser()
         if (userResult.isSuccess) {
             val user = userResult.getOrNull()
             if (user != null) {
                 targetUid = if (user.role == "caregiver" && user.connectedPatientUid.isNotEmpty()) {
                     user.connectedPatientUid
+                } else if (user.role == "family") {
+                    user.caregiverUid
                 } else {
                     user.uid
                 }

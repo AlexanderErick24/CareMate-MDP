@@ -102,6 +102,7 @@ class DashboardFragment : Fragment() {
         setupSwipeToDelete()
         observeMedicationList()
         setupSearch()
+        setupCaregiverSync()
         
         binding.btnHistory.setOnClickListener {
             HistoryBottomSheetFragment().show(childFragmentManager, HistoryBottomSheetFragment.TAG)
@@ -253,6 +254,85 @@ class DashboardFragment : Fragment() {
         viewModel.historyList.observe(viewLifecycleOwner) { history ->
             allHistory = history
             applyFilterAndRender()
+        }
+    }
+
+    private fun setupCaregiverSync() {
+        observeCurrentUser()
+
+        binding.btnSyncPatient.setOnClickListener {
+            val user = viewModel.currentUserFlow.value
+            if (user == null) return@setOnClickListener
+
+            if (user.connectedPatientUid.isNotEmpty()) {
+                val isLocal = viewModel.isLocalMode.value ?: false
+                if (isLocal) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Sync Kembali ke Pasien")
+                        .setMessage("Aktifkan kembali sinkronisasi jadwal obat dengan Pasien (${user.patientName.ifEmpty { "Terhubung" }})?")
+                        .setPositiveButton("Sync Sekarang") { _, _ ->
+                            viewModel.toggleCaregiverSyncMode(toLocal = false) {
+                                Toast.makeText(requireContext(), "Berhasil tersinkronisasi kembali dengan Pasien!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .setNegativeButton("Batal", null)
+                        .show()
+                } else {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Status Sinkronisasi")
+                        .setMessage("Jadwal obat saat ini sedang tersinkronisasi secara real-time dengan Pasien (${user.patientName.ifEmpty { "Terhubung" }}).\n\nJika Anda ingin melihat/mengatur obat pribadi tanpa mengubah jadwal Pasien, klik tombol Unsync di sebelah kanan.")
+                        .setPositiveButton("OK", null)
+                        .show()
+                }
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Belum Terhubung ke Pasien")
+                    .setMessage("Akun Anda saat ini dalam Mode Mandiri (belum ada Pasien/Keluarga yang terhubung).\n\nUntuk menghubungkan jadwal obat secara otomatis, bagikan Kode Pairing Anda (${user.pairingCode.ifEmpty { "-" }}) kepada Pasien atau Keluarga yang ingin Anda dampingi.")
+                    .setPositiveButton("OK", null)
+                    .show()
+            }
+        }
+
+        binding.btnUnsyncPatient.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Beralih ke Mode Mandiri (Unsync)")
+                .setMessage("Apakah Anda ingin beralih sementara ke Mode Mandiri? Jadwal obat di layar Anda akan menampilkan catatan lokal Caregiver tanpa mengubah atau menghapus jadwal obat Pasien.")
+                .setPositiveButton("Unsync Sementara") { _, _ ->
+                    viewModel.toggleCaregiverSyncMode(toLocal = true) {
+                        Toast.makeText(requireContext(), "Beralih ke Mode Mandiri (Lokal)", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .setNegativeButton("Batal", null)
+                .show()
+        }
+    }
+
+    private fun observeCurrentUser() {
+        viewModel.currentUserFlow.observe(viewLifecycleOwner) { user ->
+            updateCaregiverHeaderUI(user, viewModel.isLocalMode.value ?: false)
+        }
+        viewModel.isLocalMode.observe(viewLifecycleOwner) { isLocal ->
+            updateCaregiverHeaderUI(viewModel.currentUserFlow.value, isLocal)
+        }
+    }
+
+    private fun updateCaregiverHeaderUI(user: com.mdp.caremate.data.model.User?, isLocal: Boolean) {
+        if (user != null && user.role.equals("caregiver", ignoreCase = true)) {
+            binding.layoutCaregiverSyncHeader.visibility = View.VISIBLE
+            if (user.connectedPatientUid.isNotEmpty() && !isLocal) {
+                binding.btnUnsyncPatient.visibility = View.VISIBLE
+                val patientLabel = if (user.patientName.isNotEmpty()) user.patientName else "Tersinkron"
+                binding.btnSyncPatient.text = patientLabel
+            } else {
+                binding.btnUnsyncPatient.visibility = View.GONE
+                if (user.connectedPatientUid.isNotEmpty() && isLocal) {
+                    binding.btnSyncPatient.text = "Sync"
+                } else {
+                    binding.btnSyncPatient.text = "Unsync"
+                }
+            }
+        } else {
+            binding.layoutCaregiverSyncHeader.visibility = View.GONE
         }
     }
 

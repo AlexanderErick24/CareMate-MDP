@@ -3,6 +3,7 @@ package com.mdp.caremate.ui.dashboard
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.mdp.caremate.data.model.Medication
@@ -14,17 +15,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-class DashboardViewModel(application: Application) : AndroidViewModel(application) {
-    private val medRepository: MedRepository = MedRepositoryImpl()
-    private val firebaseSource = FirebaseSource()
-    private val scheduler = MedicationAlarmScheduler(application)
+class DashboardViewModel @JvmOverloads constructor(
+    application: Application,
+    private val medRepository: MedRepository = MedRepositoryImpl(),
+    private val firebaseSource: FirebaseSource = FirebaseSource(),
+    private val scheduler: MedicationAlarmScheduler = MedicationAlarmScheduler(application)
+) : AndroidViewModel(application) {
 
     private val targetUidFlow = MutableStateFlow<String?>(null)
 
     private val _currentUserFlow = MutableStateFlow<com.mdp.caremate.data.model.User?>(null)
     val currentUserFlow: LiveData<com.mdp.caremate.data.model.User?> = _currentUserFlow.asLiveData()
 
+    private val _isLocalMode = MutableStateFlow(false)
+    val isLocalMode: LiveData<Boolean> = _isLocalMode.asLiveData()
+
+    private val _statusMessage = MutableLiveData<String?>()
+    val statusMessage: LiveData<String?> = _statusMessage
+
     init {
+        refreshUserData()
+    }
+
+    fun refreshUserData(onComplete: (() -> Unit)? = null) {
         viewModelScope.launch {
             val userResult = firebaseSource.getCurrentUser()
             if (userResult.isSuccess) {
@@ -32,12 +45,13 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                 _currentUserFlow.value = user
                 if (user != null) {
                     targetUidFlow.value = when {
-                        user.role == "caregiver" && user.connectedPatientUid.isNotEmpty() -> user.connectedPatientUid
+                        user.role == "caregiver" && user.connectedPatientUid.isNotEmpty() && !_isLocalMode.value -> user.connectedPatientUid
                         user.role == "family" -> user.caregiverUid
                         else -> user.uid
                     }
                 }
             }
+            onComplete?.invoke()
         }
     }
 
@@ -58,11 +72,26 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     }.asLiveData()
 
     fun updateMedicationTakenStatus(medication: Medication, isTakenToday: Boolean, photoUrl: String? = null) {
+        val user = _currentUserFlow.value
+        val validPhotoUrl = if (!photoUrl.isNullOrEmpty() && user != null && !user.isPremium) {
+            _statusMessage.value = "Fitur upload foto bukti minum obat hanya untuk akun Caregiver Premium!"
+            null
+        } else {
+            if (isTakenToday && !photoUrl.isNullOrEmpty()) {
+                _statusMessage.value = "Bukti foto berhasil diunggah (Premium)"
+            } else if (isTakenToday) {
+                _statusMessage.value = "Status obat diperbarui: Sudah Diminum"
+            } else {
+                _statusMessage.value = "Status obat diperbarui: Belum Diminum"
+            }
+            photoUrl
+        }
+
         viewModelScope.launch {
             try {
                 val uid = targetUidFlow.value
                 if (uid != null) {
-                    medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday, photoUrl)
+                    medRepository.setMedicationTakenStatus(uid, medication.id, isTakenToday, validPhotoUrl)
                     
                     // Trigger AI Verification if photo was uploaded
                     if (isTakenToday && !photoUrl.isNullOrEmpty()) {
@@ -100,5 +129,16 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                 e.printStackTrace()
             }
         }
+    }
+
+    fun toggleCaregiverSyncMode(toLocal: Boolean, onSuccess: () -> Unit) {
+        val user = _currentUserFlow.value ?: return
+        _isLocalMode.value = toLocal
+        if (toLocal || user.connectedPatientUid.isEmpty()) {
+            targetUidFlow.value = user.uid
+        } else {
+            targetUidFlow.value = user.connectedPatientUid
+        }
+        onSuccess()
     }
 }

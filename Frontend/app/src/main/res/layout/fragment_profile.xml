@@ -229,6 +229,135 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- FAMILY QUIT REQUEST CARD (shown when a family member wants to quit) -->
+        <!-- Hidden by default, shown only when a pending family_quit request exists -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardFamilyQuitRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#FFF8E1"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#F9A825"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Family Quit Request"
+                    android:textColor="#E65100"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvFamilyQuitRequesterName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A family member wants to quit."
+                    android:textColor="#404845"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="12dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnApproveFamilyQuit"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:text="Approve"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="13sp"
+                        app:backgroundTint="#386458"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRejectFamilyQuit"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Reject"
+                        android:textAllCaps="false"
+                        android:textColor="#BA1A1A"
+                        android:textSize="13sp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="#BA1A1A"
+                        app:strokeWidth="1dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- CAREGIVER QUIT STATUS CARD -->
+        <!-- Hidden by default. Shows "Waiting" or "Rejected" state for caregiver quit request -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardCaregiverQuitStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#E8F5E9"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#388E3C"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvCaregiverQuitStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quit Request Status"
+                    android:textColor="#1B5E20"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvCaregiverQuitStatusMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Waiting for family approval..."
+                    android:textColor="#404845"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Only visible when status is rejected -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDismissCaregiverQuit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Dismiss"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:backgroundTint="#717975"
+                    app:cornerRadius="8dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
@@ -240,6 +369,22 @@
             android:textStyle="bold"
             app:backgroundTint="#386458"
             app:cornerRadius="12dp" />
+
+        <!-- QUIT PATIENT button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQuitPatient"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Quit Patient"
+            android:textAllCaps="false"
+            android:textColor="#E65100"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp"
+            app:strokeColor="#E65100"
+            app:strokeWidth="1.5dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"

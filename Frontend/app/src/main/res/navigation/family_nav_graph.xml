@@ -36,7 +36,6 @@
             android:id="@+id/action_family_dashboard_to_ai_alert_history"
             app:destination="@id/aiAlertHistoryFragment"/>
 
-        <!-- NEW action to open caregiver detail -->
         <action
             android:id="@+id/action_family_dashboard_to_caregiver_detail"
             app:destination="@id/caregiverDetailFragment"/>
@@ -69,18 +68,25 @@
         <action
             android:id="@+id/action_family_management_to_register"
             app:destination="@id/registerFragment"/>
+
     </fragment>
 
     <fragment
         android:id="@+id/familyProfileFragment"
-        android:name="com.mdp.caremate.ui.family.profile.FamilyProfileFragment"/>
+        android:name="com.mdp.caremate.ui.family.profile.FamilyProfileFragment">
+
+        <!-- NEW: navigate from Family Profile to Caregiver Detail (Part D) -->
+        <action
+            android:id="@+id/action_familyProfileFragment_to_caregiverDetailFragment"
+            app:destination="@id/caregiverDetailFragment"/>
+
+    </fragment>
 
     <fragment
         android:id="@+id/aiAlertHistoryFragment"
         android:name="com.mdp.caremate.ui.family.alert.AiAlertHistoryFragment"
         android:label="AI Alert History"/>
 
-    <!-- NEW destination for caregiver detail -->
     <fragment
         android:id="@+id/caregiverDetailFragment"
         android:name="com.mdp.caremate.ui.family.dashboard.CaregiverDetailFragment"

@@ -8,6 +8,7 @@
     android:background="#F9FAFB"
     tools:context=".ui.admin.UserDetail">
 
+    <!-- Header Bar / Top Navigation -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/headerBar"
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_back"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Kembali"
             app:tint="#2D4A43"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,6 +46,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Main Content Container Scrollable -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -60,6 +63,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Card 1: Informasi Dasar & Status Akun -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,7 +98,6 @@
                         android:textSize="12sp"
                         android:textStyle="bold"
                         tools:text="Caregiver"
-                        tools:background="@android:color/holo_green_light"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -140,6 +143,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Card 2: Section Khusus Data Mentah Internal Akun Family -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardFamilySection"
                 android:layout_width="match_parent"
@@ -159,7 +163,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hubungan Keluarga &amp; Pasien"
+                        android:text="Data Internal Akun Family"
                         android:textColor="#0B253A"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -173,27 +177,10 @@
                         android:textSize="14sp"
                         tools:text="Pairing Code: XF930A" />
 
-                    <TextView
-                        android:id="@+id/tvPatientName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="Nama Pasien: Opa Albert" />
-
-                    <TextView
-                        android:id="@+id/tvConnectedPatientUid"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="13sp"
-                        tools:text="Connected Patient UID: p_12345" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Card 3: Section Khusus Portofolio & CV Caregiver + Data Pasien Asuhan -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardCaregiverCvSection"
                 android:layout_width="match_parent"
@@ -281,6 +268,122 @@
                         android:textColor="#5A6E72"
                         android:textSize="14sp"
                         tools:text="• Terapi Fisik, CPR, Manajemen Nutrisi" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#E5E7EB" />
+
+                    <!-- Data Pasien Asuhan (Hanya Ada di Caregiver) -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Data Pasien yang Ditangani:"
+                        android:textColor="#0B253A"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPatientName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="#5A6E72"
+                        android:textSize="14sp"
+                        tools:text="Nama Pasien: Opa Albert" />
+
+                    <TextView
+                        android:id="@+id/tvConnectedPatientUid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#5A6E72"
+                        android:textSize="13sp"
+                        tools:text="Connected Patient UID: p_12345" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 4: Tab / Section Informasi Relasi Hubungan Kompleks (1:1 & Grup) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardConnectionSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Informasi Relasi Hubungan (1:1)"
+                        android:textColor="#0B253A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSharedPairingCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="#0B253A"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="Pairing Code Bersama: XF930A" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="#F3F4F6"/>
+
+                    <!-- Informasi Struktur Target Relasi Dinamis (Caregiver Utama / Pasien Terkait) -->
+                    <TextView
+                        android:id="@+id/tvTargetRelationInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#5A6E72"
+                        android:textSize="14sp"
+                        android:lineSpacingMultiplier="1.2"
+                        tools:text="Memuat status relasi pengguna..." />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="#F3F4F6"/>
+
+                    <!-- Daftar Anggota yang memiliki Pairing Code yang sama (Family ke Family) -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Daftar Anggota Grup (Pairing Code Sama):"
+                        android:textColor="#0B253A"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvFamilyGroupList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#5A6E72"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.2"
+                        tools:text="- Budi (budi@mail.com) [Family]\n- Caregiver A (cg@mail.com) [Caregiver] (User Ini)" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

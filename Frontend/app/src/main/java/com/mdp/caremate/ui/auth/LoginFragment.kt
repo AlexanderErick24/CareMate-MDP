@@ -153,7 +153,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                     com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
                                     Toast.makeText(
                                         requireContext(),
-                                        "Akun Anda ditangguhkan oleh Admin. Silakan hubungi dukungan.",
+                                        "Akun Anda ditangguhkan oleh Admin. Silakan email ke admin@caremate.com.",
                                         Toast.LENGTH_LONG
                                     ).show()
                                 } else {

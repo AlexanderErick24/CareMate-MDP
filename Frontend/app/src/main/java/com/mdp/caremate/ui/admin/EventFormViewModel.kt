@@ -112,18 +112,27 @@ class EventFormViewModel : ViewModel() {
         capacity: String,
         selectedTimestamp: Long,
         targetListedStatus: Boolean,
-        photoUrl: String? // Tambahkan parameter string Base64 foto di sini
+        photoUrl: String? // Parameter string Base64 foto
     ) {
+        // 1. Validasi input kosong
         if (name.isEmpty() || date.isEmpty() || time.isEmpty() || place.isEmpty() || capacity.isEmpty()) {
             _toastMessage.value = "Semua field harus diisi!"
             return
         }
 
+        // 2. Validasi Waktu Tambah Baru: Mencegah draft/unlisted disimpan di masa lalu
         if (currentEventId == null && selectedTimestamp < System.currentTimeMillis()) {
             _toastMessage.value = "Tanggal dan waktu event tidak boleh sebelum waktu sekarang!"
             return
         }
 
+        // 3. Validasi Listed Real-Time: Jika mau di-publish, tanggal dan jam TIDAK BOLEH kurang dari detik ini
+        if (targetListedStatus && selectedTimestamp < System.currentTimeMillis()) {
+            _toastMessage.value = "Event yang sudah lewat hari atau jamnya tidak bisa dipublish ke publik!"
+            return
+        }
+
+        // Jika currentEventId null, buat ID baru. Jika ada, pakai ID lama (proses EDIT).
         val id = currentEventId ?: UUID.randomUUID().toString()
 
         val eventData = Event(
@@ -134,12 +143,13 @@ class EventFormViewModel : ViewModel() {
             place = place,
             capacity = capacity,
             listed = targetListedStatus,
-            photoUrl = photoUrl?: "" // Pasangkan string Base64 ke dalam model data Event
+            photoUrl = photoUrl ?: "" // Pasangkan string Base64 ke dalam model data Event
         )
 
         viewModelScope.launch {
             val isSuccess = firebaseSource.saveEvent(eventData)
             if (isSuccess) {
+                // Berikan pesan toast yang adaptif agar admin tahu status terbarunya
                 val statusText = if (targetListedStatus) "dipublish" else "disimpan"
                 _toastMessage.value = "Event '${eventData.name}' berhasil $statusText"
                 _isActionSuccess.value = true

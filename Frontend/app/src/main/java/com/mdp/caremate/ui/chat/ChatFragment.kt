@@ -117,6 +117,11 @@ class ChatFragment :
 
         authViewModel.getFamilyMembers()
 
+        // NEW: mark chat as read as soon as this screen opens.
+        // This resets unreadCount to 0 in Firestore,
+        // which causes the badge in ChatRoomListFragment to disappear.
+        viewModel.markAsRead()
+
         viewModel.messages.observe(
             viewLifecycleOwner
         ) {

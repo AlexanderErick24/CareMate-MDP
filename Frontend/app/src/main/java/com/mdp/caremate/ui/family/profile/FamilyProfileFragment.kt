@@ -18,7 +18,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 
 import com.mdp.caremate.R
@@ -55,7 +57,6 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
                 inputStream?.close()
 
                 if (bitmap != null) {
-                    // Compress and convert to base64 (same approach as DashboardFragment)
                     val outputStream = ByteArrayOutputStream()
                     bitmap.compress(
                         android.graphics.Bitmap.CompressFormat.JPEG,
@@ -67,11 +68,9 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
                         Base64.NO_WRAP
                     )
 
-                    // Update ImageView immediately for fast feedback
                     view?.findViewById<ImageView>(R.id.ivProfilePhoto)
                         ?.setImageBitmap(bitmap)
 
-                    // Save to Firestore via ViewModel
                     profileViewModel.uploadProfilePhoto(base64)
                 }
 
@@ -102,18 +101,21 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
         val btnChangePassword = view.findViewById<Button>(R.id.btnChangePassword)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
 
+        // New views for Part D (caregiver card)
+        val cardCaregiverDetail = view.findViewById<MaterialCardView>(R.id.cardCaregiverDetail)
+        val tvCaregiverCardName = view.findViewById<TextView>(R.id.tvCaregiverCardName)
+        val tvCaregiverCardJob = view.findViewById<TextView>(R.id.tvCaregiverCardJob)
+
         // =========================
         // SETUP VIEWMODELS
         // =========================
 
         val firebaseSource = FirebaseSource()
 
-        // ProfileViewModel: handles getCurrentUser + edit actions
         val profileRepository = ProfileRepositoryImpl(firebaseSource)
         val profileFactory = ProfileViewModelFactory(profileRepository)
         profileViewModel = ViewModelProvider(this, profileFactory)[ProfileViewModel::class.java]
 
-        // AuthViewModel: handles getLinkedCaregiver (caregiver/patient names)
         val authRepository = AuthRepositoryImpl(firebaseSource)
         val authFactory = AuthViewModelFactory(authRepository)
         authViewModel = ViewModelProvider(this, authFactory)[AuthViewModel::class.java]
@@ -135,7 +137,6 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
                 tvEmail.text = user.email
                 tvRole.text = user.role
 
-                // Load profile photo if available
                 if (user.photoUrl.isNotEmpty()) {
                     try {
                         val bytes = Base64.decode(user.photoUrl, Base64.NO_WRAP)
@@ -153,6 +154,18 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
         authViewModel.linkedCaregiver.observe(viewLifecycleOwner) { caregiver ->
             tvCaregiver.text = caregiver.name
             tvPatient.text = caregiver.patientName
+
+            // Fill the caregiver card (Part D)
+            tvCaregiverCardName.text = caregiver.name
+            tvCaregiverCardJob.text =
+                if (caregiver.jobTitle.isEmpty()) "Caregiver" else caregiver.jobTitle
+
+            // Navigate to CaregiverDetailFragment when the card is tapped
+            cardCaregiverDetail.setOnClickListener {
+                val action = FamilyProfileFragmentDirections
+                    .actionFamilyProfileFragmentToCaregiverDetailFragment(caregiver.uid)
+                findNavController().navigate(action)
+            }
         }
 
         profileViewModel.toastMessage.observe(viewLifecycleOwner) { msg ->

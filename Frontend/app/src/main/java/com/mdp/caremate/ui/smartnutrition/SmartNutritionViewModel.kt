@@ -21,7 +21,11 @@ sealed class SmartNutritionState {
     data class Error(val message: String) : SmartNutritionState()
 }
 
-class SmartNutritionViewModel : ViewModel() {
+class SmartNutritionViewModel(
+    // Parameter opsional: jika tidak diberikan (runtime normal), gunakan Retrofit default.
+    // Jika diberikan (saat testing), gunakan mock API.
+    private val apiOverride: SmartNutritionApi? = null
+) : ViewModel() {
 
     private val _uiState = MutableLiveData<SmartNutritionState>(SmartNutritionState.Idle)
     val uiState: LiveData<SmartNutritionState> = _uiState
@@ -31,7 +35,7 @@ class SmartNutritionViewModel : ViewModel() {
 
     // In a real app with DI (Hilt/Dagger), this would be injected.
     // For this prototype, we'll instantiate Retrofit here.
-    private val api: SmartNutritionApi by lazy {
+    private val defaultApi: SmartNutritionApi by lazy {
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -49,6 +53,9 @@ class SmartNutritionViewModel : ViewModel() {
             .build()
             .create(SmartNutritionApi::class.java)
     }
+
+    // Gunakan apiOverride jika ada (testing), jika tidak gunakan defaultApi (runtime)
+    private val api: SmartNutritionApi get() = apiOverride ?: defaultApi
 
     fun generateRecipes(
         patientProfile: PatientMedicalProfile,

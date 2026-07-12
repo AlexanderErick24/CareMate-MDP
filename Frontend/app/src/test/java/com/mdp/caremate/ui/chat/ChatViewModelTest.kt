@@ -33,7 +33,6 @@ class ChatViewModelTest {
 
     private val repository: ChatRepository = mockk()
 
-    // A fake ListenerRegistration that does nothing when removed
     private val fakeListener: ListenerRegistration = mockk(relaxed = true)
 
     private lateinit var viewModel: ChatViewModel
@@ -54,10 +53,9 @@ class ChatViewModelTest {
     // ==================================================
 
     @Test
-    fun `loadChatRoom success - pairingCode LiveData is set`() = runTest {
+    fun loadChatRoomSuccess_pairingCodeLiveDataIsSet() = runTest {
 
-        // Given: getPairingCodeForCurrentUser returns a code
-        // and observeMessages + observeChatRoom return fake listeners
+        // Given
         coEvery {
             repository.getPairingCodeForCurrentUser()
         } returns Result.success("CM-456B")
@@ -78,9 +76,9 @@ class ChatViewModelTest {
     }
 
     @Test
-    fun `loadChatRoom failed - pairingCode LiveData stays null`() = runTest {
+    fun loadChatRoomFailed_pairingCodeLiveDataStaysNull() = runTest {
 
-        // Given: no pairing code found (user not linked)
+        // Given
         coEvery {
             repository.getPairingCodeForCurrentUser()
         } returns Result.failure(Exception("User not found"))
@@ -88,7 +86,7 @@ class ChatViewModelTest {
         // When
         viewModel.loadChatRoom()
 
-        // Then: onSuccess is never called, pairingCode stays null
+        // Then
         assertNull(viewModel.pairingCode.value)
     }
 
@@ -97,9 +95,9 @@ class ChatViewModelTest {
     // ==================================================
 
     @Test
-    fun `loadChatRoom - messages LiveData receives messages from listener`() = runTest {
+    fun loadChatRoom_messagesLiveDataReceivesMessagesFromListener() = runTest {
 
-        // Given: fake messages that the listener will "push"
+        // Given
         val fakeMessages = listOf(
             ChatMessage(senderId = "uid-001", senderName = "Grace", message = "Hello!", timestamp = 1000L),
             ChatMessage(senderId = "uid-002", senderName = "Dr. Ani", message = "Hi Grace!", timestamp = 2000L)
@@ -109,11 +107,9 @@ class ChatViewModelTest {
             repository.getPairingCodeForCurrentUser()
         } returns Result.success("CM-456B")
 
-        // Simulate the listener immediately calling onMessagesChanged with fakeMessages
         every {
             repository.observeMessages("CM-456B", any())
         } answers {
-            // The second argument is the callback; invoke it right away
             val callback = secondArg<(List<ChatMessage>) -> Unit>()
             callback(fakeMessages)
             fakeListener
@@ -135,9 +131,9 @@ class ChatViewModelTest {
     }
 
     @Test
-    fun `loadChatRoom - empty messages list is handled correctly`() = runTest {
+    fun loadChatRoom_emptyMessagesListIsHandledCorrectly() = runTest {
 
-        // Given: no messages in the chat yet
+        // Given
         coEvery {
             repository.getPairingCodeForCurrentUser()
         } returns Result.success("CM-456B")
@@ -157,7 +153,7 @@ class ChatViewModelTest {
         // When
         viewModel.loadChatRoom()
 
-        // Then: messages is an empty list, not null — adapter should show empty state
+        // Then
         val messages = viewModel.messages.value
         assertNotNull(messages)
         assertEquals(0, messages!!.size)
@@ -168,9 +164,9 @@ class ChatViewModelTest {
     // ==================================================
 
     @Test
-    fun `sendMessage - repository sendMessage is called when pairingCode is set`() = runTest {
+    fun sendMessage_repositorySendMessageIsCalledWhenPairingCodeIsSet() = runTest {
 
-        // Given: pairingCode is already loaded
+        // Given
         coEvery {
             repository.getPairingCodeForCurrentUser()
         } returns Result.success("CM-456B")
@@ -192,19 +188,19 @@ class ChatViewModelTest {
         // When
         viewModel.sendMessage("Hello!")
 
-        // Then: verify the repository was actually called
+        // Then
         coVerify { repository.sendMessage("CM-456B", "Hello!") }
     }
 
     @Test
-    fun `sendMessage - repository is NOT called when pairingCode is null`() = runTest {
+    fun sendMessage_repositoryIsNotCalledWhenPairingCodeIsNull() = runTest {
 
-        // Given: loadChatRoom was never called, so pairingCode is null
+        // Given: loadChatRoom was never called, pairingCode is null
 
-        // When: sendMessage is called without a pairing code
+        // When
         viewModel.sendMessage("Hello!")
 
-        // Then: repository.sendMessage should never be called
+        // Then
         coVerify(exactly = 0) { repository.sendMessage(any(), any()) }
     }
 
@@ -213,9 +209,9 @@ class ChatViewModelTest {
     // ==================================================
 
     @Test
-    fun `markAsRead - calls markChatAsRead when pairingCode is already set`() = runTest {
+    fun markAsRead_callsMarkChatAsReadWhenPairingCodeIsAlreadySet() = runTest {
 
-        // Given: pairingCode is already set (after loadChatRoom)
+        // Given
         coEvery {
             repository.getPairingCodeForCurrentUser()
         } returns Result.success("CM-456B")
@@ -242,7 +238,7 @@ class ChatViewModelTest {
     }
 
     @Test
-    fun `markAsRead - loads pairingCode first if not set yet then calls markChatAsRead`() = runTest {
+    fun markAsRead_loadsPairingCodeFirstIfNotSetThenCallsMarkChatAsRead() = runTest {
 
         // Given: pairingCode is null (markAsRead called before loadChatRoom)
         coEvery {
@@ -256,7 +252,7 @@ class ChatViewModelTest {
         // When: markAsRead is called before loadChatRoom
         viewModel.markAsRead()
 
-        // Then: it should have fetched the pairing code and marked as read
+        // Then
         coVerify { repository.markChatAsRead("CM-456B") }
     }
 
@@ -265,9 +261,9 @@ class ChatViewModelTest {
     // ==================================================
 
     @Test
-    fun `loadChatRoom - unreadCount LiveData is updated from room observer`() = runTest {
+    fun loadChatRoom_unreadCountLiveDataIsUpdatedFromRoomObserver() = runTest {
 
-        // Given: the room document shows 3 unread messages
+        // Given: room document shows 3 unread messages
         val fakeRoom = ChatRoom(
             pairingCode = "CM-456B",
             lastSenderId = "uid-002",
@@ -299,7 +295,7 @@ class ChatViewModelTest {
     }
 
     @Test
-    fun `loadChatRoom - unreadCount is 0 when all messages are read`() = runTest {
+    fun loadChatRoom_unreadCountIsZeroWhenAllMessagesAreRead() = runTest {
 
         // Given: no unread messages
         val fakeRoom = ChatRoom(

@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -47,7 +48,7 @@ class FamilyManagementViewModelTest {
     // ==================================================
 
     @Test
-    fun `loadFamilyMembers success - familyMembers LiveData shows all members`() = runTest {
+    fun loadFamilyMembersSuccess_familyMembersLiveDataShowsAllMembers() = runTest {
 
         // Given: two family members exist
         val fakeMembers = listOf(
@@ -68,7 +69,7 @@ class FamilyManagementViewModelTest {
     }
 
     @Test
-    fun `loadFamilyMembers with single member - familyMembers LiveData has one item`() = runTest {
+    fun loadFamilyMembersWithSingleMember_familyMembersLiveDataHasOneItem() = runTest {
 
         // Given
         val fakeMembers = listOf(
@@ -86,7 +87,7 @@ class FamilyManagementViewModelTest {
     }
 
     @Test
-    fun `loadFamilyMembers with empty result - familyMembers LiveData is empty`() = runTest {
+    fun loadFamilyMembersWithEmptyResult_familyMembersLiveDataIsEmpty() = runTest {
 
         // Given: no family members yet
         coEvery { repository.getFamilyMemberList() } returns Result.success(emptyList())
@@ -101,37 +102,34 @@ class FamilyManagementViewModelTest {
     }
 
     @Test
-    fun `loadFamilyMembers failed - familyMembers LiveData stays null`() = runTest {
+    fun loadFamilyMembersFailed_familyMembersLiveDataStaysNull() = runTest {
 
         // Given: network/Firestore error
-        coEvery { repository.getFamilyMemberList() } returns Result.failure(Exception("Network error"))
+        coEvery {
+            repository.getFamilyMemberList()
+        } returns Result.failure(Exception("Network error"))
 
         // When
         viewModel.loadFamilyMembers()
 
-        // Then: onSuccess is never called, so LiveData is never set
-        assertEquals(null, viewModel.familyMembers.value)
+        // Then: onSuccess is never called, so LiveData stays null
+        assertNull(viewModel.familyMembers.value)
     }
 
     // ==================================================
     // PREMIUM LIMIT LOGIC
-    // The premium limit (max 2 family members for free tier)
-    // is enforced in FirebaseSource.registerFamily().
-    // The ViewModel exposes _isPremiumRequired for the Fragment to show a warning.
-    // We test that it starts as null (not triggered unless explicitly set).
     // ==================================================
 
     @Test
-    fun `isPremiumRequired is null by default - no false alarm on startup`() {
+    fun isPremiumRequiredIsNullByDefault_noFalseAlarmOnStartup() {
 
-        // The ViewModel was just created in setUp().
-        // isPremiumRequired should never be true unless explicitly triggered.
-        val isPremium = viewModel.isPremiumRequired.value
-        assertEquals(null, isPremium)
+        // The ViewModel was just created in setUp()
+        // isPremiumRequired should never be true unless explicitly triggered
+        assertNull(viewModel.isPremiumRequired.value)
     }
 
     @Test
-    fun `loadFamilyMembers with 2 members - familyMembers shows free tier is full`() = runTest {
+    fun loadFamilyMembersWith2Members_familyMembersShowsFreeTierIsFull() = runTest {
 
         // Given: exactly 2 members (free tier max)
         val fakeMembers = listOf(
@@ -143,8 +141,7 @@ class FamilyManagementViewModelTest {
         // When
         viewModel.loadFamilyMembers()
 
-        // Then: 2 members loaded correctly — attempting to add a 3rd would trigger PREMIUM_REQUIRED
-        // (that check is done in FirebaseSource, not here, but we confirm count is correct)
+        // Then: 2 members loaded — adding a 3rd would trigger PREMIUM_REQUIRED in FirebaseSource
         assertEquals(2, viewModel.familyMembers.value!!.size)
     }
 }

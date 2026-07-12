@@ -41,7 +41,6 @@ class ProfileRepositoryImpl(
         return firebaseSource.rejectJoinRequest(requestId)
     }
 
-    // New functions for Family Profile
     override suspend fun updateUsername(newName: String): Result<String> {
         return firebaseSource.updateUsername(newName)
     }
@@ -55,5 +54,10 @@ class ProfileRepositoryImpl(
 
     override suspend fun uploadProfilePhoto(photoBase64: String): Result<String> {
         return firebaseSource.uploadProfilePhoto(photoBase64)
+    }
+
+    // NEW
+    override suspend fun updatePatientName(newPatientName: String): Result<String> {
+        return firebaseSource.updatePatientName(newPatientName)
     }
 }

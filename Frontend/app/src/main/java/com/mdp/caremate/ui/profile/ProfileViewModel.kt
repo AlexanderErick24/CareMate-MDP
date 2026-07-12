@@ -40,7 +40,7 @@ class ProfileViewModel(
             val result = repository.requestJoinFamily(targetCode)
             if (result.isSuccess) {
                 _toastMessage.value = "Berhasil meminta gabung!"
-                fetchCurrentUser() // refresh
+                fetchCurrentUser()
             } else {
                 _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
             }
@@ -63,18 +63,6 @@ class ProfileViewModel(
         experience: List<String>,
         skills: List<String>
     ) {
-        if (name.trim().isEmpty()) {
-            _toastMessage.value = "Nama tidak boleh kosong"
-            return
-        }
-        if (age < 0 || age > 120) {
-            _toastMessage.value = "Usia harus bernilai valid (0 - 120 tahun)"
-            return
-        }
-        if (bio.length > 500) {
-            _toastMessage.value = "Bio maksimal 500 karakter"
-            return
-        }
         _isLoading.value = true
         viewModelScope.launch {
             val result = repository.updateUserProfile(name, jobTitle, age, bio, experience, skills)
@@ -89,17 +77,13 @@ class ProfileViewModel(
         }
     }
 
-    // =========================
-    // NEW: For Family Profile
-    // =========================
-
     fun updateUsername(newName: String) {
         _isLoading.value = true
         viewModelScope.launch {
             val result = repository.updateUsername(newName)
             if (result.isSuccess) {
                 _toastMessage.value = "Nama berhasil diperbarui!"
-                fetchCurrentUser() // refresh display
+                fetchCurrentUser()
             } else {
                 _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
             }
@@ -126,13 +110,14 @@ class ProfileViewModel(
             val result = repository.uploadProfilePhoto(photoBase64)
             if (result.isSuccess) {
                 _toastMessage.value = "Foto profil berhasil diperbarui!"
-                fetchCurrentUser() // refresh display
+                fetchCurrentUser()
             } else {
-                _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
+                _toastMessage.value = "Gagal memperbarui foto: ${result.exceptionOrNull()?.message}"
             }
+            _isLoading.value = false
         }
     }
-    
+
     fun updateProfilePhoto(photoUrl: String) {
         _isLoading.value = true
         viewModelScope.launch {
@@ -142,6 +127,21 @@ class ProfileViewModel(
                 fetchCurrentUser()
             } else {
                 _toastMessage.value = "Gagal memperbarui foto: ${result.exceptionOrNull()?.message}"
+            }
+            _isLoading.value = false
+        }
+    }
+
+    // NEW: update nama pasien dari profile caregiver
+    fun updatePatientName(newPatientName: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.updatePatientName(newPatientName)
+            if (result.isSuccess) {
+                _toastMessage.value = "Nama pasien berhasil diperbarui!"
+                fetchCurrentUser() // refresh supaya UI langsung update
+            } else {
+                _toastMessage.value = "Gagal: ${result.exceptionOrNull()?.message}"
             }
             _isLoading.value = false
         }

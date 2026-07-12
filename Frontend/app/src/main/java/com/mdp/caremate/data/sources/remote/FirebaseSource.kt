@@ -1383,4 +1383,20 @@ class FirebaseSource {
             Result.failure(e)
         }
     }
+
+    suspend fun updatePatientName(newPatientName: String): Result<String> {
+        return try {
+            val uid = auth.currentUser?.uid
+                ?: throw Exception("User not logged in")
+
+            firestore.collection("users")
+                .document(uid)
+                .update("patientName", newPatientName)
+                .await()
+
+            Result.success("Nama pasien berhasil diperbarui")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

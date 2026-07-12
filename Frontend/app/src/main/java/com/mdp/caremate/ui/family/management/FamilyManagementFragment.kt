@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
 
 import androidx.navigation.fragment.findNavController
 
@@ -58,11 +59,6 @@ class FamilyManagementFragment :
         // SETUP ADAPTER
         // =========================
 
-        // The adapter receives a callback when "Quit Family" is pressed on a member row.
-        // Since FamilyManagementFragment is visible to BOTH caregiver and family roles:
-        // - Caregiver sees all family members with Quit buttons (to remove a member)
-        // - A family member viewing their own row can press Quit to send a quit request
-        // We use authViewModel.currentUser to decide which flow to trigger.
         val adapter = FamilyMemberAdapter(
             onQuitClick = { member ->
                 handleQuitFamilyClick(member)
@@ -79,11 +75,7 @@ class FamilyManagementFragment :
         viewModel.loadFamilyMembers()
         authViewModel.getCurrentUser()
         authViewModel.getLinkedCaregiver()
-
-        // Load the caregiver quit request visible to this family member
         authViewModel.loadCaregiverQuitRequestForFamily()
-
-        // Load self quit request status (for family member's own row status)
         authViewModel.loadFamilyQuitRequestForSelf()
 
         // =========================
@@ -94,16 +86,13 @@ class FamilyManagementFragment :
             adapter.submitList(it)
         }
 
-        // Show or hide the caregiver quit request card
+        // Show or hide caregiver quit request card
         authViewModel.caregiverQuitRequestForFamily.observe(viewLifecycleOwner) { request ->
-            if (request != null) {
-                cardCaregiverQuitRequest.visibility = View.VISIBLE
-            } else {
-                cardCaregiverQuitRequest.visibility = View.GONE
-            }
+            cardCaregiverQuitRequest.visibility =
+                if (request != null) View.VISIBLE else View.GONE
         }
 
-        // Update quit status labels on each family member row
+        // Quit status label per family member row
         authViewModel.familyQuitRequestForSelf.observe(viewLifecycleOwner) { request ->
             if (request != null) {
                 val statusText = when (request.status) {
@@ -121,14 +110,14 @@ class FamilyManagementFragment :
             }
         }
 
-        // Toast messages from quit actions
+        // General toast dari quit actions
         authViewModel.quitToastMessage.observe(viewLifecycleOwner) { msg ->
             if (msg.isNotEmpty()) {
                 Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
             }
         }
 
-        // After family quit is approved, show reconnect dialog
+        // Family quit approved → tampilkan reconnect dialog
         authViewModel.familyQuitApproved.observe(viewLifecycleOwner) { approved ->
             if (approved) {
                 authViewModel.consumeFamilyQuitApproved()
@@ -137,18 +126,61 @@ class FamilyManagementFragment :
         }
 
         // =========================
+        // CAREGIVER QUIT APPROVED OLEH FAMILY
+        // Setelah family approve request quit dari caregiver:
+        // - caregiverUid family ini sudah di-clear di Firestore
+        // - Tampilkan toast penjelasan
+        // - Logout supaya family tidak stuck di dashboard tanpa caregiver
+        // =========================
+
+        authViewModel.caregiverQuitApproved.observe(viewLifecycleOwner) { approved ->
+            if (approved == true) {
+                authViewModel.consumeCaregiverQuitApproved()
+                showCaregiverQuitApprovedAndLogout()
+            }
+        }
+
+        // =========================
         // CAREGIVER QUIT APPROVAL BUTTONS
         // =========================
 
         btnApproveCaregiverQuit.setOnClickListener {
-            val request = authViewModel.caregiverQuitRequestForFamily.value ?: return@setOnClickListener
+            val request =
+                authViewModel.caregiverQuitRequestForFamily.value ?: return@setOnClickListener
             showApproveCaregiverQuitDialog(request.requestId)
         }
 
         btnRejectCaregiverQuit.setOnClickListener {
-            val request = authViewModel.caregiverQuitRequestForFamily.value ?: return@setOnClickListener
+            val request =
+                authViewModel.caregiverQuitRequestForFamily.value ?: return@setOnClickListener
             showRejectCaregiverQuitDialog(request.requestId)
         }
+    }
+
+    // =========================
+    // TOAST + LOGOUT setelah approve caregiver quit
+    // =========================
+
+    private fun showCaregiverQuitApprovedAndLogout() {
+
+        Toast.makeText(
+            requireContext(),
+            "Kamu telah menyetujui permintaan caregiver untuk berhenti. " +
+                    "Silakan login kembali dan hubungkan ke caregiver baru.",
+            Toast.LENGTH_LONG
+        ).show()
+
+        // Delay sedikit supaya toast sempat terbaca sebelum logout
+        view?.postDelayed({
+            FirebaseAuth.getInstance().signOut()
+            val intent = requireActivity().intent
+            intent.addFlags(
+                android.content.Intent.FLAG_ACTIVITY_NEW_TASK or
+                        android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+            )
+            startActivity(intent)
+            requireActivity().finish()
+        }, 2500)
     }
 
     // =========================
@@ -159,18 +191,15 @@ class FamilyManagementFragment :
 
         val currentUser = authViewModel.currentUser.value
 
-        // If the current user is the family member themselves clicking their own row
         if (currentUser?.uid == member.uid) {
 
             val existingRequest = authViewModel.familyQuitRequestForSelf.value
 
-            // If there's a rejected request, dismiss it first, then allow re-send
             if (existingRequest?.status == "rejected") {
                 authViewModel.dismissFamilyQuitRequest(existingRequest.requestId)
                 return
             }
 
-            // Send a new quit request
             AlertDialog.Builder(requireContext())
                 .setTitle("Quit Family")
                 .setMessage(
@@ -183,17 +212,12 @@ class FamilyManagementFragment :
                 .setNegativeButton("Cancel", null)
                 .show()
         }
-        // If the current user is the caregiver viewing the family list,
-        // the Quit button is not the right action for them here.
-        // Family quit is initiated by the family member only.
     }
 
     // =========================
     // DIALOGS
     // =========================
 
-    // Family member approves caregiver quit — needs to enter new patient name
-    // (The new pairing code is generated internally in FirebaseSource)
     private fun showApproveCaregiverQuitDialog(requestId: String) {
 
         val input = EditText(requireContext())
@@ -215,7 +239,6 @@ class FamilyManagementFragment :
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    // Generate the new pairing code here so we can pass it in
                     val newPairingCode = generatePairingCode()
                     authViewModel.approveCaregiverQuit(
                         requestId,
@@ -253,7 +276,6 @@ class FamilyManagementFragment :
             .show()
     }
 
-    // After family quit is approved, ask for a new pairing code to reconnect
     private fun showReconnectDialog() {
 
         val input = EditText(requireContext())
@@ -275,7 +297,6 @@ class FamilyManagementFragment :
                         "Please enter a pairing code",
                         Toast.LENGTH_SHORT
                     ).show()
-                    // Show dialog again if empty
                     showReconnectDialog()
                 } else {
                     authViewModel.reconnectFamilyToNewCaregiver(newCode)
@@ -284,8 +305,6 @@ class FamilyManagementFragment :
             .show()
     }
 
-    // Generates a pairing code in the same format as FirebaseSource
-    // This is passed to approveCaregiverQuit so the new code is known
     private fun generatePairingCode(): String {
         val number = (100..999).random()
         val letter = ('A'..'Z').random()

@@ -1,7 +1,6 @@
 package com.mdp.caremate.ui.auth
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.mdp.caremate.data.model.FamilyMember
 import com.mdp.caremate.data.model.User
 import com.mdp.caremate.data.repositories.AuthRepository
 import io.mockk.coEvery
@@ -15,6 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -23,13 +23,11 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthViewModelTest {
 
-    // Makes LiveData work synchronously in tests (no Android main thread needed)
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
-    // Mock the repository — we don't want real Firebase calls in unit tests
     private val repository: AuthRepository = mockk()
 
     private lateinit var viewModel: AuthViewModel
@@ -50,17 +48,17 @@ class AuthViewModelTest {
     // ==================================================
 
     @Test
-    fun `login success - loginState emits success with role`() = runTest {
+    fun loginSuccess_loginStateEmitsSuccessWithRole() = runTest {
 
-        // Given: repository returns "family" role on success
+        // Given
         coEvery {
             repository.login("grace@mail.com", "password123")
         } returns Result.success("family")
 
-        // When: login is called
+        // When
         viewModel.login("grace@mail.com", "password123")
 
-        // Then: loginState should hold a success result with "family"
+        // Then
         val result = viewModel.loginState.value
         assertNotNull(result)
         assertTrue(result!!.isSuccess)
@@ -68,9 +66,9 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `login failed - loginState emits failure`() = runTest {
+    fun loginFailed_loginStateEmitsFailure() = runTest {
 
-        // Given: repository returns failure
+        // Given
         coEvery {
             repository.login("wrong@mail.com", "wrongpass")
         } returns Result.failure(Exception("Invalid credentials"))
@@ -78,7 +76,7 @@ class AuthViewModelTest {
         // When
         viewModel.login("wrong@mail.com", "wrongpass")
 
-        // Then: loginState should hold a failure result
+        // Then
         val result = viewModel.loginState.value
         assertNotNull(result)
         assertTrue(result!!.isFailure)
@@ -90,9 +88,9 @@ class AuthViewModelTest {
     // ==================================================
 
     @Test
-    fun `register family success - registerState emits success`() = runTest {
+    fun registerFamilySuccess_registerStateEmitsSuccess() = runTest {
 
-        // Given: repository returns success for family register
+        // Given
         coEvery {
             repository.register("Grace", "grace@mail.com", "pass123", "family", "CM-123A", "")
         } returns Result.success("Register berhasil")
@@ -107,9 +105,9 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `register family with invalid pairing code - registerState emits failure`() = runTest {
+    fun registerFamilyWithInvalidPairingCode_registerStateEmitsFailure() = runTest {
 
-        // Given: repository rejects invalid pairing code
+        // Given
         coEvery {
             repository.register("Grace", "grace@mail.com", "pass123", "family", "INVALID", "")
         } returns Result.failure(Exception("Invalid Pairing Code"))
@@ -125,9 +123,9 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `register family when premium limit reached - registerState emits PREMIUM_REQUIRED`() = runTest {
+    fun registerFamilyWhenPremiumLimitReached_registerStateEmitsPremiumRequired() = runTest {
 
-        // Given: the caregiver already has 2 family members (free tier limit)
+        // Given: caregiver already has 2 family members (free tier limit)
         coEvery {
             repository.register("Grace", "grace@mail.com", "pass123", "family", "CM-123A", "")
         } returns Result.failure(Exception("PREMIUM_REQUIRED"))
@@ -135,7 +133,7 @@ class AuthViewModelTest {
         // When
         viewModel.register("Grace", "grace@mail.com", "pass123", "family", "CM-123A", "")
 
-        // Then: the error message must be exactly "PREMIUM_REQUIRED" so the Fragment can handle it
+        // Then
         val result = viewModel.registerState.value
         assertNotNull(result)
         assertTrue(result!!.isFailure)
@@ -147,7 +145,7 @@ class AuthViewModelTest {
     // ==================================================
 
     @Test
-    fun `getCurrentUser success - currentUser LiveData is updated`() = runTest {
+    fun getCurrentUserSuccess_currentUserLiveDataIsUpdated() = runTest {
 
         // Given
         val fakeUser = User(uid = "uid-001", name = "Grace", email = "grace@mail.com", role = "family")
@@ -164,17 +162,16 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `getCurrentUser failed - currentUser LiveData stays null`() = runTest {
+    fun getCurrentUserFailed_currentUserLiveDataStaysNull() = runTest {
 
-        // Given: user not found
+        // Given
         coEvery { repository.getCurrentUser() } returns Result.failure(Exception("User not found"))
 
         // When
         viewModel.getCurrentUser()
 
-        // Then: currentUser was never set, so it stays null
-        val user = viewModel.currentUser.value
-        assertEquals(null, user)
+        // Then
+        assertNull(viewModel.currentUser.value)
     }
 
     // ==================================================
@@ -182,10 +179,15 @@ class AuthViewModelTest {
     // ==================================================
 
     @Test
-    fun `getLinkedCaregiver success - linkedCaregiver LiveData is updated`() = runTest {
+    fun getLinkedCaregiverSuccess_linkedCaregiverLiveDataIsUpdated() = runTest {
 
         // Given
-        val fakeCaregiver = User(uid = "cg-001", name = "Dr. Ani", role = "caregiver", patientName = "Grandpa")
+        val fakeCaregiver = User(
+            uid = "cg-001",
+            name = "Dr. Ani",
+            role = "caregiver",
+            patientName = "Grandpa"
+        )
         coEvery { repository.getLinkedCaregiver() } returns Result.success(fakeCaregiver)
 
         // When
@@ -199,16 +201,18 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `getLinkedCaregiver failed - linkedCaregiver stays null`() = runTest {
+    fun getLinkedCaregiverFailed_linkedCaregiverStaysNull() = runTest {
 
-        // Given: family member has no caregiver linked
-        coEvery { repository.getLinkedCaregiver() } returns Result.failure(Exception("Caregiver not linked"))
+        // Given
+        coEvery {
+            repository.getLinkedCaregiver()
+        } returns Result.failure(Exception("Caregiver not linked"))
 
         // When
         viewModel.getLinkedCaregiver()
 
-        // Then: linkedCaregiver is never set
-        assertEquals(null, viewModel.linkedCaregiver.value)
+        // Then
+        assertNull(viewModel.linkedCaregiver.value)
     }
 
     // ==================================================
@@ -216,10 +220,12 @@ class AuthViewModelTest {
     // ==================================================
 
     @Test
-    fun `getFamilyMembers success - familyMembers LiveData contains correct names`() = runTest {
+    fun getFamilyMembersSuccess_familyMembersLiveDataContainsCorrectNames() = runTest {
 
         // Given
-        coEvery { repository.getFamilyMembers() } returns Result.success(listOf("Grace", "John"))
+        coEvery {
+            repository.getFamilyMembers()
+        } returns Result.success(listOf("Grace", "John"))
 
         // When
         viewModel.getFamilyMembers()
@@ -233,10 +239,12 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `getFamilyMembers returns empty list - familyMembers LiveData is empty`() = runTest {
+    fun getFamilyMembersReturnsEmptyList_familyMembersLiveDataIsEmpty() = runTest {
 
-        // Given: no family members connected yet
-        coEvery { repository.getFamilyMembers() } returns Result.success(emptyList())
+        // Given
+        coEvery {
+            repository.getFamilyMembers()
+        } returns Result.success(emptyList())
 
         // When
         viewModel.getFamilyMembers()

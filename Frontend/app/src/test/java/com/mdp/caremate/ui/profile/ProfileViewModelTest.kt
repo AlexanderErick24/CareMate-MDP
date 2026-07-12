@@ -33,7 +33,6 @@ class ProfileViewModelTest {
 
     private lateinit var viewModel: ProfileViewModel
 
-    // A reusable fake user for all tests
     private val fakeUser = User(
         uid = "uid-001",
         name = "Grace",
@@ -58,7 +57,7 @@ class ProfileViewModelTest {
     // ==================================================
 
     @Test
-    fun `fetchCurrentUser success - userState LiveData contains user data`() = runTest {
+    fun fetchCurrentUserSuccess_userStateLiveDataContainsUserData() = runTest {
 
         // Given
         coEvery { repository.getCurrentUser() } returns Result.success(fakeUser)
@@ -75,7 +74,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun `fetchCurrentUser success - isLoading is false after completion`() = runTest {
+    fun fetchCurrentUserSuccess_isLoadingIsFalseAfterCompletion() = runTest {
 
         // Given
         coEvery { repository.getCurrentUser() } returns Result.success(fakeUser)
@@ -83,15 +82,17 @@ class ProfileViewModelTest {
         // When
         viewModel.fetchCurrentUser()
 
-        // Then: loading must be finished
+        // Then
         assertFalse(viewModel.isLoading.value!!)
     }
 
     @Test
-    fun `fetchCurrentUser failed - userState stays null and toastMessage is set`() = runTest {
+    fun fetchCurrentUserFailed_userStateStaysNullAndToastMessageIsSet() = runTest {
 
         // Given
-        coEvery { repository.getCurrentUser() } returns Result.failure(Exception("User not found"))
+        coEvery {
+            repository.getCurrentUser()
+        } returns Result.failure(Exception("User not found"))
 
         // When
         viewModel.fetchCurrentUser()
@@ -108,11 +109,13 @@ class ProfileViewModelTest {
     // ==================================================
 
     @Test
-    fun `updateUsername success - toastMessage shows success and user is refreshed`() = runTest {
+    fun updateUsernameSuccess_toastMessageShowsSuccessAndUserIsRefreshed() = runTest {
 
-        // Given: username update succeeds, then fetchCurrentUser returns updated user
+        // Given
         val updatedUser = fakeUser.copy(name = "Grace Updated")
-        coEvery { repository.updateUsername("Grace Updated") } returns Result.success("Nama berhasil diperbarui")
+        coEvery {
+            repository.updateUsername("Grace Updated")
+        } returns Result.success("Nama berhasil diperbarui")
         coEvery { repository.getCurrentUser() } returns Result.success(updatedUser)
 
         // When
@@ -122,16 +125,16 @@ class ProfileViewModelTest {
         val msg = viewModel.toastMessage.value
         assertNotNull(msg)
         assertEquals("Nama berhasil diperbarui!", msg)
-
-        // And the user should be refreshed with the new name
         assertEquals("Grace Updated", viewModel.userState.value?.name)
     }
 
     @Test
-    fun `updateUsername failed - toastMessage shows error`() = runTest {
+    fun updateUsernameFailed_toastMessageShowsError() = runTest {
 
         // Given
-        coEvery { repository.updateUsername("Grace Updated") } returns Result.failure(Exception("Network error"))
+        coEvery {
+            repository.updateUsername("Grace Updated")
+        } returns Result.failure(Exception("Network error"))
 
         // When
         viewModel.updateUsername("Grace Updated")
@@ -147,7 +150,7 @@ class ProfileViewModelTest {
     // ==================================================
 
     @Test
-    fun `changePassword success - toastMessage shows success`() = runTest {
+    fun changePasswordSuccess_toastMessageShowsSuccess() = runTest {
 
         // Given
         coEvery {
@@ -164,9 +167,9 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun `changePassword failed - toastMessage shows error`() = runTest {
+    fun changePasswordFailed_toastMessageShowsError() = runTest {
 
-        // Given: wrong current password
+        // Given
         coEvery {
             repository.changePassword("wrongPass", "newPass456")
         } returns Result.failure(Exception("Wrong current password"))
@@ -181,7 +184,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun `changePassword failed - isLoading is false after failure`() = runTest {
+    fun changePasswordFailed_isLoadingIsFalseAfterFailure() = runTest {
 
         // Given
         coEvery {
@@ -191,7 +194,7 @@ class ProfileViewModelTest {
         // When
         viewModel.changePassword("any", "any")
 
-        // Then: loading should always be reset after the operation
+        // Then: loading is always reset after the operation completes
         assertFalse(viewModel.isLoading.value!!)
     }
 
@@ -200,12 +203,14 @@ class ProfileViewModelTest {
     // ==================================================
 
     @Test
-    fun `uploadProfilePhoto success - toastMessage shows success and user is refreshed`() = runTest {
+    fun uploadProfilePhotoSuccess_toastMessageShowsSuccessAndUserIsRefreshed() = runTest {
 
         // Given
         val fakeBase64 = "base64encodedstring"
         val updatedUser = fakeUser.copy(photoUrl = fakeBase64)
-        coEvery { repository.uploadProfilePhoto(fakeBase64) } returns Result.success(fakeBase64)
+        coEvery {
+            repository.uploadProfilePhoto(fakeBase64)
+        } returns Result.success(fakeBase64)
         coEvery { repository.getCurrentUser() } returns Result.success(updatedUser)
 
         // When
@@ -215,13 +220,11 @@ class ProfileViewModelTest {
         val msg = viewModel.toastMessage.value
         assertNotNull(msg)
         assertEquals("Foto profil berhasil diperbarui!", msg)
-
-        // And photo URL should be refreshed
         assertEquals(fakeBase64, viewModel.userState.value?.photoUrl)
     }
 
     @Test
-    fun `uploadProfilePhoto failed - toastMessage shows error`() = runTest {
+    fun uploadProfilePhotoFailed_toastMessageShowsError() = runTest {
 
         // Given
         coEvery {

@@ -10,8 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiConfig {
     // Production Render URL (enforces HTTPS)
-    const val BASE_URL = "https://caremate-backend.onrender.com/"
-    
+    const val BASE_URL = "https://caremate-backend-d004.onrender.com/"
     // For local debugging, change to: "http://10.0.2.2:3000/"
 //     const val BASE_URL = "http://10.0.2.2:3000/"
 

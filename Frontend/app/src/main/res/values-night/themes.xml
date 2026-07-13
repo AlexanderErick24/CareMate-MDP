@@ -9,4 +9,11 @@
         <item name="colorOutline">@color/caremate_outline</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.CareMate.MySplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/caremate_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="postSplashScreenTheme">@style/Theme.CareMate</item>
+    </style>
 </resources>

@@ -1,217 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_main"
-    android:id="@+id/adminDashboard"
-    android:paddingStart="@dimen/padding_main"
-    android:paddingEnd="@dimen/padding_main"
-    android:paddingTop="75dp"
-    android:paddingBottom="@dimen/padding_main">
+<?xml version='1.0' encoding='utf-8'?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg_main" android:id="@+id/adminDashboard" android:paddingStart="@dimen/padding_main" android:paddingEnd="@dimen/padding_main" android:paddingTop="75dp" android:paddingBottom="@dimen/padding_main">
 
-    <ImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_calendar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView android:id="@+id/ivAvatar" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_calendar" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" android:contentDescription="@null" />
 
-    <TextView
-        android:id="@+id/tvAdminHub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="Admin Dashboard"
-        android:textColor="@color/text_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/ivAvatar"
-        app:layout_constraintTop_toTopOf="@id/ivAvatar" />
+    <TextView android:id="@+id/tvAdminHub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="@string/txt_fragment_admin_community_dashboard_75" android:textColor="@color/text_dark" android:textSize="18sp" android:textStyle="bold" app:layout_constraintStart_toEndOf="@id/ivAvatar" app:layout_constraintTop_toTopOf="@id/ivAvatar" />
 
-    <TextView
-        android:id="@+id/tvRole"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Community Manager"
-        android:textColor="@color/text_muted"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/tvAdminHub"
-        app:layout_constraintTop_toBottomOf="@id/tvAdminHub" />
+    <TextView android:id="@+id/tvRole" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_admin_community_dashboard_76" android:textColor="@color/text_muted" android:textSize="14sp" app:layout_constraintStart_toStartOf="@id/tvAdminHub" app:layout_constraintTop_toBottomOf="@id/tvAdminHub" />
 
-    <!-- BARIS 1, KIRI: USER AKTIF -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardActiveUsers"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="2dp"
-        app:layout_constraintEnd_toStartOf="@+id/cardActiveEvents"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivAvatar">
+    
+    <androidx.cardview.widget.CardView android:id="@+id/cardActiveUsers" android:layout_width="0dp" android:layout_height="120dp" android:layout_marginTop="24dp" android:layout_marginEnd="8dp" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="2dp" app:layout_constraintEnd_toStartOf="@+id/cardActiveEvents" app:layout_constraintHorizontal_bias="0.5" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/ivAvatar">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User Aktif"
-                android:textColor="@color/text_muted" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_admin_community_dashboard_77" android:textColor="@color/text_muted" />
 
-            <TextView
-                android:id="@+id/tvActiveUsersCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="1,240"
-                android:textColor="@color/text_dark"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+            <TextView android:id="@+id/tvActiveUsersCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/txt_fragment_admin_community_dashboard_78" android:textColor="@color/text_dark" android:textSize="22sp" android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- BARIS 1, KANAN: EVENT AKTIF -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardActiveEvents"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="8dp"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cardActiveUsers"
-        app:layout_constraintTop_toBottomOf="@id/ivAvatar">
+    
+    <androidx.cardview.widget.CardView android:id="@+id/cardActiveEvents" android:layout_width="0dp" android:layout_height="120dp" android:layout_marginTop="24dp" android:layout_marginStart="8dp" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="2dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.5" app:layout_constraintStart_toEndOf="@+id/cardActiveUsers" app:layout_constraintTop_toBottomOf="@id/ivAvatar">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Event Aktif"
-                android:textColor="@color/text_muted" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_admin_community_dashboard_79" android:textColor="@color/text_muted" />
 
-            <TextView
-                android:id="@+id/tvActiveEventsCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="42"
-                android:textColor="@color/text_dark"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+            <TextView android:id="@+id/tvActiveEventsCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="42" android:textColor="@color/text_dark" android:textSize="22sp" android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- BARIS 2: TOTAL REVENUE (MEMANJANG KE BAWAH) -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardRevenue"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardActiveUsers">
+    
+    <androidx.cardview.widget.CardView android:id="@+id/cardRevenue" android:layout_width="match_parent" android:layout_height="120dp" android:layout_marginTop="16dp" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="2dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/cardActiveUsers">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total Revenue"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_admin_community_dashboard_80" android:textColor="@color/text_muted" android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/tvTotalRevenue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Rp 0"
-                android:textColor="@color/text_dark"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <TextView android:id="@+id/tvTotalRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/txt_fragment_admin_community_dashboard_81" android:textColor="@color/text_dark" android:textSize="20sp" android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvPremiumMultiplier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="× Rp 50.000"
-                android:textColor="@color/text_muted"
-                android:textSize="12sp" />
+            <TextView android:id="@+id/tvPremiumMultiplier" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/txt_fragment_admin_community_dashboard_82" android:textColor="@color/text_muted" android:textSize="12sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- BARIS 3: USER PREMIUM (DI BAWAH TOTAL REVENUE) -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardPremiumUsers"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="@dimen/card_corner_radius"
-        app:cardElevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardRevenue">
+    
+    <androidx.cardview.widget.CardView android:id="@+id/cardPremiumUsers" android:layout_width="match_parent" android:layout_height="120dp" android:layout_marginTop="16dp" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="2dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/cardRevenue">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User Premium"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_admin_community_dashboard_83" android:textColor="@color/text_muted" android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/tvPremiumUsersCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="0"
-                android:textColor="@color/caremate_primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            <TextView android:id="@+id/tvPremiumUsersCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="0" android:textColor="@color/caremate_primary" android:textSize="24sp" android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Aktif Berlangganan"
-                android:textColor="@color/text_muted"
-                android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/txt_fragment_admin_community_dashboard_84" android:textColor="@color/text_muted" android:textSize="12sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

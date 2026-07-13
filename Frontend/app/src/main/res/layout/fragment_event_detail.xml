@@ -1,218 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/caremate_tertiary"
-    tools:context=".ui.community.EventDetailFragment">
+<?xml version='1.0' encoding='utf-8'?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/caremate_tertiary" tools:context=".ui.community.EventDetailFragment">
 
-    <!-- Header Card dengan info utama event -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardDetailHeader"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/caremate_primary"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="4dp"
-        app:contentPadding="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    
+    <com.google.android.material.card.MaterialCardView android:id="@+id/cardDetailHeader" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="16dp" app:cardBackgroundColor="@color/caremate_primary" app:cardCornerRadius="24dp" app:cardElevation="4dp" app:contentPadding="24dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
-            <!-- Tombol back -->
-            <Button
-                android:id="@+id/btnDetailBack"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:drawableStart="@android:drawable/ic_media_previous"
-                android:drawablePadding="4dp"
-                android:text="@string/community_back"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+            
+            <Button android:id="@+id/btnDetailBack" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:drawableStart="@android:drawable/ic_media_previous" android:drawablePadding="4dp" android:text="@string/community_back" android:textColor="@android:color/white" android:textStyle="bold" />
 
-            <!-- Judul event -->
-            <TextView
-                android:id="@+id/tvDetailTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:text="Seminar Kesehatan Lansia 2025" />
+            
+            <TextView android:id="@+id/tvDetailTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@android:color/white" android:textSize="24sp" android:textStyle="bold" tools:text="@string/txt_fragment_event_detail_128" />
 
-            <!-- Tanggal -->
-            <TextView
-                android:id="@+id/tvDetailDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_badge_white"
-                android:drawableStart="@drawable/ic_calendar"
-                android:drawablePadding="6dp"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:textColor="#1E463C"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                tools:text="20 Juni 2025 • 08:00 WIB" />
+            
+            <TextView android:id="@+id/tvDetailDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:background="@drawable/bg_badge_white" android:drawableStart="@drawable/ic_calendar" android:drawablePadding="6dp" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:textColor="#1E463C" android:textSize="13sp" android:textStyle="bold" tools:text="@string/txt_fragment_event_detail_129" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- ScrollView untuk konten detail -->
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardDetailHeader">
+    
+    <ScrollView android:layout_width="0dp" android:layout_height="0dp" android:layout_marginTop="0dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/cardDetailHeader">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-            <!-- Card Poster Event -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDetailPoster"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:layout_marginBottom="12dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp"
-                tools:visibility="visible">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDetailPoster" android:layout_width="match_parent" android:layout_height="220dp" android:layout_marginBottom="12dp" android:visibility="gone" app:cardBackgroundColor="@color/white" app:cardCornerRadius="20dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp" tools:visibility="visible">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/ivDetailEventPoster"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="Poster Detail Event"
-                    tools:src="@tools:sample/backgrounds/scenic" />
+                <com.google.android.material.imageview.ShapeableImageView android:id="@+id/ivDetailEventPoster" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:contentDescription="Poster Detail Event" tools:src="@tools:sample/backgrounds/scenic" />
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card Lokasi -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDetailLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:contentPadding="16dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDetailLocation" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" app:cardBackgroundColor="@color/white" app:cardCornerRadius="20dp" app:cardElevation="0dp" app:contentPadding="16dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/community_detail_location_label"
-                        android:textColor="@color/caremate_muted"
-                        android:textSize="12sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/community_detail_location_label" android:textColor="@color/caremate_muted" android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tvDetailLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="@color/caremate_neutral"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        tools:text="Gedung Serbaguna, Jakarta" />
+                    <TextView android:id="@+id/tvDetailLocation" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="@color/caremate_neutral" android:textSize="15sp" android:textStyle="bold" tools:text="@string/txt_fragment_event_detail_130" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card Penyelenggara -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDetailOrganizer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:contentPadding="16dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDetailOrganizer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" app:cardBackgroundColor="@color/white" app:cardCornerRadius="20dp" app:cardElevation="0dp" app:contentPadding="16dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Informasi Kuota &amp; Kapasitas"
-                        android:textColor="@color/caremate_muted"
-                        android:textSize="12sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_event_detail_131" android:textColor="@color/caremate_muted" android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tvDetailOrganizer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="@color/caremate_neutral"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        tools:text="Yayasan Peduli Lansia" />
+                    <TextView android:id="@+id/tvDetailOrganizer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="@color/caremate_neutral" android:textSize="15sp" android:textStyle="bold" tools:text="@string/txt_fragment_event_detail_132" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card Deskripsi -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDetailDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:contentPadding="16dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDetailDescription" android:layout_width="match_parent" android:layout_height="wrap_content" app:cardBackgroundColor="@color/white" app:cardCornerRadius="20dp" app:cardElevation="0dp" app:contentPadding="16dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/community_detail_description_label"
-                        android:textColor="@color/caremate_muted"
-                        android:textSize="12sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/community_detail_description_label" android:textColor="@color/caremate_muted" android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tvDetailDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:lineSpacingExtra="4dp"
-                        android:textColor="@color/caremate_neutral"
-                        android:textSize="14sp"
-                        tools:text="Seminar ini membahas cara merawat lansia dengan baik, strategi manajemen obat, dan pentingnya dukungan keluarga dalam proses perawatan." />
+                    <TextView android:id="@+id/tvDetailDescription" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:lineSpacingExtra="4dp" android:textColor="@color/caremate_neutral" android:textSize="14sp" tools:text="@string/txt_fragment_event_detail_133" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

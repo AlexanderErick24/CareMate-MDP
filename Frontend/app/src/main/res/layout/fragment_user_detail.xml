@@ -1,389 +1,105 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F9FAFB"
-    tools:context=".ui.admin.UserDetail">
+<?xml version='1.0' encoding='utf-8'?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F9FAFB" tools:context=".ui.admin.UserDetail">
 
-    <!-- Header Bar / Top Navigation -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/headerBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="#FFFFFF"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/headerBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:background="#FFFFFF" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_back"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Kembali"
-            app:tint="#2D4A43"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <ImageView android:id="@+id/btnBack" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_arrow_back" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Kembali" app:tint="#2D4A43" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Detail Pengguna"
-            android:textColor="#2D4A43"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginStart="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnBack" />
+        <TextView android:id="@+id/tvTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_user_detail_262" android:textColor="#2D4A43" android:textSize="18sp" android:textStyle="bold" android:layout_marginStart="16dp" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@id/btnBack" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Main Content Container Scrollable -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingBottom="24dp"
-        app:layout_constraintTop_toBottomOf="@id/headerBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    
+    <androidx.core.widget.NestedScrollView android:layout_width="0dp" android:layout_height="0dp" android:clipToPadding="false" android:paddingBottom="24dp" app:layout_constraintTop_toBottomOf="@id/headerBar" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-            <!-- Card 1: Informasi Dasar & Status Akun -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="12dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="2dp">
+            
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="12dp" app:strokeWidth="0dp" app:cardElevation="2dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
+                <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
 
-                    <TextView
-                        android:id="@+id/tvDetailName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColor="#0B253A"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        tools:text="Nama Lengkap User"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/tvDetailRole" />
+                    <TextView android:id="@+id/tvDetailName" android:layout_width="0dp" android:layout_height="wrap_content" android:textColor="#0B253A" android:textSize="22sp" android:textStyle="bold" tools:text="@string/txt_fragment_user_detail_263" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toStartOf="@id/tvDetailRole" />
 
-                    <TextView
-                        android:id="@+id/tvDetailRole"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="4dp"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        tools:text="Caregiver"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                    <TextView android:id="@+id/tvDetailRole" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingHorizontal="12dp" android:paddingVertical="4dp" android:textSize="12sp" android:textStyle="bold" tools:text="@string/txt_fragment_family_dashboard_148" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tvDetailEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="emailuser@caremate.com"
-                        app:layout_constraintTop_toBottomOf="@id/tvDetailName" />
+                    <TextView android:id="@+id/tvDetailEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_264" app:layout_constraintTop_toBottomOf="@id/tvDetailName" />
 
-                    <View
-                        android:id="@+id/div1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:background="#E5E7EB"
-                        app:layout_constraintTop_toBottomOf="@id/tvDetailEmail" />
+                    <View android:id="@+id/div1" android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="16dp" android:background="#E5E7EB" app:layout_constraintTop_toBottomOf="@id/tvDetailEmail" />
 
-                    <TextView
-                        android:id="@+id/lblStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Status Akun"
-                        android:textColor="#0B253A"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@id/div1"
-                        app:layout_constraintStart_toStartOf="parent" />
+                    <TextView android:id="@+id/lblStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/txt_fragment_user_detail_265" android:textColor="#0B253A" android:textSize="14sp" android:textStyle="bold" app:layout_constraintTop_toBottomOf="@id/div1" app:layout_constraintStart_toStartOf="parent" />
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/switchStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:checked="true"
-                        app:layout_constraintTop_toTopOf="@id/lblStatus"
-                        app:layout_constraintBottom_toBottomOf="@id/lblStatus"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/switchStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" tools:checked="true" app:layout_constraintTop_toTopOf="@id/lblStatus" app:layout_constraintBottom_toBottomOf="@id/lblStatus" app:layout_constraintEnd_toEndOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card 2: Section Khusus Data Mentah Internal Akun Family -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardFamilySection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="12dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="2dp">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardFamilySection" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="12dp" app:strokeWidth="0dp" app:cardElevation="2dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Data Internal Akun Family"
-                        android:textColor="#0B253A"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_user_detail_266" android:textColor="#0B253A" android:textSize="15sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvPairingCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="Pairing Code: XF930A" />
+                    <TextView android:id="@+id/tvPairingCode" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_267" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card 3: Section Khusus Portofolio & CV Caregiver + Data Pasien Asuhan -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardCaregiverCvSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="12dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="2dp">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardCaregiverCvSection" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="12dp" app:strokeWidth="0dp" app:cardElevation="2dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Profil Portofolio &amp; CV"
-                        android:textColor="#0B253A"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_user_detail_268" android:textColor="#0B253A" android:textSize="15sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvJobTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#2D4A43"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        tools:text="Job Title: Specialist Lansia / Stroke Care" />
+                    <TextView android:id="@+id/tvJobTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="#2D4A43" android:textStyle="bold" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_269" />
 
-                    <TextView
-                        android:id="@+id/tvAge"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="Umur: 28 Tahun" />
+                    <TextView android:id="@+id/tvAge" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_270" />
 
-                    <TextView
-                        android:id="@+id/tvBio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="Bio: Berdedikasi tinggi merawat pasien pasca stroke dengan terapi fisik teratur..." />
+                    <TextView android:id="@+id/tvBio" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_271" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Pengalaman Kerja:"
-                        android:textColor="#0B253A"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/txt_fragment_user_detail_272" android:textColor="#0B253A" android:textSize="13sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvExperienceList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="- 2 Tahun di RS Utama\n- Merawat pasien stroke mandiri" />
+                    <TextView android:id="@+id/tvExperienceList" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_273" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Keahlian Medis / Skills:"
-                        android:textColor="#0B253A"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/txt_fragment_user_detail_274" android:textColor="#0B253A" android:textSize="13sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvSkillsList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="• Terapi Fisik, CPR, Manajemen Nutrisi" />
+                    <TextView android:id="@+id/tvSkillsList" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_275" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:background="#E5E7EB" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" android:background="#E5E7EB" />
 
-                    <!-- Data Pasien Asuhan (Hanya Ada di Caregiver) -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Data Pasien yang Ditangani:"
-                        android:textColor="#0B253A"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                    
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_user_detail_276" android:textColor="#0B253A" android:textSize="13sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvPatientName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        tools:text="Nama Pasien: Opa Albert" />
+                    <TextView android:id="@+id/tvPatientName" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="#5A6E72" android:textSize="14sp" tools:text="@string/txt_fragment_user_detail_277" />
 
-                    <TextView
-                        android:id="@+id/tvConnectedPatientUid"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="13sp"
-                        tools:text="Connected Patient UID: p_12345" />
+                    <TextView android:id="@+id/tvConnectedPatientUid" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="#5A6E72" android:textSize="13sp" tools:text="@string/txt_fragment_user_detail_278" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card 4: Tab / Section Informasi Relasi Hubungan Kompleks (1:1 & Grup) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardConnectionSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="12dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="2dp">
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardConnectionSection" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:visibility="gone" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="12dp" app:strokeWidth="0dp" app:cardElevation="2dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Informasi Relasi Hubungan (1:1)"
-                        android:textColor="#0B253A"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_user_detail_279" android:textColor="#0B253A" android:textSize="15sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvSharedPairingCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#0B253A"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        tools:text="Pairing Code Bersama: XF930A" />
+                    <TextView android:id="@+id/tvSharedPairingCode" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="#0B253A" android:textSize="14sp" android:textStyle="bold" tools:text="@string/txt_fragment_user_detail_280" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#F3F4F6"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:background="#F3F4F6" />
 
-                    <!-- Informasi Struktur Target Relasi Dinamis (Caregiver Utama / Pasien Terkait) -->
-                    <TextView
-                        android:id="@+id/tvTargetRelationInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#5A6E72"
-                        android:textSize="14sp"
-                        android:lineSpacingMultiplier="1.2"
-                        tools:text="Memuat status relasi pengguna..." />
+                    
+                    <TextView android:id="@+id/tvTargetRelationInfo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#5A6E72" android:textSize="14sp" android:lineSpacingMultiplier="1.2" tools:text="@string/txt_fragment_user_detail_281" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#F3F4F6"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:background="#F3F4F6" />
 
-                    <!-- Daftar Anggota yang memiliki Pairing Code yang sama (Family ke Family) -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Daftar Anggota Grup (Pairing Code Sama):"
-                        android:textColor="#0B253A"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                    
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_user_detail_282" android:textColor="#0B253A" android:textSize="13sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvFamilyGroupList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:textColor="#5A6E72"
-                        android:textSize="13sp"
-                        android:lineSpacingMultiplier="1.2"
-                        tools:text="- Budi (budi@mail.com) [Family]\n- Caregiver A (cg@mail.com) [Caregiver] (User Ini)" />
+                    <TextView android:id="@+id/tvFamilyGroupList" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="#5A6E72" android:textSize="13sp" android:lineSpacingMultiplier="1.2" tools:text="@string/txt_fragment_user_detail_283" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

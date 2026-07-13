@@ -1,61 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Simpan di: res/layout/dialog_reconnect_family.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nama"
-        android:textStyle="bold"
-        android:textColor="#404845"
-        android:layout_marginBottom="4dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_dialog_reconnect_family_68" android:textStyle="bold" android:textColor="#404845" android:layout_marginBottom="4dp" />
 
-    <!-- Read-only, diisi otomatis dari Firestore -->
-    <EditText
-        android:id="@+id/etReconnectName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#CCCCCC"
-        android:textColor="#888888"
-        android:layout_marginBottom="16dp"/>
+    
+    <EditText android:id="@+id/etReconnectName" android:layout_width="match_parent" android:layout_height="wrap_content" android:backgroundTint="#CCCCCC" android:textColor="#888888" android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:textStyle="bold"
-        android:textColor="#404845"
-        android:layout_marginBottom="4dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_dialog_reconnect_family_69" android:textStyle="bold" android:textColor="#404845" android:layout_marginBottom="4dp" />
 
-    <!-- Read-only, diisi otomatis dari Firestore -->
-    <EditText
-        android:id="@+id/etReconnectEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#CCCCCC"
-        android:textColor="#888888"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="16dp"/>
+    
+    <EditText android:id="@+id/etReconnectEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:backgroundTint="#CCCCCC" android:textColor="#888888" android:inputType="textEmailAddress" android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pairing Code Caregiver Baru"
-        android:textStyle="bold"
-        android:textColor="#404845"
-        android:layout_marginBottom="4dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_dialog_reconnect_family_70" android:textStyle="bold" android:textColor="#404845" android:layout_marginBottom="4dp" />
 
-    <!-- User isi sendiri -->
-    <EditText
-        android:id="@+id/etReconnectPairingCode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contoh: CM-123A"
-        android:inputType="textCapCharacters"
-        android:layout_marginBottom="4dp"/>
+    
+    <EditText android:id="@+id/etReconnectPairingCode" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/txt_dialog_reconnect_family_71" android:inputType="textCapCharacters" android:layout_marginBottom="4dp" />
 
 </LinearLayout>

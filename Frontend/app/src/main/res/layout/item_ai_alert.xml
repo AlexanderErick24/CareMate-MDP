@@ -1,84 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp">
+<?xml version='1.0' encoding='utf-8'?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp" app:cardCornerRadius="16dp" app:cardElevation="2dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivAlertThumbnail"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:background="#E0E0E0"
-            app:cornerFamily="rounded"
-            app:cornerSize="8dp"
-            android:src="@android:drawable/ic_menu_camera"
-            app:tint="#9E9E9E" />
+        <com.google.android.material.imageview.ShapeableImageView android:id="@+id/ivAlertThumbnail" android:layout_width="80dp" android:layout_height="80dp" android:scaleType="centerCrop" android:background="#E0E0E0" app:cornerFamily="rounded" app:cornerSize="8dp" android:src="@android:drawable/ic_menu_camera" app:tint="#9E9E9E" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:layout_weight="1" android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tvAlertSeverity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_danger"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:text="HIGH"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:visibility="visible" />
+                <TextView android:id="@+id/tvAlertSeverity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_rounded_danger" android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:text="@string/txt_item_ai_alert_284" android:textColor="#FFFFFF" android:textSize="10sp" android:textStyle="bold" android:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/tvAlertTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="10:30 AM"
-                    android:textColor="#6B7280"
-                    android:textSize="12sp" />
+                <TextView android:id="@+id/tvAlertTime" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/txt_item_ai_alert_285" android:textColor="#6B7280" android:textSize="12sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvAlertTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Fall Detected"
-                android:textColor="#191C1B"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            <TextView android:id="@+id/tvAlertTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/txt_item_ai_alert_286" android:textColor="#191C1B" android:textSize="16sp" android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvAlertDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="AI detected the patient lying on the floor next to the bed."
-                android:textColor="#6B7280"
-                android:textSize="14sp" />
+            <TextView android:id="@+id/tvAlertDescription" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/txt_item_ai_alert_287" android:textColor="#6B7280" android:textSize="14sp" />
 
         </LinearLayout>
     </LinearLayout>

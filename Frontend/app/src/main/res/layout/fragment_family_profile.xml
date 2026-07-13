@@ -1,209 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAF8">
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="20dp" android:orientation="vertical">
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8FAF8">
+        <ImageView android:id="@+id/ivProfilePhoto" android:layout_width="96dp" android:layout_height="96dp" android:layout_gravity="center" android:src="@mipmap/ic_launcher_round" android:scaleType="centerCrop" android:clickable="true" android:focusable="true" android:contentDescription="@null" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:orientation="vertical">
+        <TextView android:id="@+id/tvProfileName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="12dp" android:text="@string/txt_fragment_family_profile_162" android:textStyle="bold" android:textSize="22sp" />
 
-        <ImageView
-            android:id="@+id/ivProfilePhoto"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher_round"
-            android:scaleType="centerCrop"
-            android:clickable="true"
-            android:focusable="true"/>
+        <TextView android:id="@+id/tvProfileRole" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="@string/txt_fragment_family_profile_163" android:textColor="#6B7280" />
 
-        <TextView
-            android:id="@+id/tvProfileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:text="Grace"
-            android:textStyle="bold"
-            android:textSize="22sp"/>
+        
 
-        <TextView
-            android:id="@+id/tvProfileRole"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Family"
-            android:textColor="#6B7280"/>
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp">
 
-        <!-- ACCOUNT INFO -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_dialog_reconnect_family_69" android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical">
+                <TextView android:id="@+id/tvEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/txt_fragment_admin_setting_86" android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                <TextView android:id="@+id/tvRole" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Role"
-                    android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/txt_fragment_caregiver_detail_90" android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvRole"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                <TextView android:id="@+id/tvPatient" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Patient"
-                    android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/txt_fragment_family_dashboard_148" android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvPatient"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Caregiver"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvCaregiver"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Loading..." />
+                <TextView android:id="@+id/tvCaregiver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_89" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- CAREGIVER LIST SECTION (Part D) -->
-        <!-- Shows the linked caregiver as a clickable card -->
+        
+        
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
-            android:text="Current Caregiver"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#191C1B"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:layout_marginBottom="8dp" android:text="@string/txt_fragment_family_profile_164" android:textStyle="bold" android:textSize="16sp" android:textColor="#191C1B" />
 
-        <!-- Clickable caregiver card — navigates to CaregiverDetailFragment -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardCaregiverDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:strokeColor="#E0E6E2"
-            app:strokeWidth="1dp">
+        
+        <com.google.android.material.card.MaterialCardView android:id="@+id/cardCaregiverDetail" android:layout_width="match_parent" android:layout_height="wrap_content" android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackground" app:cardCornerRadius="12dp" app:cardElevation="2dp" app:strokeColor="#E0E6E2" app:strokeWidth="1dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvCaregiverCardName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:textColor="#191C1B"/>
+                    <TextView android:id="@+id/tvCaregiverCardName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_89" android:textStyle="bold" android:textSize="15sp" android:textColor="#191C1B" />
 
-                    <TextView
-                        android:id="@+id/tvCaregiverCardJob"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Caregiver"
-                        android:textColor="#6B7280"
-                        android:textSize="13sp"
-                        android:layout_marginTop="2dp"/>
+                    <TextView android:id="@+id/tvCaregiverCardJob" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_dashboard_148" android:textColor="#6B7280" android:textSize="13sp" android:layout_marginTop="2dp" />
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_media_next"
-                    android:alpha="0.4"/>
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_media_next" android:alpha="0.4" android:contentDescription="@null" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ACTION BUTTONS -->
+        
 
-        <Button
-            android:id="@+id/btnEditUsername"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:text="Edit Username"
-            android:backgroundTint="#386458"
-            android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnEditUsername" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="24dp" android:text="@string/txt_fragment_family_profile_165" android:backgroundTint="#386458" android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/btnChangePassword"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:text="Change Password"
-            android:backgroundTint="#386458"
-            android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnChangePassword" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="12dp" android:text="@string/txt_fragment_family_profile_166" android:backgroundTint="#386458" android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:text="Logout"
-            android:backgroundTint="#C62828"
-            android:textColor="@android:color/white"/>
+        <Button android:id="@+id/btnLogout" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="12dp" android:text="@string/txt_fragment_admin_setting_87" android:backgroundTint="#C62828" android:textColor="@android:color/white" />
 
     </LinearLayout>
 

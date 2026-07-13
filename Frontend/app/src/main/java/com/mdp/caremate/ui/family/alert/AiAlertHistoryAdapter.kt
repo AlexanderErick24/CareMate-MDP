@@ -39,8 +39,10 @@ class AiAlertHistoryAdapter(
         private val tvAlertDescription: TextView = itemView.findViewById(R.id.tvAlertDescription)
         private val tvAlertTime: TextView = itemView.findViewById(R.id.tvAlertTime)
         private val tvAlertSeverity: TextView = itemView.findViewById(R.id.tvAlertSeverity)
+        private var decodeJob: kotlinx.coroutines.Job? = null
 
         fun bind(item: AiAlertHistoryItem) {
+            decodeJob?.cancel()
             tvAlertTitle.text = item.title
             tvAlertDescription.text = item.description
             tvAlertTime.text = item.time
@@ -59,7 +61,7 @@ class AiAlertHistoryAdapter(
             val ivAlertThumbnail: android.widget.ImageView = itemView.findViewById(R.id.ivAlertThumbnail)
             if (!item.imageUrl.isNullOrEmpty()) {
                 // Decode in background to prevent UI lag
-                CoroutineScope(Dispatchers.IO).launch {
+                decodeJob = CoroutineScope(Dispatchers.IO).launch {
                     try {
                         val decodedBytes = android.util.Base64.decode(item.imageUrl, android.util.Base64.DEFAULT)
                         val bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)

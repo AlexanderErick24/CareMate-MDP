@@ -545,6 +545,7 @@ class DashboardFragment : Fragment() {
 
     override fun onDestroyView() {
         binding.rvMedications.adapter = null
+        currentPreviewBinding = null
         _binding = null
         super.onDestroyView()
     }

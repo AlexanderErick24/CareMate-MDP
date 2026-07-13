@@ -33,29 +33,8 @@ class SmartNutritionViewModel(
     // Menyimpan resep yang dipilih untuk ditampilkan di halaman detail
     var selectedRecipe: Recipe? = null
 
-    // In a real app with DI (Hilt/Dagger), this would be injected.
-    // For this prototype, we'll instantiate Retrofit here.
-    private val defaultApi: SmartNutritionApi by lazy {
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .connectTimeout(90, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(90, java.util.concurrent.TimeUnit.SECONDS)
-            .writeTimeout(90, java.util.concurrent.TimeUnit.SECONDS)
-            .build()
-
-        Retrofit.Builder()
-            .baseUrl(com.mdp.caremate.data.sources.remote.ApiConfig.BASE_URL) // Menggunakan BASE_URL tersentralisasi
-            .client(client)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(SmartNutritionApi::class.java)
-    }
-
-    // Gunakan apiOverride jika ada (testing), jika tidak gunakan defaultApi (runtime)
-    private val api: SmartNutritionApi get() = apiOverride ?: defaultApi
+    // Gunakan apiOverride jika ada (testing), jika tidak gunakan centralized singleton (runtime)
+    private val api: SmartNutritionApi get() = apiOverride ?: com.mdp.caremate.data.sources.remote.ApiConfig.smartNutritionApi
 
     fun generateRecipes(
         patientProfile: PatientMedicalProfile,

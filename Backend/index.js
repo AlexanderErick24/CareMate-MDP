@@ -6,7 +6,8 @@ const crypto = require('crypto'); // Bawaan Node.js untuk membuat ID Unik
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // Wajib ada agar server bisa membaca JSON dari Retrofit Android
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Inisialisasi Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -142,12 +143,6 @@ Keterangan moodScore:
         console.error("Terjadi kesalahan sistem AI:", error);
         res.status(500).json({ error: "Gagal menganalisis jurnal, periksa koneksi atau API Key." });
     }
-});
-
-// Jalankan Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server Backend Caremate sudah berjalan di http://localhost:${PORT}`);
 });
 
 // =====================================================================
@@ -701,4 +696,19 @@ DILARANG memberikan teks markdown seperti \`\`\`json. Output harus LANGSUNG beru
         }
         res.status(500).json({ error: "Terjadi kesalahan server saat memproses resep." });
     }
+});
+
+// Global Error Handlers to prevent server crashes on uncaught asynchronous exceptions
+process.on('uncaughtException', (err) => {
+    console.error('Unhandled Exception (uncaughtException):', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Start Server at the end of registration
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server Backend Caremate berjalan di http://localhost:${PORT}`);
 });

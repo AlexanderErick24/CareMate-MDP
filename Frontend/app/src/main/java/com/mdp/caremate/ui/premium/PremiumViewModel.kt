@@ -24,8 +24,8 @@ class PremiumViewModel (
     val journalResult: LiveData<Journal>
         get() = _journalResult
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String>
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?>
         get() = _errorMessage
 
     private val _burnoutAlert = MutableLiveData<Boolean>()

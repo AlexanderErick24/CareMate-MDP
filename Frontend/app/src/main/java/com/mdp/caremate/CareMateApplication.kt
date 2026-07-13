@@ -16,12 +16,12 @@ class CareMateApplication : Application() {
         super.onCreate()
 
         // 1. Ambil WebService dari ApiConfig buatan timmu
-        val retrofitService = ApiConfig.getWebService()
+        val retrofitService = ApiConfig.webService
 
         // 2. Rakit Repository khusus untuk fitur Premium/AI milikmu
         premiumRepository = PremiumRepositoryImpl(
             remoteDataSource = PremiumRemoteDataSourceImpl(retrofitService),
-            journalDao = AppDatabase.getDatabase(baseContext).journalDao()
+            journalDao = AppDatabase.getDatabase(this).journalDao()
         )
     }
 }

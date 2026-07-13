@@ -1,155 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAF8" android:orientation="vertical">
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8FAF8"
-    android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            <TextView android:id="@+id/tvGreeting" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_dashboard_144" android:textColor="#191C1B" android:textSize="24sp" android:textStyle="bold" />
 
-            <!-- HEADER -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/txt_fragment_family_dashboard_145" android:textColor="#6B7280" android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tvGreeting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello, Grace 👋"
-                android:textColor="#191C1B"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Monitoring Hub"
-                android:textColor="#6B7280"
-                android:textSize="14sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="horizontal">
 
-            <!-- PATIENT + CAREGIVER ROW -->
+                
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                <com.google.android.material.card.MaterialCardView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="8dp" app:cardCornerRadius="16dp">
 
-                <!-- PATIENT CARD -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_90" android:textStyle="bold" android:textColor="#6B7280" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/txt_fragment_family_dashboard_146" android:textStyle="bold" android:textSize="16sp" android:textColor="#191C1B" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Patient"
-                            android:textStyle="bold"
-                            android:textColor="#6B7280"/>
+                        <TextView android:text="@string/txt_fragment_family_dashboard_147" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:id="@+id/tvPatientName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Budi Santoso"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:textColor="#191C1B"/>
-
-                        <TextView
-                            android:text="Emergency Call 112"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <ImageButton
-                            android:id="@+id/btnCall112"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="#386458"
-                            android:src="@android:drawable/ic_menu_call"/>
+                        <ImageButton android:id="@+id/btnCall112" android:layout_width="40dp" android:layout_height="40dp" android:backgroundTint="#386458" android:src="@android:drawable/ic_menu_call" android:contentDescription="@string/cd_emergency_call" />
 
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- CAREGIVER CARD — id added so we can set a click listener -->
+                
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardCaregiver"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="16dp">
+                <com.google.android.material.card.MaterialCardView android:id="@+id/cardCaregiver" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:clickable="true" android:focusable="true" android:foreground="?android:attr/selectableItemBackground" app:cardCornerRadius="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Caregiver"
-                            android:textStyle="bold"
-                            android:textColor="#6B7280"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_dashboard_148" android:textStyle="bold" android:textColor="#6B7280" />
 
-                        <TextView
-                            android:id="@+id/tvCaregiverName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Siti Nurhaliza"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:textColor="#191C1B"/>
+                        <TextView android:id="@+id/tvCaregiverName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/txt_fragment_chat_97" android:textStyle="bold" android:textSize="16sp" android:textColor="#191C1B" />
 
-                        <TextView
-                            android:id="@+id/tvCaregiverMood"
-                            android:text="Mood Status: Loading..."
-                            android:textColor="#386458"
-                            android:textSize="12sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        <TextView android:id="@+id/tvCaregiverMood" android:text="@string/txt_fragment_family_dashboard_149" android:textColor="#386458" android:textSize="12sp" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
 
-                            <ImageButton
-                                android:id="@+id/btnChat"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:backgroundTint="#D9EDF5"
-                                android:src="@android:drawable/ic_dialog_email"/>
+                            <ImageButton android:id="@+id/btnChat" android:layout_width="40dp" android:layout_height="40dp" android:backgroundTint="#D9EDF5" android:src="@android:drawable/ic_dialog_email" android:contentDescription="@null" />
 
                         </LinearLayout>
 
@@ -159,112 +57,47 @@
 
             </LinearLayout>
 
-            <!-- AI ALERT -->
+            
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardAiAlert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="16dp">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardAiAlert" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:clickable="true" android:focusable="true" android:foreground="?android:attr/selectableItemBackground" app:cardCornerRadius="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="AI Alert"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_dashboard_150" android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvAiAlert"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="No active alerts"
-                        android:textColor="#386458" />
+                    <TextView android:id="@+id/tvAiAlert" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/txt_fragment_family_dashboard_151" android:textColor="#386458" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- DAILY PROGRESS -->
+            
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="16dp">
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" app:cardCornerRadius="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Daily Medication Progress"
-                            android:textStyle="bold" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/txt_fragment_family_dashboard_152" android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tvProgressPercent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="75%"
-                            android:textColor="#386458"
-                            android:textStyle="bold" />
+                        <TextView android:id="@+id/tvProgressPercent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_dashboard_153" android:textColor="#386458" android:textStyle="bold" />
 
                     </LinearLayout>
 
-                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                        android:id="@+id/progressDaily"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:max="100"/>
+                    <com.google.android.material.progressindicator.LinearProgressIndicator android:id="@+id/progressDaily" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:max="100" />
 
-                    <TextView
-                        android:id="@+id/tvProgressDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="6 of 8 tasks completed today"
-                        android:textColor="#6B7280" />
+                    <TextView android:id="@+id/tvProgressDescription" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/txt_fragment_family_dashboard_154" android:textColor="#6B7280" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ACTIVITY FEED -->
+            
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Medication Activity Feed"
-                android:textColor="#191C1B"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="@string/txt_fragment_family_dashboard_155" android:textColor="#191C1B" android:textSize="20sp" android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvActivityFeed"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="12dp" />
+            <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvActivityFeed" android:layout_width="match_parent" android:layout_height="300dp" android:layout_marginTop="12dp" />
 
         </LinearLayout>
 

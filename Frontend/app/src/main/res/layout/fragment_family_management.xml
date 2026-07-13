@@ -1,106 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAF8" android:orientation="vertical" android:padding="20dp">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_management_156" android:textSize="24sp" android:textStyle="bold" />
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F8FAF8"
-    android:orientation="vertical"
-    android:padding="20dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_management_157" android:textColor="#6B7280" android:layout_marginTop="4dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Family Members"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
+    
+    
+    <com.google.android.material.card.MaterialCardView android:id="@+id/cardCaregiverQuitRequest" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:visibility="gone" app:cardBackgroundColor="#FFF8E1" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="#F9A825" app:strokeWidth="1dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Manage connected family accounts"
-        android:textColor="#6B7280"
-        android:layout_marginTop="4dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-    <!-- CAREGIVER QUIT REQUEST CARD -->
-    <!-- Shown when the caregiver sends a quit request that needs family approval -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardCaregiverQuitRequest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:cardBackgroundColor="#FFF8E1"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeColor="#F9A825"
-        app:strokeWidth="1dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_management_158" android:textColor="#E65100" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_management_159" android:textColor="#404845" android:textSize="13sp" android:layout_marginBottom="12dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Caregiver Wants to Quit"
-                android:textColor="#E65100"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your caregiver has requested to end the relationship with this patient. Do you approve?"
-                android:textColor="#404845"
-                android:textSize="13sp"
-                android:layout_marginBottom="12dp" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnApproveCaregiverQuit" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="@string/txt_fragment_family_management_160" android:textAllCaps="false" android:textColor="@android:color/white" android:textSize="13sp" app:backgroundTint="#386458" app:cornerRadius="8dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnApproveCaregiverQuit"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="Approve"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp"
-                    app:backgroundTint="#386458"
-                    app:cornerRadius="8dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRejectCaregiverQuit"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text="Reject"
-                    android:textAllCaps="false"
-                    android:textColor="#BA1A1A"
-                    android:textSize="13sp"
-                    app:cornerRadius="8dp"
-                    app:strokeColor="#BA1A1A"
-                    app:strokeWidth="1dp" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnRejectCaregiverQuit" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_marginStart="8dp" android:text="@string/txt_fragment_family_management_161" android:textAllCaps="false" android:textColor="#BA1A1A" android:textSize="13sp" app:cornerRadius="8dp" app:strokeColor="#BA1A1A" app:strokeWidth="1dp" />
 
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFamilyMembers"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="20dp"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvFamilyMembers" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="20dp" />
 
 </LinearLayout>

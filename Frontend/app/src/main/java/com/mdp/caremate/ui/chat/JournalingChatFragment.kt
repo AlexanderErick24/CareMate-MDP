@@ -27,7 +27,7 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
         AuthViewModelFactory(AuthRepositoryImpl(FirebaseSource()))
     }
     
-    private lateinit var adapter: JournalingChatAdapter
+    private var adapter: JournalingChatAdapter? = null
     private var currentCaregiverId: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,7 +84,7 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
                 }
             }
             
-            adapter.submitList(chatMessages)
+            adapter?.submitList(chatMessages)
             if (chatMessages.isNotEmpty()) {
                 rvChat.scrollToPosition(chatMessages.size - 1)
             }
@@ -110,7 +110,7 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
             val message = etMessage.text.toString().trim()
             if (message.isNotEmpty() && currentCaregiverId.isNotEmpty()) {
                 // Jangan hapus list (jangan pakai emptyList), tapi tambahkan pesan baru secara manual ke UI
-                val currentList = adapter.getCurrentList().toMutableList()
+                val currentList = adapter?.getCurrentList()?.toMutableList() ?: mutableListOf()
                 
                 // 1. Pesan User
                 currentList.add(
@@ -131,7 +131,7 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
                     )
                 )
                 
-                adapter.submitList(currentList)
+                adapter?.submitList(currentList)
                 rvChat.scrollToPosition(currentList.size - 1)
                 
                 viewModel.analyzeJournal(message, currentCaregiverId)
@@ -149,5 +149,10 @@ class JournalingChatFragment : Fragment(R.layout.fragment_journaling_chat) {
             }
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 }

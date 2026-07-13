@@ -1,48 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAF8" android:orientation="vertical">
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8FAF8"
-    android:orientation="vertical">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:orientation="horizontal" android:background="#FFFFFF">
 
-    <!-- HEADER -->
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal"
-        android:background="#FFFFFF">
+            <TextView android:id="@+id/tvCaregiverName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_chat_97" android:textStyle="bold" android:textSize="16sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_chat_98" android:textColor="#6B7280" />
 
-            <TextView
-                android:id="@+id/tvCaregiverName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Siti Nurhaliza"
-                android:textStyle="bold"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Primary Caregiver"
-                android:textColor="#6B7280"/>
-
-            <TextView
-                android:id="@+id/tvFamilyMembers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="12sp"/>
+            <TextView android:id="@+id/tvFamilyMembers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -50,36 +19,17 @@
 
 
 
-    <!-- CHAT -->
+    
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvChat"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvChat" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
-    <!-- INPUT -->
+    
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:orientation="horizontal">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/etMessage"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:hint="Type a message"/>
+        <EditText android:id="@+id/etMessage" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:hint="@string/txt_fragment_chat_99" />
 
-        <ImageButton
-            android:id="@+id/btnSend"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="#386458"
-            android:src="@android:drawable/ic_menu_send"/>
+        <ImageButton android:id="@+id/btnSend" android:layout_width="56dp" android:layout_height="56dp" android:layout_marginStart="8dp" android:backgroundTint="#386458" android:src="@android:drawable/ic_menu_send" android:contentDescription="@string/cd_send" />
 
     </LinearLayout>
 

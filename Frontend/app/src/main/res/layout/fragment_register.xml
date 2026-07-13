@@ -1,107 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAF8">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8FAF8">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp" android:layout_gravity="center" android:gravity="center">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:layout_gravity="center"
-        android:gravity="center">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_register_241" android:textSize="32sp" android:textStyle="bold" android:textColor="#191C1B" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create Account"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="#191C1B"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_register_242" android:textColor="#404845" android:layout_marginTop="4dp" android:layout_marginBottom="32dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Join CareMate today"
-            android:textColor="#404845"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="32dp"/>
+        <EditText android:id="@+id/etName" android:layout_width="match_parent" android:layout_height="56dp" android:hint="@string/txt_fragment_register_243" />
 
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:hint="Full Name"/>
+        <EditText android:id="@+id/etPatientName" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="16dp" android:hint="@string/txt_fragment_register_244" />
 
-        <EditText
-            android:id="@+id/etPatientName"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:hint="Patient Name"/>
+        <EditText android:id="@+id/etEmail" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="16dp" android:hint="@string/txt_dialog_reconnect_family_69" android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:hint="Email"
-            android:inputType="textEmailAddress"/>
+        <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="16dp" android:hint="@string/txt_fragment_login_174" android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:hint="Password"
-            android:inputType="textPassword"/>
+        <RadioGroup android:id="@+id/radioGroupRole" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="24dp">
 
-        <RadioGroup
-            android:id="@+id/radioGroupRole"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="24dp">
+            <RadioButton android:id="@+id/rbCaregiver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_dashboard_148" />
 
-            <RadioButton
-                android:id="@+id/rbCaregiver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Caregiver"/>
-
-            <RadioButton
-                android:id="@+id/rbFamily"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Family"/>
+            <RadioButton android:id="@+id/rbFamily" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_family_profile_163" />
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/etPairingCode"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:hint="Pairing Code"
-            android:visibility="gone"/>
+        <EditText android:id="@+id/etPairingCode" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="16dp" android:hint="@string/txt_fragment_register_245" android:visibility="gone" />
 
-        <Button
-            android:id="@+id/btnRegister"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:text="Register"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#386458"/>
+        <Button android:id="@+id/btnRegister" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="24dp" android:text="@string/txt_fragment_register_246" android:textColor="@android:color/white" android:backgroundTint="#386458" />
 
-        <TextView
-            android:id="@+id/tvLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Already have an account? Login"
-            android:textColor="#386458"
-            android:layout_marginTop="24dp"/>
+        <TextView android:id="@+id/tvLogin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_register_247" android:textColor="#386458" android:layout_marginTop="24dp" />
 
     </LinearLayout>
 

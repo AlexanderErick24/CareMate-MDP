@@ -1,520 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/caremate_tertiary"
-    tools:context=".ui.dashboard.DashboardFragment">
+<?xml version='1.0' encoding='utf-8'?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/caremate_tertiary" tools:context=".ui.dashboard.DashboardFragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:paddingBottom="88dp">
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:clipToPadding="false" android:fillViewport="true" android:paddingBottom="88dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
 
-        <!-- Top Header Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardHeader"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/caremate_primary"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="2dp"
-            app:contentPadding="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        
+        <com.google.android.material.card.MaterialCardView android:id="@+id/cardHeader" android:layout_width="0dp" android:layout_height="wrap_content" app:cardBackgroundColor="@color/caremate_primary" app:cardCornerRadius="28dp" app:cardElevation="2dp" app:contentPadding="20dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tvDashboardTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Jadwal Kesehatan"
-                    android:textColor="@android:color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/layoutCaregiverSyncHeader"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView android:id="@+id/tvDashboardTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="8dp" android:text="@string/txt_fragment_dashboard_105" android:textColor="@android:color/white" android:textSize="22sp" android:textStyle="bold" app:layout_constraintEnd_toStartOf="@id/layoutCaregiverSyncHeader" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvDashboardSubtitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Jumat, 20 Februari 2026"
-                    android:textColor="#EAF4F0"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toStartOf="@id/layoutCaregiverSyncHeader"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDashboardTitle" />
+                <TextView android:id="@+id/tvDashboardSubtitle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:layout_marginEnd="8dp" android:text="@string/txt_fragment_dashboard_106" android:textColor="#EAF4F0" android:textSize="14sp" android:textStyle="italic" app:layout_constraintEnd_toStartOf="@id/layoutCaregiverSyncHeader" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tvDashboardTitle" />
 
-                <!-- Caregiver Sync Button in Header (Samping Kanan "Jadwal Kesehatan") -->
-                <LinearLayout
-                    android:id="@+id/layoutCaregiverSyncHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|end"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible">
+                
+                <LinearLayout android:id="@+id/layoutCaregiverSyncHeader" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical|end" android:orientation="horizontal" android:visibility="gone" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" tools:visibility="visible">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSyncPatient"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:text="Sync Pasien"
-                        android:textAllCaps="false"
-                        android:textColor="@color/caremate_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="#FFFFFF"
-                        app:cornerRadius="18dp"
-                        app:icon="@drawable/ic_profile"
-                        app:iconSize="14dp"
-                        app:iconTint="@color/caremate_primary" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnSyncPatient" style="@style/Widget.MaterialComponents.Button" android:layout_width="wrap_content" android:layout_height="36dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="@string/txt_fragment_dashboard_107" android:textAllCaps="false" android:textColor="@color/caremate_primary" android:textSize="12sp" android:textStyle="bold" app:backgroundTint="#FFFFFF" app:cornerRadius="18dp" app:icon="@drawable/ic_profile" app:iconSize="14dp" app:iconTint="@color/caremate_primary" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnUnsyncPatient"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="6dp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        android:text="Unsync"
-                        android:textAllCaps="false"
-                        android:textColor="#FFEBEE"
-                        android:textSize="12sp"
-                        android:visibility="gone"
-                        app:cornerRadius="18dp"
-                        app:strokeColor="#FFEBEE"
-                        app:strokeWidth="1dp"
-                        tools:visibility="visible" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnUnsyncPatient" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="6dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="@string/txt_fragment_dashboard_108" android:textAllCaps="false" android:textColor="#FFEBEE" android:textSize="12sp" android:visibility="gone" app:cornerRadius="18dp" app:strokeColor="#FFEBEE" app:strokeWidth="1dp" tools:visibility="visible" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Horizontal Calendar Strip -->
-        <LinearLayout
-            android:id="@+id/layoutCalendarStrip"
-            android:layout_width="0dp"
-            android:layout_height="72dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardHeader">
+        
+        <LinearLayout android:id="@+id/layoutCalendarStrip" android:layout_width="0dp" android:layout_height="72dp" android:layout_marginTop="16dp" android:orientation="horizontal" android:gravity="center" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/cardHeader">
 
-            <!-- Day 1 -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="17"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/caremate_neutral" />
-                    <TextView
-                        android:id="@+id/tvDayName1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sel"
-                        android:textSize="11sp"
-                        android:textColor="@color/caremate_muted" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/white" app:cardCornerRadius="18dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="17" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/caremate_neutral" />
+                    <TextView android:id="@+id/tvDayName1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_109" android:textSize="11sp" android:textColor="@color/caremate_muted" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Day 2 -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="18"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/caremate_neutral" />
-                    <TextView
-                        android:id="@+id/tvDayName2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rab"
-                        android:textSize="11sp"
-                        android:textColor="@color/caremate_muted" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/white" app:cardCornerRadius="18dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/caremate_neutral" />
+                    <TextView android:id="@+id/tvDayName2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_110" android:textSize="11sp" android:textColor="@color/caremate_muted" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Day 3 -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="19"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/caremate_neutral" />
-                    <TextView
-                        android:id="@+id/tvDayName3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Kam"
-                        android:textSize="11sp"
-                        android:textColor="@color/caremate_muted" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/white" app:cardCornerRadius="18dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="19" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/caremate_neutral" />
+                    <TextView android:id="@+id/tvDayName3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_111" android:textSize="11sp" android:textColor="@color/caremate_muted" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Day 4 (Today / Selected) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/caremate_primary"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="0dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="20"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
-                    <TextView
-                        android:id="@+id/tvDayName4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hari Ini"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1.2" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/caremate_primary" app:cardCornerRadius="18dp" app:cardElevation="2dp" app:strokeWidth="0dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/white" />
+                    <TextView android:id="@+id/tvDayName4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_112" android:textSize="10sp" android:textStyle="bold" android:textColor="@android:color/white" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Day 5 -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="21"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/caremate_neutral" />
-                    <TextView
-                        android:id="@+id/tvDayName5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sab"
-                        android:textSize="11sp"
-                        android:textColor="@color/caremate_muted" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate5" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/white" app:cardCornerRadius="18dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="21" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/caremate_neutral" />
+                    <TextView android:id="@+id/tvDayName5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_113" android:textSize="11sp" android:textColor="@color/caremate_muted" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Day 6 -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="22"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/caremate_neutral" />
-                    <TextView
-                        android:id="@+id/tvDayName6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Min"
-                        android:textSize="11sp"
-                        android:textColor="@color/caremate_muted" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate6" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/white" app:cardCornerRadius="18dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="22" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/caremate_neutral" />
+                    <TextView android:id="@+id/tvDayName6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_114" android:textSize="11sp" android:textColor="@color/caremate_muted" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Day 7 -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDate7"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/caremate_outline"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvDateNum7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="23"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/caremate_neutral" />
-                    <TextView
-                        android:id="@+id/tvDayName7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sen"
-                        android:textSize="11sp"
-                        android:textColor="@color/caremate_muted" />
+            
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardDate7" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginHorizontal="2dp" android:clickable="true" android:focusable="true" app:cardBackgroundColor="@color/white" app:cardCornerRadius="18dp" app:cardElevation="0dp" app:strokeColor="@color/caremate_outline" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvDateNum7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="23" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/caremate_neutral" />
+                    <TextView android:id="@+id/tvDayName7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_115" android:textSize="11sp" android:textColor="@color/caremate_muted" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!-- Section Title & History Button -->
-        <TextView
-            android:id="@+id/tvSectionTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Jadwal Minum Obat"
-            android:textColor="@color/caremate_neutral"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/btnHistory"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutCalendarStrip" />
+        
+        <TextView android:id="@+id/tvSectionTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="@string/txt_fragment_dashboard_116" android:textColor="@color/caremate_neutral" android:textSize="18sp" android:textStyle="bold" app:layout_constraintEnd_toStartOf="@+id/btnHistory" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/layoutCalendarStrip" />
 
-        <TextView
-            android:id="@+id/btnHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lihat Riwayat"
-            android:textColor="@color/caremate_primary"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/tvSectionTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvSectionTitle" />
+        <TextView android:id="@+id/btnHistory" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_dashboard_117" android:textColor="@color/caremate_primary" android:textSize="14sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/tvSectionTitle" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/tvSectionTitle" />
 
-        <!-- Search input (Hidden or compact if needed, let's make it compact below title) -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilSearch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:visibility="gone"
-            app:boxBackgroundColor="@color/white"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/caremate_primary"
-            app:endIconMode="clear_text"
-            app:hintTextColor="@color/caremate_muted"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
-            app:startIconDrawable="@android:drawable/ic_menu_search"
-            app:startIconTint="@color/caremate_primary">
+        
+        <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilSearch" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:visibility="gone" app:boxBackgroundColor="@color/white" app:boxCornerRadiusBottomEnd="16dp" app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusTopEnd="16dp" app:boxCornerRadiusTopStart="16dp" app:boxStrokeColor="@color/caremate_primary" app:endIconMode="clear_text" app:hintTextColor="@color/caremate_muted" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tvSectionTitle" app:startIconDrawable="@android:drawable/ic_menu_search" app:startIconTint="@color/caremate_primary">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDashboardSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/dashboard_search_hint"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:paddingVertical="12dp"
-                android:textColor="@color/caremate_neutral"
-                android:textColorHint="@color/caremate_muted" />
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etDashboardSearch" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/dashboard_search_hint" android:imeOptions="actionDone" android:inputType="text" android:paddingVertical="12dp" android:textColor="@color/caremate_neutral" android:textColorHint="@color/caremate_muted" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Summary (Compact/Hidden for compatibility) -->
-        <LinearLayout
-            android:id="@+id/layoutSummary"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilSearch">
+        
+        <LinearLayout android:id="@+id/layoutSummary" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" android:orientation="horizontal" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tilSearch">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardTotal"
-                android:layout_width="0dp"
-                android:layout_height="0dp">
-                <TextView android:id="@+id/tvTotalCount" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardTotal" android:layout_width="0dp" android:layout_height="0dp">
+                <TextView android:id="@+id/tvTotalCount" android:layout_width="wrap_content" android:layout_height="wrap_content" />
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardTaken"
-                android:layout_width="0dp"
-                android:layout_height="0dp">
-                <TextView android:id="@+id/tvTakenCount" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardTaken" android:layout_width="0dp" android:layout_height="0dp">
+                <TextView android:id="@+id/tvTakenCount" android:layout_width="wrap_content" android:layout_height="wrap_content" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!-- RecyclerView Medications -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMedications"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_medication" />
+        
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvMedications" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:clipToPadding="false" android:nestedScrollingEnabled="false" app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tvSectionTitle" tools:itemCount="2" tools:listitem="@layout/item_medication" />
 
-        <!-- Empty State -->
-        <TextView
-            android:id="@+id/tvEmptyState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:gravity="center"
-            android:text="Belum ada jadwal obat untuk tanggal ini."
-            android:textColor="@color/caremate_muted"
-            android:textSize="15sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSectionTitle" />
+        
+        <TextView android:id="@+id/tvEmptyState" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="48dp" android:gravity="center" android:text="@string/txt_fragment_dashboard_118" android:textColor="@color/caremate_muted" android:textSize="15sp" android:visibility="gone" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tvSectionTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddMedication"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:contentDescription="Tambah jadwal obat"
-        app:backgroundTint="@color/caremate_primary"
-        app:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_input_add" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/fabAddMedication" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom|end" android:layout_margin="20dp" android:contentDescription="Tambah jadwal obat" app:backgroundTint="@color/caremate_primary" app:tint="@android:color/white" app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

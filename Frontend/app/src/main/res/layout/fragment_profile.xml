@@ -1,333 +1,101 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8FAF8"
-    tools:context=".ui.profile.ProfileFragment">
+<?xml version='1.0' encoding='utf-8'?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8FAF8" tools:context=".ui.profile.ProfileFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
 
-        <!-- HEADER (Photo & Name) -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+        
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal" android:layout_marginBottom="24dp">
 
-            <FrameLayout
-                android:id="@+id/flAvatarContainer"
-                android:layout_width="86dp"
-                android:layout_height="86dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+            <FrameLayout android:id="@+id/flAvatarContainer" android:layout_width="86dp" android:layout_height="86dp" android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackgroundBorderless">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/ivProfileAvatar"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center"
-                    android:background="#EAF4F0"
-                    android:scaleType="centerCrop"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    app:cornerFamily="rounded"
-                    app:cornerSize="50%" />
+                <com.google.android.material.imageview.ShapeableImageView android:id="@+id/ivProfileAvatar" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="#EAF4F0" android:scaleType="centerCrop" android:src="@android:drawable/ic_menu_gallery" app:cornerFamily="rounded" app:cornerSize="50%" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="bottom|end"
-                    app:cardBackgroundColor="#386458"
-                    app:cardCornerRadius="13dp"
-                    app:cardElevation="2dp"
-                    app:strokeColor="@android:color/white"
-                    app:strokeWidth="1.5dp">
+                <com.google.android.material.card.MaterialCardView android:layout_width="26dp" android:layout_height="26dp" android:layout_gravity="bottom|end" app:cardBackgroundColor="#386458" app:cardCornerRadius="13dp" app:cardElevation="2dp" app:strokeColor="@android:color/white" app:strokeWidth="1.5dp">
 
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_camera"
-                        app:tint="@android:color/white" />
+                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_camera" app:tint="@android:color/white" android:contentDescription="@null" />
                 </com.google.android.material.card.MaterialCardView>
             </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvProfileName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="John Doe"
-                    android:textColor="#191C1B"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                <TextView android:id="@+id/tvProfileName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_222" android:textColor="#191C1B" android:textSize="22sp" android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvProfileJob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Professional Caregiver"
-                    android:textColor="#386458"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
+                <TextView android:id="@+id/tvProfileJob" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_223" android:textColor="#386458" android:textSize="14sp" android:textStyle="bold" android:layout_marginTop="4dp" />
 
-                <TextView
-                    android:id="@+id/tvProfileAge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="32 Years Old"
-                    android:textColor="#717975"
-                    android:textSize="14sp"
-                    android:layout_marginTop="2dp" />
+                <TextView android:id="@+id/tvProfileAge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_224" android:textColor="#717975" android:textSize="14sp" android:layout_marginTop="2dp" />
 
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ================================================== -->
-        <!-- PASIEN SAAT INI SECTION -->
-        <!-- Tampil selalu. Kalau kosong → placeholder "Belum diisi" -->
-        <!-- Ada tombol edit di pojok kanan untuk ubah nama pasien -->
-        <!-- ================================================== -->
+        
+        
+        
+        
+        
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PASIEN SAAT INI"
-            android:textColor="#717975"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_225" android:textColor="#717975" android:textSize="12sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:strokeColor="#E0E6E2"
-            app:strokeWidth="1dp">
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="20dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:strokeColor="#E0E6E2" app:strokeWidth="1dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="16dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
 
-                    <!-- Nama pasien — diisi dari Firestore -->
-                    <!-- Kalau kosong tampil teks placeholder -->
-                    <TextView
-                        android:id="@+id/tvPatientName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Belum diisi"
-                        android:textColor="#191C1B"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                    
+                    
+                    <TextView android:id="@+id/tvPatientName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_226" android:textColor="#191C1B" android:textSize="16sp" android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nama pasien yang sedang dirawat"
-                        android:textColor="#717975"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_227" android:textColor="#717975" android:textSize="12sp" android:layout_marginTop="2dp" />
 
                 </LinearLayout>
 
-                <!-- Tombol edit nama pasien -->
-                <ImageView
-                    android:id="@+id/ivEditPatientName"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:padding="4dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    app:tint="#386458" />
+                
+                <ImageView android:id="@+id/ivEditPatientName" android:layout_width="32dp" android:layout_height="32dp" android:src="@android:drawable/ic_menu_edit" android:padding="4dp" android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackgroundBorderless" app:tint="#386458" android:contentDescription="@null" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- KELUARGA SECTION (Caregiver) -->
-        <TextView
-            android:id="@+id/tvKeluargaLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="KELUARGA"
-            android:textColor="#717975"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
+        
+        <TextView android:id="@+id/tvKeluargaLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_228" android:textColor="#717975" android:textSize="12sp" android:textStyle="bold" android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:id="@+id/tvPairingCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kode Pasangan Anda: -"
-            android:textColor="#386458"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/bg_pairing_code"
-            android:padding="12dp"
-            android:gravity="center" />
+        <TextView android:id="@+id/tvPairingCode" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_229" android:textColor="#386458" android:textSize="14sp" android:textStyle="bold" android:layout_marginBottom="24dp" android:background="@drawable/bg_pairing_code" android:padding="12dp" android:gravity="center" />
 
-        <!-- BIO SECTION -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeColor="#E0E6E2"
-            app:strokeWidth="1dp">
+        
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="#E0E6E2" app:strokeWidth="1dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="About Me"
-                    android:textColor="#191C1B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_profile_230" android:textColor="#191C1B" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="8dp" />
 
-                <TextView
-                    android:id="@+id/tvProfileBio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Belum ada bio"
-                    android:textColor="#404845"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp" />
+                <TextView android:id="@+id/tvProfileBio" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_92" android:textColor="#404845" android:textSize="14sp" android:lineSpacingExtra="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- EXPERIENCE SECTION -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeColor="#E0E6E2"
-            app:strokeWidth="1dp">
+        
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="#E0E6E2" app:strokeWidth="1dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Experience"
-                    android:textColor="#191C1B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_93" android:textColor="#191C1B" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="12dp" />
 
-                <TextView
-                    android:id="@+id/tvProfileExperience"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Belum ada pengalaman kerja"
-                    android:textColor="#404845"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp" />
+                <TextView android:id="@+id/tvProfileExperience" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_94" android:textColor="#404845" android:textSize="14sp" android:lineSpacingExtra="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- SKILLS SECTION -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:strokeColor="#E0E6E2"
-            app:strokeWidth="1dp">
+        
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="24dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="#E0E6E2" app:strokeWidth="1dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Skills"
-                    android:textColor="#191C1B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/txt_fragment_caregiver_detail_95" android:textColor="#191C1B" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="12dp" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroupSkills"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:chipSpacingVertical="4dp" />
+                <com.google.android.material.chip.ChipGroup android:id="@+id/chipGroupSkills" android:layout_width="match_parent" android:layout_height="wrap_content" app:chipSpacingVertical="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnEditProfile"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Edit Profile"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:backgroundTint="#386458"
-            app:cornerRadius="12dp" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnEditProfile" android:layout_width="match_parent" android:layout_height="56dp" android:text="@string/txt_fragment_profile_231" android:textAllCaps="false" android:textColor="@android:color/white" android:textSize="16sp" android:textStyle="bold" app:backgroundTint="#386458" app:cornerRadius="12dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogout"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:text="Keluar / Logout"
-            android:textAllCaps="false"
-            android:textColor="#BA1A1A"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="12dp"
-            app:strokeColor="#BA1A1A"
-            app:strokeWidth="1.5dp" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnLogout" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="12dp" android:text="@string/txt_fragment_profile_232" android:textAllCaps="false" android:textColor="#BA1A1A" android:textSize="16sp" android:textStyle="bold" app:cornerRadius="12dp" app:strokeColor="#BA1A1A" app:strokeWidth="1.5dp" />
 
     </LinearLayout>
 </ScrollView>

@@ -67,6 +67,7 @@ class MedicalProfileBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
+        onProfileSaved = null
         super.onDestroyView()
         _binding = null
     }

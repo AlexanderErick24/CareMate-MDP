@@ -170,7 +170,7 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
 
         profileViewModel.toastMessage.observe(viewLifecycleOwner) { msg ->
             if (!msg.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                context?.let { Toast.makeText(it, msg, Toast.LENGTH_SHORT).show() }
             }
         }
 
@@ -204,7 +204,7 @@ class FamilyProfileFragment : Fragment(R.layout.fragment_family_profile) {
 
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val intent = requireActivity().intent
+            val intent = android.content.Intent(requireContext(), com.mdp.caremate.MainActivity::class.java)
             intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             requireActivity().finish()

@@ -42,10 +42,10 @@ class AdminSetting : Fragment() {
             // 1. Hapus sesi login di Firebase
             FirebaseAuth.getInstance().signOut()
 
-            Toast.makeText(requireContext(), "Berhasil Logout", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context ?: return@setOnClickListener, "Berhasil Logout", Toast.LENGTH_SHORT).show()
 
             // 2. Restart Activity untuk membersihkan seluruh sisa UI (termasuk Bottom Nav)
-            val intent = requireActivity().intent
+            val intent = Intent(requireContext(), com.mdp.caremate.MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             requireActivity().finish()

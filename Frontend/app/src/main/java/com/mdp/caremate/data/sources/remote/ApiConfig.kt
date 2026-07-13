@@ -57,7 +57,4 @@ object ApiConfig {
     val smartNutritionApi: SmartNutritionApi by lazy {
         moshiRetrofit.create(SmartNutritionApi::class.java)
     }
-
-    // Compatibility getter method for legacy calls
-    fun getWebService(): WebService = webService
 }

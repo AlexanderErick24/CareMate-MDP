@@ -5,7 +5,7 @@ import com.mdp.caremate.data.model.Nutrition
 
 class PremiumRemoteDataSourceImpl(
     // Berikan nilai default agar langsung mengambil dari ApiConfig
-    private val webService: WebService = ApiConfig.getWebService()
+    private val webService: WebService = ApiConfig.webService
 ) : PremiumRemoteDataSource {
 
     override suspend fun analyzeMood(content: String, history: List<ChatHistoryItem>): Journal {

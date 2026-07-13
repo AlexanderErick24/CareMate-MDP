@@ -58,6 +58,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
 
     // ViewModel, LiveData, Activity, Fragment
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")

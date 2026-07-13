@@ -21,7 +21,7 @@ class CareMateApplication : Application() {
         // 2. Rakit Repository khusus untuk fitur Premium/AI milikmu
         premiumRepository = PremiumRepositoryImpl(
             remoteDataSource = PremiumRemoteDataSourceImpl(retrofitService),
-            journalDao = AppDatabase.getDatabase(baseContext).journalDao()
+            journalDao = AppDatabase.getDatabase(this).journalDao()
         )
     }
 }

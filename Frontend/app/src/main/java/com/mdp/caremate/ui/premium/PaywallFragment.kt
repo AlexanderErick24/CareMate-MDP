@@ -23,8 +23,8 @@ import java.net.URL
 
 class PaywallFragment : Fragment() {
 
-    private lateinit var webViewMidtrans: WebView
-    private lateinit var btnBuyPremium: Button
+    private var webViewMidtrans: WebView? = null
+    private var btnBuyPremium: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +41,15 @@ class PaywallFragment : Fragment() {
         btnBuyPremium = view.findViewById(R.id.btnBuyPremium)
 
         // Setup WebView for Midtrans Snap
-        webViewMidtrans.settings.javaScriptEnabled = true
-        webViewMidtrans.webViewClient = object : WebViewClient() {
+        webViewMidtrans?.settings?.javaScriptEnabled = true
+        webViewMidtrans?.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url.toString()
                 // Jika url mengarah kembali ke app atau callback sukses, kita bisa tutup webview
                 // Untuk simulasi, anggap semua url eksternal selain snap adalah callback sukses
                 if (url.contains("example.com") || url.contains("callback")) {
                     Toast.makeText(requireContext(), "Pembayaran Berhasil! Mengaktifkan Premium...", Toast.LENGTH_LONG).show()
-                    webViewMidtrans.visibility = View.GONE
+                    webViewMidtrans?.visibility = View.GONE
                     
                     // Update status isPremium = true per-user via PremiumUtils
                     com.mdp.caremate.utils.PremiumUtils.setPremium(requireContext(), true)
@@ -58,8 +58,8 @@ class PaywallFragment : Fragment() {
                     val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
                     if (uid != null) {
                         com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                            .collection("users").document(uid)
-                            .update("isPremium", true)
+                             .collection("users").document(uid)
+                             .update("isPremium", true)
                     }
                     
                     activity?.onBackPressedDispatcher?.onBackPressed()
@@ -69,7 +69,7 @@ class PaywallFragment : Fragment() {
             }
         }
 
-        btnBuyPremium.setOnClickListener {
+        btnBuyPremium?.setOnClickListener {
             // Simulasi panggil backend create-transaction
             createTransaction()
         }
@@ -94,8 +94,8 @@ class PaywallFragment : Fragment() {
     }
 
     private fun createTransaction() {
-        btnBuyPremium.isEnabled = false
-        btnBuyPremium.text = "Memproses..."
+        btnBuyPremium?.isEnabled = false
+        btnBuyPremium?.text = "Memproses..."
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -123,25 +123,32 @@ class PaywallFragment : Fragment() {
                     val redirectUrl = jsonResponse.getString("redirect_url")
 
                     withContext(Dispatchers.Main) {
-                        webViewMidtrans.visibility = View.VISIBLE
-                        webViewMidtrans.loadUrl(redirectUrl)
-                        btnBuyPremium.visibility = View.GONE
+                        webViewMidtrans?.visibility = View.VISIBLE
+                        webViewMidtrans?.loadUrl(redirectUrl)
+                        btnBuyPremium?.visibility = View.GONE
                         view?.findViewById<Button>(R.id.btnBypassPremium)?.visibility = View.VISIBLE
                     }
                 } else {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Gagal memproses pembayaran.", Toast.LENGTH_SHORT).show()
-                        btnBuyPremium.text = "Berlangganan Rp 50.000 / Bulan"
-                        btnBuyPremium.isEnabled = true
+                        btnBuyPremium?.text = "Berlangganan Rp 50.000 / Bulan"
+                        btnBuyPremium?.isEnabled = true
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Error jaringan: ${e.message}", Toast.LENGTH_SHORT).show()
-                    btnBuyPremium.text = "Berlangganan Rp 50.000 / Bulan"
-                    btnBuyPremium.isEnabled = true
+                    btnBuyPremium?.text = "Berlangganan Rp 50.000 / Bulan"
+                    btnBuyPremium?.isEnabled = true
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        webViewMidtrans?.destroy()
+        webViewMidtrans = null
+        btnBuyPremium = null
+        super.onDestroyView()
     }
 }
